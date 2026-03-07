@@ -1295,7 +1295,7 @@
         <div style="font-size:24px;">📱</div>
         <div><div style="font-size:13px;font-weight:800;color:#2A8A56;">Parent Notified</div><div style="font-size:12px;font-weight:600;color:#3AAF72;margin-top:2px;">SMS sent to Mike (Buddy's owner)</div></div>
       </div>
-      <button class="btn btn-primary btn-full" onclick="go('employee-home')">Back to Home</button>
+      <button class="btn btn-primary btn-full" onclick="go('admin-home')">Back to Home</button>
       <div style="margin-top:12px;font-size:14px;font-weight:700;color:var(--light);cursor:pointer;" onclick="go('nfc-friend')">View Buddy's Profile</div>
     </div>
   </div>
@@ -1483,7 +1483,7 @@
             <div style="width:44px;height:44px;border-radius:12px;background:var(--coral-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
             <div><div style="font-size:15px;font-weight:800;color:var(--dark);">Check Out of Yard</div><div style="font-size:12px;font-weight:600;color:var(--medium);margin-top:2px;">Clear your yard assignment</div></div>
           </div>
-          <div class="action-row" style="background:white;border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+          <div class="action-row" onclick="go('flag-maintenance')" style="background:white;border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
             <div style="width:44px;height:44px;border-radius:12px;background:var(--yellow-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🔧</div>
             <div><div style="font-size:15px;font-weight:800;color:var(--dark);">Flag Maintenance / Safety Issue</div><div style="font-size:12px;font-weight:600;color:var(--medium);margin-top:2px;">Notify admin of a yard issue</div></div>
           </div>
@@ -1568,6 +1568,53 @@
       </div>
       <button onclick="submitTiffFinal()" style="width:100%;padding:14px;border-radius:14px;border:none;background:var(--coral);font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;color:white;cursor:pointer;margin-bottom:10px;">Submit Report ✓</button>
       <button onclick="closeTiffDogAssign()" style="width:100%;padding:12px;border-radius:14px;border:2px solid var(--border);background:white;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--medium);cursor:pointer;">← Back to Edit</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- TIFF DONE                                  -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="screen" id="screen-tiff-done">
+    <div class="top-nav">
+      <button class="back-btn" onclick="go('employee-home')">‹</button>
+      <div class="nav-title">Report Submitted</div>
+    </div>
+    <div class="scroll-content">
+      <div class="p-16" style="display:flex;flex-direction:column;align-items:center;padding-top:32px;">
+
+        <div style="width:80px;height:80px;border-radius:50%;background:var(--green-light);border:3px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:40px;margin-bottom:16px;">✅</div>
+        <div style="font-size:22px;font-weight:900;color:var(--dark);margin-bottom:4px;">Tiff Logged</div>
+        <div style="font-size:14px;font-weight:600;color:var(--medium);margin-bottom:20px;" id="tiff-done-yard">Yard 5 · 🟠 Orange Group</div>
+
+        <!-- Timestamp -->
+        <div style="background:var(--teal-light);border-radius:12px;padding:10px 18px;display:flex;align-items:center;gap:10px;margin-bottom:12px;width:100%;">
+          <div style="font-size:18px;">⏱</div>
+          <div>
+            <div style="font-size:11px;font-weight:800;color:var(--teal-dark);text-transform:uppercase;letter-spacing:0.5px;">Timestamp</div>
+            <div style="font-size:13px;font-weight:700;color:var(--dark);margin-top:2px;" id="tiff-done-time">Today · 9:41 AM · Logged by Sarah</div>
+          </div>
+        </div>
+
+        <!-- Severity -->
+        <div style="background:white;border-radius:12px;padding:12px 16px;width:100%;margin-bottom:12px;border:2px solid var(--border);display:flex;align-items:center;gap:10px;">
+          <div style="font-size:18px;">⚠️</div>
+          <div>
+            <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Severity</div>
+            <div style="font-size:14px;font-weight:800;color:var(--dark);" id="tiff-done-severity">Medium</div>
+          </div>
+        </div>
+
+        <!-- Admin notified -->
+        <div style="background:var(--coral-light);border:2px solid var(--coral);border-radius:12px;padding:12px 16px;width:100%;margin-bottom:28px;display:flex;align-items:center;gap:10px;">
+          <div style="font-size:20px;">📣</div>
+          <div>
+            <div style="font-size:13px;font-weight:800;color:#C43D3D;">Admin Notified</div>
+            <div style="font-size:12px;font-weight:600;color:#C43D3D;margin-top:2px;">Alert sent to facility admin</div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-full" onclick="go('employee-home')">Back to Home</button>
+      </div>
     </div>
   </div>
 
@@ -3993,6 +4040,124 @@
   </div>
 
   <!-- ══════════════════════════════════════════ -->
+  <!-- EMPLOYEE: FLAG MAINTENANCE                  -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="screen" id="screen-flag-maintenance">
+    <div class="top-nav">
+      <button class="back-btn" onclick="go('nfc-yard')">‹</button>
+      <div class="nav-title">Flag Issue</div>
+      <div style="background:var(--yellow-light);border-radius:14px;padding:6px 10px;font-size:18px;">🔧</div>
+    </div>
+
+    <div class="scroll-content">
+      <div style="padding:16px;display:flex;flex-direction:column;gap:16px;">
+
+        <!-- Yard context badge -->
+        <div style="background:var(--yellow-light);border:2px solid var(--yellow);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:10px;">
+          <div style="font-size:20px;">📍</div>
+          <div>
+            <div style="font-size:13px;font-weight:800;color:#8A6800;" id="flag-yard-label">Yard 5 · 🟠 Orange Group</div>
+            <div style="font-size:11px;font-weight:600;color:#6A5000;margin-top:2px;">Issue will be sent to admin immediately</div>
+          </div>
+        </div>
+
+        <!-- Issue type -->
+        <div>
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Issue Type</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div id="flag-type-maintenance" onclick="selectFlagType(this,'maintenance')" class="flag-type-btn" style="border-radius:12px;border:2px solid var(--border);background:white;padding:13px 10px;text-align:center;cursor:pointer;">
+              <div style="font-size:22px;margin-bottom:4px;">🔧</div>
+              <div style="font-size:12px;font-weight:800;color:var(--dark);">Maintenance</div>
+              <div style="font-size:10px;font-weight:600;color:var(--medium);margin-top:2px;">Broken equipment, latch, etc.</div>
+            </div>
+            <div id="flag-type-safety" onclick="selectFlagType(this,'safety')" class="flag-type-btn" style="border-radius:12px;border:2px solid var(--border);background:white;padding:13px 10px;text-align:center;cursor:pointer;">
+              <div style="font-size:22px;margin-bottom:4px;">⚠️</div>
+              <div style="font-size:12px;font-weight:800;color:var(--dark);">Safety Hazard</div>
+              <div style="font-size:10px;font-weight:600;color:var(--medium);margin-top:2px;">Sharp edge, escape concern, etc.</div>
+            </div>
+            <div id="flag-type-spill" onclick="selectFlagType(this,'spill')" class="flag-type-btn" style="border-radius:12px;border:2px solid var(--border);background:white;padding:13px 10px;text-align:center;cursor:pointer;">
+              <div style="font-size:22px;margin-bottom:4px;">💦</div>
+              <div style="font-size:12px;font-weight:800;color:var(--dark);">Spill / Waste</div>
+              <div style="font-size:10px;font-weight:600;color:var(--medium);margin-top:2px;">Major cleanup needed</div>
+            </div>
+            <div id="flag-type-other" onclick="selectFlagType(this,'other')" class="flag-type-btn" style="border-radius:12px;border:2px solid var(--border);background:white;padding:13px 10px;text-align:center;cursor:pointer;">
+              <div style="font-size:22px;margin-bottom:4px;">📋</div>
+              <div style="font-size:12px;font-weight:800;color:var(--dark);">Other</div>
+              <div style="font-size:10px;font-weight:600;color:var(--medium);margin-top:2px;">Something else to flag</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Annotation -->
+        <div>
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Description</div>
+          <div style="display:flex;gap:10px;margin-bottom:10px;">
+            <button class="btn btn-secondary" style="flex:1;padding:12px;" id="flag-dictate-btn" onclick="toggleFlagDictate(this)">🎙️ &nbsp;Dictate</button>
+          </div>
+          <textarea id="flag-desc" rows="4" placeholder="Describe the issue — what happened, where exactly, how urgent…" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:14px;font-family:inherit;resize:none;outline:none;"></textarea>
+        </div>
+
+        <!-- Photo -->
+        <div>
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Photo (optional)</div>
+          <div id="flag-photo-preview" style="display:none;background:var(--teal-light);border-radius:12px;padding:12px 16px;margin-bottom:10px;align-items:center;gap:10px;">
+            <div style="font-size:24px;">📷</div>
+            <div style="font-size:13px;font-weight:700;color:var(--teal-dark);">Photo attached</div>
+            <button onclick="removeFlagPhoto()" style="margin-left:auto;background:none;border:none;font-size:18px;color:var(--medium);cursor:pointer;">✕</button>
+          </div>
+          <button id="flag-photo-btn" onclick="attachFlagPhoto()" style="width:100%;background:white;border:1.5px dashed var(--border);border-radius:12px;padding:14px;font-size:13px;font-weight:800;color:var(--medium);cursor:pointer;">📷 &nbsp;Take / Attach Photo</button>
+        </div>
+
+        <button class="btn btn-primary btn-full btn-lg" onclick="submitFlagIssue()">🚩 Flag Issue</button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- EMPLOYEE: FLAG DONE                        -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="screen" id="screen-flag-done">
+    <div class="top-nav">
+      <div style="width:36px;"></div>
+      <div class="nav-title">Issue Reported</div>
+      <div style="width:36px;"></div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;padding:32px 24px 24px;text-align:center;overflow-y:auto;">
+
+      <!-- Success icon -->
+      <div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--yellow),#E6A800);display:flex;align-items:center;justify-content:center;font-size:46px;box-shadow:0 10px 40px rgba(249,200,70,0.4);margin-bottom:22px;">🔧</div>
+      <div style="font-size:26px;font-weight:900;color:var(--dark);margin-bottom:6px;">Issue Flagged!</div>
+
+      <!-- Yard context -->
+      <div id="flag-done-yard" style="font-size:14px;font-weight:700;color:var(--medium);margin-bottom:18px;">Yard 5 · 🟠 Orange Group</div>
+
+      <!-- Timestamp badge -->
+      <div style="background:var(--teal-dark);color:white;border-radius:20px;padding:6px 16px;font-size:12px;font-weight:800;margin-bottom:20px;">🕐 Just now · Thu Mar 6</div>
+
+      <!-- Issue type card -->
+      <div style="width:100%;background:var(--yellow-light);border:1.5px solid var(--yellow);border-radius:14px;padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;gap:12px;">
+        <div style="font-size:26px;" id="flag-done-icon">🔧</div>
+        <div style="text-align:left;">
+          <div style="font-size:12px;font-weight:700;color:#8A6800;">Issue Type</div>
+          <div style="font-size:14px;font-weight:900;color:var(--dark);margin-top:2px;" id="flag-done-type">Maintenance</div>
+        </div>
+      </div>
+
+      <!-- Admin notified card -->
+      <div style="width:100%;background:#FFF0E5;border:1.5px solid var(--orange);border-radius:14px;padding:14px 16px;margin-bottom:28px;display:flex;align-items:center;gap:12px;">
+        <div style="font-size:24px;">🔔</div>
+        <div style="text-align:left;">
+          <div style="font-size:13px;font-weight:800;color:#C45C1A;">Admin Notified</div>
+          <div style="font-size:12px;font-weight:600;color:#A04014;margin-top:2px;">Issue is in the flagged queue</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-full" onclick="go('employee-home')">Back to Home</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
   <!-- EMPLOYEE: MY SCHEDULE                      -->
   <!-- ══════════════════════════════════════════ -->
   <div class="screen" id="screen-employee-schedule">
@@ -4226,6 +4391,9 @@
     // Update tiff screen badge
     const lbl = document.getElementById('tiff-yard-label');
     if (lbl) lbl.textContent = 'Yard ' + yardNum + ' · 🟠 ' + groupLabel;
+    // Update flag maintenance badge
+    const flagLbl = document.getElementById('flag-yard-label');
+    if (flagLbl) flagLbl.textContent = 'Yard ' + yardNum + ' · 🟠 ' + groupLabel;
     const sub = document.getElementById('tiff-yard-sub');
     if (sub) sub.textContent = currentYardDogs.length + ' dogs in yard — dogs assigned after submit';
     // Update dog sheet sub
@@ -4260,7 +4428,15 @@
   }
   function submitTiffFinal() {
     closeTiffDogAssign();
-    go('employee-home');
+    // Populate done screen with current yard context
+    const yardEl = document.getElementById('tiff-done-yard');
+    const lbl = document.getElementById('tiff-yard-label');
+    if (yardEl && lbl) yardEl.textContent = lbl.textContent;
+    // Severity
+    const selected = document.querySelector('.severity-btn.selected');
+    const sevEl = document.getElementById('tiff-done-severity');
+    if (sevEl) sevEl.textContent = selected ? selected.textContent.trim() : 'Not specified';
+    go('tiff-done');
   }
 
   // Admin message yard — toggle yard selection
@@ -4418,6 +4594,68 @@
     newSlot.innerHTML = '<div style="font-size:24px;">📸</div><div style="font-size:10px;font-weight:700;color:var(--medium);">Add</div>';
     grid.appendChild(newSlot);
     ciPhotoCount++;
+  }
+
+  // Flag maintenance screen
+  let flagDictating = false;
+  let flagDictateTimer = null;
+  let selectedFlagType = null;
+
+  function selectFlagType(el, type) {
+    selectedFlagType = type;
+    document.querySelectorAll('.flag-type-btn').forEach(b => {
+      b.style.border = '2px solid var(--border)';
+      b.style.background = 'white';
+    });
+    el.style.border = '2px solid var(--yellow)';
+    el.style.background = 'var(--yellow-light)';
+  }
+
+  function toggleFlagDictate(btn) {
+    flagDictating = !flagDictating;
+    const desc = document.getElementById('flag-desc');
+    if (flagDictating) {
+      btn.style.background = 'var(--coral-light)';
+      btn.style.color = '#C43D3D';
+      btn.innerHTML = '🔴 &nbsp;Listening...';
+      flagDictateTimer = setTimeout(() => {
+        desc.value += (desc.value ? ' ' : '') + 'Gate latch on north fence is not closing securely.';
+        toggleFlagDictate(btn);
+      }, 2200);
+    } else {
+      clearTimeout(flagDictateTimer);
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.innerHTML = '🎙️ &nbsp;Dictate';
+    }
+  }
+
+  function attachFlagPhoto() {
+    document.getElementById('flag-photo-preview').style.display = 'flex';
+    document.getElementById('flag-photo-btn').style.display = 'none';
+  }
+
+  function removeFlagPhoto() {
+    document.getElementById('flag-photo-preview').style.display = 'none';
+    document.getElementById('flag-photo-btn').style.display = '';
+  }
+
+  function submitFlagIssue() {
+    const typeNames = { maintenance: 'Maintenance', safety: 'Safety Hazard', spill: 'Spill / Waste', other: 'Other' };
+    const typeIcons = { maintenance: '🔧', safety: '⚠️', spill: '💦', other: '📋' };
+    const type = selectedFlagType || 'maintenance';
+    document.getElementById('flag-done-type').textContent = typeNames[type];
+    document.getElementById('flag-done-icon').textContent = typeIcons[type];
+    // Copy yard context from flag form
+    const flagYard = document.getElementById('flag-yard-label');
+    const doneYard = document.getElementById('flag-done-yard');
+    if (flagYard && doneYard) doneYard.textContent = flagYard.textContent;
+    // Reset form
+    selectedFlagType = null;
+    document.querySelectorAll('.flag-type-btn').forEach(b => { b.style.border = '2px solid var(--border)'; b.style.background = 'white'; });
+    document.getElementById('flag-desc').value = '';
+    removeFlagPhoto();
+    go('flag-done');
   }
 
   // Send SMS screen
