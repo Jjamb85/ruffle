@@ -4077,55 +4077,86 @@
     </div>
 
     <div class="scroll-content">
-      <div style="padding:16px;display:flex;flex-direction:column;gap:16px;">
+      <div style="padding:16px;display:flex;flex-direction:column;gap:14px;">
 
-        <!-- Today's shift summary -->
-        <div style="background:var(--teal-light);border-radius:16px;padding:16px;">
-          <div style="font-size:11px;font-weight:800;color:var(--teal-dark);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Today — Thursday, Mar 6</div>
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-            <div style="font-size:28px;font-weight:900;color:var(--teal-dark);">7 AM – 3 PM</div>
+        <!-- Calendar -->
+        <div style="background:white;border-radius:16px;border:1px solid var(--border);padding:14px 12px 10px;">
+          <div style="font-size:14px;font-weight:900;color:var(--dark);text-align:center;margin-bottom:12px;">March 2026</div>
+          <!-- Day-of-week headers -->
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px;">
+            <div style="text-align:center;font-size:10px;font-weight:800;color:var(--lighter);padding:2px 0;">Su</div>
+            <div style="text-align:center;font-size:10px;font-weight:800;color:var(--lighter);padding:2px 0;">Mo</div>
+            <div style="text-align:center;font-size:10px;font-weight:800;color:var(--lighter);padding:2px 0;">Tu</div>
+            <div style="text-align:center;font-size:10px;font-weight:800;color:var(--lighter);padding:2px 0;">We</div>
+            <div style="text-align:center;font-size:10px;font-weight:800;color:var(--lighter);padding:2px 0;">Th</div>
+            <div style="text-align:center;font-size:10px;font-weight:800;color:var(--lighter);padding:2px 0;">Fr</div>
+            <div style="text-align:center;font-size:10px;font-weight:800;color:var(--lighter);padding:2px 0;">Sa</div>
           </div>
+          <!-- Day grid (March 2026 starts on Sunday) -->
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">
+            <!-- Row 1: 1–7 -->
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--lighter);">1</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--lighter);">2</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--lighter);">3</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--lighter);">4</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--lighter);">5</div></div>
+            <!-- Day 6 — today, shift, pre-selected -->
+            <div onclick="selectScheduleDay(6)" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px 0;cursor:pointer;">
+              <div id="sday-6" style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;background:var(--teal);color:white;">6</div>
+              <div class="sday-dot" style="width:5px;height:5px;border-radius:50%;background:var(--teal);"></div>
+            </div>
+            <!-- Day 7 — shift -->
+            <div onclick="selectScheduleDay(7)" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px 0;cursor:pointer;">
+              <div id="sday-7" style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:var(--teal-dark);">7</div>
+              <div class="sday-dot" style="width:5px;height:5px;border-radius:50%;background:var(--teal);"></div>
+            </div>
+            <!-- Row 2: 8–14 -->
+            <!-- Day 8 — shift -->
+            <div onclick="selectScheduleDay(8)" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px 0;cursor:pointer;">
+              <div id="sday-8" style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:var(--teal-dark);">8</div>
+              <div class="sday-dot" style="width:5px;height:5px;border-radius:50%;background:var(--teal);"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">9</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">10</div></div>
+            <!-- Day 11 — shift -->
+            <div onclick="selectScheduleDay(11)" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px 0;cursor:pointer;">
+              <div id="sday-11" style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:var(--teal-dark);">11</div>
+              <div class="sday-dot" style="width:5px;height:5px;border-radius:50%;background:var(--teal);"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">12</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">13</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">14</div></div>
+            <!-- Row 3: 15–21 -->
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">15</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">16</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">17</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">18</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">19</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">20</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">21</div></div>
+            <!-- Row 4: 22–28 -->
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">22</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">23</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">24</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">25</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">26</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">27</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">28</div></div>
+            <!-- Row 5: 29–31 -->
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">29</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">30</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--medium);">31</div></div>
+          </div>
+        </div>
+
+        <!-- Selected shift card — defaults to today, updates on tap -->
+        <div id="schedule-shift-card" style="background:var(--teal-light);border-radius:16px;padding:16px;">
+          <div style="font-size:11px;font-weight:800;color:var(--teal-dark);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Today — Thursday, Mar 6</div>
+          <div style="font-size:28px;font-weight:900;color:var(--teal-dark);margin-bottom:10px;">7 AM – 3 PM</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <div style="background:white;color:var(--teal-dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🌿 Yard 3 Primary</div>
             <div style="background:white;color:var(--teal-dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🍽️ Feedings</div>
             <div style="background:white;color:var(--teal-dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">💊 Meds</div>
-          </div>
-        </div>
-
-        <!-- Upcoming shifts -->
-        <div>
-          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Upcoming Shifts</div>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-
-            <div style="background:white;border:1px solid var(--border);border-radius:16px;padding:16px;">
-              <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Friday, Mar 7</div>
-              <div style="font-size:28px;font-weight:900;color:var(--dark);margin-bottom:10px;">7 AM – 3 PM</div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🌿 Yard 3 Primary</div>
-                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🍽️ Feedings</div>
-                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">💊 Meds</div>
-              </div>
-            </div>
-
-            <div style="background:white;border:1px solid var(--border);border-radius:16px;padding:16px;">
-              <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Saturday, Mar 8</div>
-              <div style="font-size:28px;font-weight:900;color:var(--dark);margin-bottom:10px;">9 AM – 5 PM</div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🌿 Yard 5 Primary</div>
-                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🍽️ Feedings</div>
-              </div>
-            </div>
-
-            <div style="background:white;border:1px solid var(--border);border-radius:16px;padding:16px;">
-              <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Tuesday, Mar 11</div>
-              <div style="font-size:28px;font-weight:900;color:var(--dark);margin-bottom:10px;">7 AM – 3 PM</div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🌿 Yard 3 Primary</div>
-                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🍽️ Feedings</div>
-                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">💊 Meds</div>
-              </div>
-            </div>
-
           </div>
         </div>
 
@@ -4431,6 +4462,57 @@
       if (check) { check.textContent = '✓'; check.style.color = 'var(--teal)'; }
     }
   };
+
+  // My Schedule — calendar
+  const scheduleShifts = {
+    6:  { label: 'Today — Thursday, Mar 6', time: '7 AM – 3 PM', tags: ['🌿 Yard 3 Primary','🍽️ Feedings','💊 Meds'], today: true },
+    7:  { label: 'Friday, Mar 7',           time: '7 AM – 3 PM', tags: ['🌿 Yard 3 Primary','🍽️ Feedings','💊 Meds'], today: false },
+    8:  { label: 'Saturday, Mar 8',         time: '9 AM – 5 PM', tags: ['🌿 Yard 5 Primary','🍽️ Feedings'],           today: false },
+    11: { label: 'Tuesday, Mar 11',         time: '7 AM – 3 PM', tags: ['🌿 Yard 3 Primary','🍽️ Feedings','💊 Meds'], today: false },
+  };
+  const shiftDays = [6, 7, 8, 11];
+  let selectedSchedDay = 6;
+
+  function selectScheduleDay(day) {
+    if (!scheduleShifts[day]) return;
+    selectedSchedDay = day;
+    // Update circle styles
+    shiftDays.forEach(d => {
+      const el = document.getElementById('sday-' + d);
+      if (!el) return;
+      if (d === day) {
+        el.style.background = 'var(--teal)';
+        el.style.color = 'white';
+      } else if (d === 6) {
+        // today but not selected — show teal ring
+        el.style.background = 'transparent';
+        el.style.color = 'var(--teal-dark)';
+        el.style.boxShadow = '0 0 0 2px var(--teal)';
+      } else {
+        el.style.background = 'transparent';
+        el.style.color = 'var(--teal-dark)';
+        el.style.boxShadow = '';
+      }
+    });
+    // Update card
+    const shift = scheduleShifts[day];
+    const card = document.getElementById('schedule-shift-card');
+    const isToday = shift.today;
+    card.style.background = isToday ? 'var(--teal-light)' : 'white';
+    card.style.border = isToday ? 'none' : '1px solid var(--border)';
+    const labelColor = isToday ? 'var(--teal-dark)' : 'var(--medium)';
+    const timeColor  = isToday ? 'var(--teal-dark)' : 'var(--dark)';
+    const tagBg      = isToday ? 'white' : 'var(--bg)';
+    const tagColor   = isToday ? 'var(--teal-dark)' : 'var(--dark)';
+    const tagsHtml = shift.tags.map(t =>
+      `<div style="background:${tagBg};color:${tagColor};border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">${t}</div>`
+    ).join('');
+    card.innerHTML = `
+      <div style="font-size:11px;font-weight:800;color:${labelColor};text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">${shift.label}</div>
+      <div style="font-size:28px;font-weight:900;color:${timeColor};margin-bottom:10px;">${shift.time}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">${tagsHtml}</div>
+    `;
+  }
 
   function openDogProfile(id, backScreen) {
     const d = dogProfiles[id];
