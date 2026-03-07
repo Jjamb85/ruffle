@@ -4073,7 +4073,6 @@
       <button class="back-btn" onclick="go('employee-home')" style="background:rgba(255,255,255,0.2);color:white;flex-shrink:0;">‹</button>
       <div>
         <div style="font-size:20px;font-weight:900;color:white;line-height:1.1;">My Schedule</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.75);font-weight:600;margin-top:3px;">Jordan Lee · This Week</div>
       </div>
     </div>
 
@@ -4104,61 +4103,40 @@
           </div>
         </div>
 
-        <!-- Task list for today -->
-        <div>
-          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Today's Tasks</div>
-          <div style="background:white;border-radius:16px;border:1px solid var(--border);overflow:hidden;">
-
-            <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);">
-              <div style="width:32px;height:32px;border-radius:8px;background:#FFF8E1;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🍽️</div>
-              <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--dark);">Morning Feedings</div><div style="font-size:11px;font-weight:600;color:var(--medium);">Yard 3 · 7:00 – 8:00 AM</div></div>
-              <div style="font-size:11px;font-weight:800;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:6px;">✓ Done</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);">
-              <div style="width:32px;height:32px;border-radius:8px;background:#EEF5FF;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">💊</div>
-              <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--dark);">Medications</div><div style="font-size:11px;font-weight:600;color:var(--medium);">Buddy – Rimadyl · 8:00 AM</div></div>
-              <div style="font-size:11px;font-weight:800;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:6px;">✓ Done</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);">
-              <div style="width:32px;height:32px;border-radius:8px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🧹</div>
-              <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--dark);">Room Cleaning</div><div style="font-size:11px;font-weight:600;color:var(--medium);">Rooms 3, 4, 5 · 9:00 AM</div></div>
-              <div style="font-size:11px;font-weight:800;color:#3B7DDD;background:#EEF5FF;padding:3px 8px;border-radius:6px;">In Progress</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);">
-              <div style="width:32px;height:32px;border-radius:8px;background:#F0FBF2;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🌿</div>
-              <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--dark);">Yard Duty</div><div style="font-size:11px;font-weight:600;color:var(--medium);">Yard 3 · 11:00 AM – 1:00 PM</div></div>
-              <div style="font-size:11px;font-weight:800;color:var(--medium);background:#F0F0F0;padding:3px 8px;border-radius:6px;">Upcoming</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);">
-              <div style="width:32px;height:32px;border-radius:8px;background:var(--purple-light);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📸</div>
-              <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--dark);">Add-On: Pups-choice</div><div style="font-size:11px;font-weight:600;color:var(--medium);">Buddy · 3:00 PM</div></div>
-              <div style="font-size:11px;font-weight:800;color:var(--medium);background:#F0F0F0;padding:3px 8px;border-radius:6px;">Upcoming</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;">
-              <div style="width:32px;height:32px;border-radius:8px;background:#FFF8E1;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🍽️</div>
-              <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--dark);">Afternoon Feedings</div><div style="font-size:11px;font-weight:600;color:var(--medium);">Yard 3 · 2:00 PM</div></div>
-              <div style="font-size:11px;font-weight:800;color:var(--medium);background:#F0F0F0;padding:3px 8px;border-radius:6px;">Upcoming</div>
-            </div>
-
-          </div>
-        </div>
-
         <!-- Upcoming shifts -->
         <div>
           <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Upcoming Shifts</div>
-          <div style="background:white;border-radius:16px;border:1px solid var(--border);overflow:hidden;">
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--border);">
-              <div><div style="font-size:13px;font-weight:800;color:var(--dark);">Friday, Mar 7</div><div style="font-size:11px;font-weight:600;color:var(--medium);">7:00 AM – 3:00 PM · Yard 3</div></div>
-              <div style="font-size:11px;font-weight:800;color:var(--teal-dark);background:var(--teal-light);padding:3px 8px;border-radius:6px;">Scheduled</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+
+            <div style="background:white;border:1px solid var(--border);border-radius:16px;padding:16px;">
+              <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Friday, Mar 7</div>
+              <div style="font-size:28px;font-weight:900;color:var(--dark);margin-bottom:10px;">7 AM – 3 PM</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🌿 Yard 3 Primary</div>
+                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🍽️ Feedings</div>
+                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">💊 Meds</div>
+              </div>
             </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--border);">
-              <div><div style="font-size:13px;font-weight:800;color:var(--dark);">Saturday, Mar 8</div><div style="font-size:11px;font-weight:600;color:var(--medium);">9:00 AM – 5:00 PM · Yard 5</div></div>
-              <div style="font-size:11px;font-weight:800;color:var(--teal-dark);background:var(--teal-light);padding:3px 8px;border-radius:6px;">Scheduled</div>
+
+            <div style="background:white;border:1px solid var(--border);border-radius:16px;padding:16px;">
+              <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Saturday, Mar 8</div>
+              <div style="font-size:28px;font-weight:900;color:var(--dark);margin-bottom:10px;">9 AM – 5 PM</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🌿 Yard 5 Primary</div>
+                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🍽️ Feedings</div>
+              </div>
             </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;">
-              <div><div style="font-size:13px;font-weight:800;color:var(--dark);">Tuesday, Mar 11</div><div style="font-size:11px;font-weight:600;color:var(--medium);">7:00 AM – 3:00 PM · Yard 3</div></div>
-              <div style="font-size:11px;font-weight:800;color:var(--teal-dark);background:var(--teal-light);padding:3px 8px;border-radius:6px;">Scheduled</div>
+
+            <div style="background:white;border:1px solid var(--border);border-radius:16px;padding:16px;">
+              <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Tuesday, Mar 11</div>
+              <div style="font-size:28px;font-weight:900;color:var(--dark);margin-bottom:10px;">7 AM – 3 PM</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🌿 Yard 3 Primary</div>
+                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🍽️ Feedings</div>
+                <div style="background:var(--bg);color:var(--dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">💊 Meds</div>
+              </div>
             </div>
+
           </div>
         </div>
 
