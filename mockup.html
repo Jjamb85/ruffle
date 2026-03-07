@@ -513,7 +513,7 @@
           <div class="cal-row">
             <div class="cal-time">8 AM</div>
             <div class="cal-slot">
-              <div class="cal-task" style="background:var(--orange-light);border-left:3px solid var(--orange);" onclick="go('feed-confirm')">
+              <div class="cal-task" style="background:var(--orange-light);border-left:3px solid var(--orange);" onclick="openSheet('feed')">
                 <div class="cal-task-title" style="color:#C45C1A;">🍽️ Feed Buddy</div>
                 <div class="cal-task-sub" style="color:#A04014;">Room 4 · Orange Group <span style="background:var(--coral);color:white;border-radius:6px;padding:1px 6px;font-size:10px;margin-left:4px;">Now</span></div>
               </div>
@@ -591,8 +591,8 @@
     </div>
 
     <div class="bottom-nav">
-      <div class="nav-item" onclick="go('note-entry')"><div class="nav-icon">🎙️</div><div class="nav-label">Care Note</div></div>
-      <div class="nav-item" onclick="go('photo-entry')"><div class="nav-icon">📸</div><div class="nav-label">Photo</div></div>
+      <div class="nav-item" onclick="openSheet('note-entry')"><div class="nav-icon">🎙️</div><div class="nav-label">Care Note</div></div>
+      <div class="nav-item" onclick="openSheet('photo-entry')"><div class="nav-icon">📸</div><div class="nav-label">Photo</div></div>
       <div class="nav-item" onclick="go('color-groups')"><div class="nav-icon">🐕</div><div class="nav-label">Groups</div></div>
       <div class="nav-item" onclick="go('incident-report')"><div class="nav-icon">⚠️</div><div class="nav-label">Tiff</div></div>
       <div class="nav-item" onclick="go('employee-schedule')"><div class="nav-icon">📅</div><div class="nav-label">My Schedule</div></div>
@@ -600,152 +600,16 @@
   </div>
 
   <!-- ══════════════════════════════════════════ -->
-  <!-- NOTE ENTRY                                 -->
+  <!-- NOTE ENTRY (now a sheet — placeholder)     -->
   <!-- ══════════════════════════════════════════ -->
-  <div class="screen" id="screen-note-entry">
-    <div style="background:linear-gradient(135deg,var(--teal-deeper),var(--teal-dark));padding:48px 20px 20px;display:flex;align-items:center;gap:14px;flex-shrink:0;position:relative;overflow:hidden;">
-      <div style="content:'🐾';position:absolute;font-size:120px;opacity:0.06;right:-20px;bottom:-20px;transform:rotate(-15deg);pointer-events:none;">🐾</div>
-      <button class="back-btn" onclick="go('employee-home')" style="background:rgba(255,255,255,0.2);color:white;flex-shrink:0;">‹</button>
-      <div>
-        <div style="font-size:20px;font-weight:900;color:white;line-height:1.1;">Record a Note</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.75);font-weight:600;margin-top:3px;">⏱ Timestamped automatically</div>
-      </div>
-    </div>
-    <div class="scroll-content">
-      <div class="p-16" style="padding:24px;">
-
-        <!-- Step 1 -->
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-          <div style="width:34px;height:34px;border-radius:50%;background:var(--teal);color:white;font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(59,190,199,0.35);">1</div>
-          <button class="btn btn-secondary" style="flex:1;padding:13px;" id="note-dictate-btn" onclick="noteToggleDictate(this)">🎙️ &nbsp;Dictate Note</button>
-        </div>
-        <textarea id="note-text" class="input-field" style="height:130px;margin-bottom:32px;" placeholder="Type or dictate an observation..." oninput="checkNoteReady()"></textarea>
-
-        <!-- Divider -->
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:28px;">
-          <div style="flex:1;height:2px;background:var(--border);border-radius:1px;"></div>
-        </div>
-
-        <!-- Step 2 -->
-        <div id="note-step2" class="step2-dimmed">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-          <div style="width:34px;height:34px;border-radius:50%;background:var(--teal);color:white;font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(59,190,199,0.35);">2</div>
-          <button id="note-nfc-btn" onclick="simulateScan('note')" class="btn btn-secondary" style="flex:1;padding:13px;display:flex;align-items:center;justify-content:center;gap:10px;">
-            <svg width="22" height="15" viewBox="0 0 36 24" fill="none"><circle cx="3" cy="12" r="2.5" fill="currentColor"/><path d="M9 8 Q12 12 9 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a1"/><path d="M15 5 Q20 12 15 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a2"/><path d="M21 2 Q28 12 21 22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a3"/></svg>
-            <span id="note-nfc-label">Scan Friend's Tag</span>
-          </button>
-        </div>
-        <!-- OR divider -->
-        <div style="display:flex;align-items:center;gap:10px;margin:4px 0 14px;">
-          <div style="flex:1;height:1px;background:var(--border);"></div>
-          <div style="font-size:12px;font-weight:800;color:var(--medium);letter-spacing:0.5px;">OR</div>
-          <div style="flex:1;height:1px;background:var(--border);"></div>
-        </div>
-        <!-- Color group chips -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;" id="note-group-chips">
-          <button class="attach-chip" data-screen="note" data-color="#3B7DDD" onclick="toggleAttachChip(this)" style="background:#EEF3FC;border:2px solid #3B7DDD;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#3B7DDD;cursor:pointer;transition:all 0.15s;">🔵 Blue</button>
-          <button class="attach-chip" data-screen="note" data-color="#D64FA0" onclick="toggleAttachChip(this)" style="background:#FCEEF7;border:2px solid #D64FA0;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#D64FA0;cursor:pointer;transition:all 0.15s;">🩷 Pink</button>
-          <button class="attach-chip" data-screen="note" data-color="#7B5EA7" onclick="toggleAttachChip(this)" style="background:#F2EEF9;border:2px solid #7B5EA7;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#7B5EA7;cursor:pointer;transition:all 0.15s;">🟣 Purple</button>
-          <button class="attach-chip" data-screen="note" data-color="#C8A000" onclick="toggleAttachChip(this)" style="background:#FBF7E4;border:2px solid #C8A000;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#C8A000;cursor:pointer;transition:all 0.15s;">🟡 Yellow</button>
-          <button class="attach-chip" data-screen="note" data-color="#E07820" onclick="toggleAttachChip(this)" style="background:#FDF3EA;border:2px solid #E07820;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#E07820;cursor:pointer;transition:all 0.15s;">🟠 Orange</button>
-          <button class="attach-chip" data-screen="note" data-color="#8B2252" onclick="toggleAttachChip(this)" style="background:#F7EBF2;border:2px solid #8B2252;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#8B2252;cursor:pointer;transition:all 0.15s;">👑 Royal</button>
-        </div>
-        <button id="note-group-submit" onclick="submitGroupAttach('note')" class="btn btn-primary" style="width:100%;display:none;">Attach to Selected Group(s)</button>
-        <!-- Inline confirmation -->
-        <div id="note-confirm" style="display:none;background:var(--green-light);border:2px solid var(--green);border-radius:16px;padding:16px;margin-top:4px;">
-          <div style="display:flex;align-items:center;gap:14px;">
-            <div style="width:56px;height:56px;border-radius:50%;background:#D4EFD4;border:3px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🐶</div>
-            <div style="flex:1;">
-              <div id="note-confirm-name" style="font-size:16px;font-weight:900;color:#1A5C2A;">Attached to Buddy</div>
-              <div id="note-confirm-sub" style="font-size:12px;font-weight:700;color:#2A8A56;margin-top:2px;">Golden Retriever · 🟠 Orange · Room 4</div>
-              <div style="font-size:11px;font-weight:600;color:#2A8A56;margin-top:4px;">⏱ Today · 8:15 AM · Sarah</div>
-            </div>
-            <div style="font-size:22px;">✅</div>
-          </div>
-        </div>
-        </div><!-- /note-step2 -->
-
-      </div>
-    </div>
-  </div>
+  <!-- Moved to global sheet #sheet-note-entry -->
 
   <!-- ══════════════════════════════════════════ -->
-  <!-- PHOTO ENTRY                                -->
+  <!-- PHOTO ENTRY PLACEHOLDER                    -->
   <!-- ══════════════════════════════════════════ -->
-  <div class="screen" id="screen-photo-entry">
-    <div style="background:linear-gradient(135deg,var(--teal-deeper),var(--teal-dark));padding:48px 20px 20px;display:flex;align-items:center;gap:14px;flex-shrink:0;position:relative;overflow:hidden;">
-      <div style="content:'🐾';position:absolute;font-size:120px;opacity:0.06;right:-20px;bottom:-20px;transform:rotate(-15deg);pointer-events:none;">🐾</div>
-      <button class="back-btn" onclick="go('employee-home')" style="background:rgba(255,255,255,0.2);color:white;flex-shrink:0;">‹</button>
-      <div>
-        <div style="font-size:20px;font-weight:900;color:white;line-height:1.1;">Take a Photo</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.75);font-weight:600;margin-top:3px;">⏱ Timestamped automatically</div>
-      </div>
-    </div>
-    <div class="scroll-content">
-      <div class="p-16" style="padding:24px;">
+  <!-- Moved to global sheet #sheet-photo-entry -->
 
-        <!-- Step 1 -->
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-          <div style="width:34px;height:34px;border-radius:50%;background:var(--teal);color:white;font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(59,190,199,0.35);">1</div>
-          <button class="btn btn-secondary" style="flex:1;padding:13px;" onclick="document.getElementById('photo-entry-preview').style.display='flex';enablePhotoStep2()">📸 &nbsp;Take Photo</button>
-        </div>
-        <div id="photo-entry-preview" style="display:none;background:var(--bg);border:2px dashed var(--border);border-radius:14px;padding:14px;align-items:center;gap:12px;margin-bottom:4px;">
-          <div style="font-size:28px;">🖼️</div>
-          <div style="flex:1;">
-            <div style="font-size:13px;font-weight:800;color:var(--dark);">Photo ready</div>
-            <div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:2px;">IMG_1024.jpg · 1.8 MB</div>
-          </div>
-          <div style="font-size:18px;color:var(--coral);cursor:pointer;" onclick="document.getElementById('photo-entry-preview').style.display='none'">✕</div>
-        </div>
-        <div style="height:32px;"></div>
 
-        <!-- Divider -->
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:28px;">
-          <div style="flex:1;height:2px;background:var(--border);border-radius:1px;"></div>
-        </div>
-
-        <!-- Step 2 -->
-        <div id="photo-step2" class="step2-dimmed">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-          <div style="width:34px;height:34px;border-radius:50%;background:var(--teal);color:white;font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(59,190,199,0.35);">2</div>
-          <button id="photo-nfc-btn" onclick="simulateScan('photo')" class="btn btn-secondary" style="flex:1;padding:13px;display:flex;align-items:center;justify-content:center;gap:10px;">
-            <svg width="22" height="15" viewBox="0 0 36 24" fill="none"><circle cx="3" cy="12" r="2.5" fill="currentColor"/><path d="M9 8 Q12 12 9 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a1"/><path d="M15 5 Q20 12 15 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a2"/><path d="M21 2 Q28 12 21 22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a3"/></svg>
-            <span id="photo-nfc-label">Scan Friend's Tag</span>
-          </button>
-        </div>
-        <!-- OR divider -->
-        <div style="display:flex;align-items:center;gap:10px;margin:4px 0 14px;">
-          <div style="flex:1;height:1px;background:var(--border);"></div>
-          <div style="font-size:12px;font-weight:800;color:var(--medium);letter-spacing:0.5px;">OR</div>
-          <div style="flex:1;height:1px;background:var(--border);"></div>
-        </div>
-        <!-- Color group chips -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;" id="photo-group-chips">
-          <button class="attach-chip" data-screen="photo" data-color="#3B7DDD" onclick="toggleAttachChip(this)" style="background:#EEF3FC;border:2px solid #3B7DDD;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#3B7DDD;cursor:pointer;transition:all 0.15s;">🔵 Blue</button>
-          <button class="attach-chip" data-screen="photo" data-color="#D64FA0" onclick="toggleAttachChip(this)" style="background:#FCEEF7;border:2px solid #D64FA0;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#D64FA0;cursor:pointer;transition:all 0.15s;">🩷 Pink</button>
-          <button class="attach-chip" data-screen="photo" data-color="#7B5EA7" onclick="toggleAttachChip(this)" style="background:#F2EEF9;border:2px solid #7B5EA7;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#7B5EA7;cursor:pointer;transition:all 0.15s;">🟣 Purple</button>
-          <button class="attach-chip" data-screen="photo" data-color="#C8A000" onclick="toggleAttachChip(this)" style="background:#FBF7E4;border:2px solid #C8A000;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#C8A000;cursor:pointer;transition:all 0.15s;">🟡 Yellow</button>
-          <button class="attach-chip" data-screen="photo" data-color="#E07820" onclick="toggleAttachChip(this)" style="background:#FDF3EA;border:2px solid #E07820;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#E07820;cursor:pointer;transition:all 0.15s;">🟠 Orange</button>
-          <button class="attach-chip" data-screen="photo" data-color="#8B2252" onclick="toggleAttachChip(this)" style="background:#F7EBF2;border:2px solid #8B2252;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#8B2252;cursor:pointer;transition:all 0.15s;">👑 Royal</button>
-        </div>
-        <button id="photo-group-submit" onclick="submitGroupAttach('photo')" class="btn btn-primary" style="width:100%;display:none;">Attach to Selected Group(s)</button>
-        <!-- Inline confirmation -->
-        <div id="photo-confirm" style="display:none;background:var(--green-light);border:2px solid var(--green);border-radius:16px;padding:16px;margin-top:4px;">
-          <div style="display:flex;align-items:center;gap:14px;">
-            <div style="width:56px;height:56px;border-radius:50%;background:#D4EFD4;border:3px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🐶</div>
-            <div style="flex:1;">
-              <div id="photo-confirm-name" style="font-size:16px;font-weight:900;color:#1A5C2A;">Attached to Buddy</div>
-              <div id="photo-confirm-sub" style="font-size:12px;font-weight:700;color:#2A8A56;margin-top:2px;">Golden Retriever · 🟠 Orange · Room 4</div>
-              <div style="font-size:11px;font-weight:600;color:#2A8A56;margin-top:4px;">⏱ Today · 8:15 AM · Sarah</div>
-            </div>
-            <div style="font-size:22px;">✅</div>
-          </div>
-        </div>
-        </div><!-- /photo-step2 -->
-
-      </div>
-    </div>
-  </div>
 
   <!-- ══════════════════════════════════════════ -->
   <!-- CAPTURE DONE                               -->
@@ -815,19 +679,19 @@
 
     <!-- Buttons — fill available space evenly -->
     <div style="flex:1;display:flex;flex-direction:column;justify-content:space-evenly;width:83%;margin:0 auto;padding:12px 0;min-height:0;overflow:hidden;">
-      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="go('feed-confirm')">
+      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="openSheet('feed')">
         <div class="action-icon">🍽️</div><div class="action-label" style="font-size:13px;color:var(--teal-dark);">Feed</div>
       </button>
-      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="go('medicate-confirm')">
+      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="openSheet('medicate')">
         <div class="action-icon">💊</div><div class="action-label" style="font-size:13px;color:var(--teal-dark);">Medicate</div>
       </button>
-      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="go('addon-select')">
+      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="openSheet('addon')">
         <div class="action-icon">⭐</div><div class="action-label" style="font-size:13px;color:var(--teal-dark);">Perform Add On</div>
       </button>
-      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="go('note-entry')">
+      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="openSheet('note-entry')">
         <div class="action-icon">🎙️</div><div class="action-label" style="font-size:13px;color:var(--teal-dark);">Care Note</div>
       </button>
-      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="go('photo-entry')">
+      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="openSheet('photo-entry')">
         <div class="action-icon">📸</div><div class="action-label" style="font-size:13px;color:var(--teal-dark);">Photo</div>
       </button>
       <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;">
@@ -1778,7 +1642,7 @@
           <div class="quick-action" onclick="go('admin-daily-report')">
             <div class="qa-icon" style="background:#FFF8E1;">📊</div><div class="qa-label">Daily Report</div>
           </div>
-          <div class="quick-action" onclick="go('admin-message-yard')">
+          <div class="quick-action" onclick="openSheet('message-yard')">
             <div class="qa-icon" style="background:var(--yellow-light);">📣</div><div class="qa-label">Message Yard</div>
           </div>
           <div class="quick-action" onclick="go('admin-send-sms')">
@@ -2117,7 +1981,7 @@
       <div style="padding:12px 16px 16px;">
 
         <!-- NFC scan banner -->
-        <div onclick="go('admin-checkout-confirm')" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark));border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:14px;margin-bottom:14px;cursor:pointer;box-shadow:0 4px 14px rgba(59,190,199,0.3);">
+        <div onclick="openCheckoutConfirm('Buddy','🐕','Golden Retriever · 🟠 Orange · Room 4')" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark));border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:14px;margin-bottom:14px;cursor:pointer;box-shadow:0 4px 14px rgba(59,190,199,0.3);">
           <div style="background:rgba(255,255,255,0.2);border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg width="24" height="16" viewBox="0 0 36 24" fill="none"><circle cx="3" cy="12" r="2.5" fill="white"/><path d="M9 8 Q12 12 9 16" stroke="white" stroke-width="2.5" stroke-linecap="round"/><path d="M15 5 Q20 12 15 19" stroke="white" stroke-width="2.5" stroke-linecap="round"/><path d="M21 2 Q28 12 21 22" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
           </div>
@@ -2139,7 +2003,7 @@
               <div style="font-size:15px;font-weight:900;color:var(--dark);">Buddy</div>
               <div style="font-size:12px;color:var(--medium);font-weight:600;">Golden Retriever · 🟠 Orange · Room 4</div>
             </div>
-            <button onclick="go('admin-checkout-confirm')" style="background:#FFF0EB;border:1.5px solid #FFCCBB;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;font-weight:800;color:#C0440A;display:flex;align-items:center;gap:5px;flex-shrink:0;">🚪 Out</button>
+            <button onclick="openCheckoutConfirm('Buddy','🐕','Golden Retriever · 🟠 Orange · Room 4')" style="background:#FFF0EB;border:1.5px solid #FFCCBB;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;font-weight:800;color:#C0440A;display:flex;align-items:center;gap:5px;flex-shrink:0;">🚪 Out</button>
           </div>
 
           <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:14px;">
@@ -2148,7 +2012,7 @@
               <div style="font-size:15px;font-weight:900;color:var(--dark);">Luna</div>
               <div style="font-size:12px;color:var(--medium);font-weight:600;">Miniature Poodle · 🩷 Pink · Room 7</div>
             </div>
-            <button onclick="go('admin-checkout-confirm')" style="background:#FFF0EB;border:1.5px solid #FFCCBB;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;font-weight:800;color:#C0440A;display:flex;align-items:center;gap:5px;flex-shrink:0;">🚪 Out</button>
+            <button onclick="openCheckoutConfirm('Luna','🐩','Miniature Poodle · 🩷 Pink · Room 7')" style="background:#FFF0EB;border:1.5px solid #FFCCBB;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;font-weight:800;color:#C0440A;display:flex;align-items:center;gap:5px;flex-shrink:0;">🚪 Out</button>
           </div>
 
           <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:14px;">
@@ -2157,7 +2021,7 @@
               <div style="font-size:15px;font-weight:900;color:var(--dark);">Max</div>
               <div style="font-size:12px;color:var(--medium);font-weight:600;">German Shepherd · 🟣 Purple · Room 2</div>
             </div>
-            <button onclick="go('admin-checkout-confirm')" style="background:#FFF0EB;border:1.5px solid #FFCCBB;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;font-weight:800;color:#C0440A;display:flex;align-items:center;gap:5px;flex-shrink:0;">🚪 Out</button>
+            <button onclick="openCheckoutConfirm('Max','🐾','German Shepherd · 🟣 Purple · Room 2')" style="background:#FFF0EB;border:1.5px solid #FFCCBB;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;font-weight:800;color:#C0440A;display:flex;align-items:center;gap:5px;flex-shrink:0;">🚪 Out</button>
           </div>
 
           <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:14px;">
@@ -2166,7 +2030,7 @@
               <div style="font-size:15px;font-weight:900;color:var(--dark);">Daisy</div>
               <div style="font-size:12px;color:var(--medium);font-weight:600;">Labrador Retriever · 🟡 Yellow · Room 11</div>
             </div>
-            <button onclick="go('admin-checkout-confirm')" style="background:#FFF0EB;border:1.5px solid #FFCCBB;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;font-weight:800;color:#C0440A;display:flex;align-items:center;gap:5px;flex-shrink:0;">🚪 Out</button>
+            <button onclick="openCheckoutConfirm('Daisy','🐶','Labrador Retriever · 🟡 Yellow · Room 11')" style="background:#FFF0EB;border:1.5px solid #FFCCBB;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;font-weight:800;color:#C0440A;display:flex;align-items:center;gap:5px;flex-shrink:0;">🚪 Out</button>
           </div>
 
           <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:14px;">
@@ -2175,7 +2039,7 @@
               <div style="font-size:15px;font-weight:900;color:var(--dark);">Rosie</div>
               <div style="font-size:12px;color:var(--medium);font-weight:600;">Bernese Mtn Dog · 👑 Royal · Room 1</div>
             </div>
-            <button onclick="go('admin-checkout-confirm')" style="background:#FFF0EB;border:1.5px solid #FFCCBB;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;font-weight:800;color:#C0440A;display:flex;align-items:center;gap:5px;flex-shrink:0;">🚪 Out</button>
+            <button onclick="openCheckoutConfirm('Rosie','🦮','Bernese Mtn Dog · 👑 Royal · Room 1')" style="background:#FFF0EB;border:1.5px solid #FFCCBB;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;font-weight:800;color:#C0440A;display:flex;align-items:center;gap:5px;flex-shrink:0;">🚪 Out</button>
           </div>
 
           <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:14px;">
@@ -2184,7 +2048,7 @@
               <div style="font-size:15px;font-weight:900;color:var(--dark);">Cooper</div>
               <div style="font-size:12px;color:var(--medium);font-weight:600;">Border Collie · 🔵 Blue · Room 9</div>
             </div>
-            <button onclick="go('admin-checkout-confirm')" style="background:#FFF0EB;border:1.5px solid #FFCCBB;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;font-weight:800;color:#C0440A;display:flex;align-items:center;gap:5px;flex-shrink:0;">🚪 Out</button>
+            <button onclick="openCheckoutConfirm('Cooper','🐕‍🦺','Border Collie · 🔵 Blue · Room 9')" style="background:#FFF0EB;border:1.5px solid #FFCCBB;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;font-weight:800;color:#C0440A;display:flex;align-items:center;gap:5px;flex-shrink:0;">🚪 Out</button>
           </div>
 
         </div>
@@ -4302,6 +4166,275 @@
     </div>
   </div>
 
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- GLOBAL BOTTOM SHEETS                                       -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="assign-overlay" id="global-sheet-overlay" onclick="closeActiveSheet()"></div>
+
+  <!-- ─── SHEET: Feed Confirm ─────────────────────────────────── -->
+  <div class="assign-sheet" id="sheet-feed" style="max-height:72%;">
+    <div class="assign-sheet-handle"></div>
+    <div style="padding:24px 24px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;">
+      <div style="font-size:64px;line-height:1;">🍽️</div>
+      <div style="font-size:22px;font-weight:900;color:var(--dark);">Did you feed Buddy?</div>
+      <div style="font-size:14px;font-weight:600;color:var(--medium);">This will complete the feeding task<br>and log the time.</div>
+      <div style="background:var(--bg);border-radius:12px;padding:14px;width:100%;text-align:left;display:flex;gap:12px;align-items:flex-start;box-sizing:border-box;">
+        <div style="font-size:18px;flex-shrink:0;margin-top:1px;">🍖</div>
+        <div>
+          <div style="font-size:10px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;">Feeding Notes</div>
+          <div style="font-size:12px;font-weight:600;color:var(--dark);line-height:1.5;">1 cup dry kibble AM &amp; PM. No treats — on a diet. Slow feeder bowl required.</div>
+        </div>
+      </div>
+      <button class="btn btn-secondary btn-full btn-lg" onclick="closeSheet('feed');go('feed-done')">Yes! 🍽️</button>
+      <div style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;padding-bottom:12px;" onclick="closeSheet('feed')">Cancel</div>
+    </div>
+  </div>
+
+  <!-- ─── SHEET: Medicate Confirm ──────────────────────────────── -->
+  <div class="assign-sheet" id="sheet-medicate" style="max-height:72%;">
+    <div class="assign-sheet-handle"></div>
+    <div style="padding:24px 24px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;">
+      <div style="font-size:64px;line-height:1;">💊</div>
+      <div style="font-size:22px;font-weight:900;color:var(--dark);">Did you medicate Buddy?</div>
+      <div style="font-size:14px;font-weight:600;color:var(--medium);">This will complete the medication task<br>and log the time.</div>
+      <div style="background:var(--bg);border-radius:12px;padding:14px;width:100%;text-align:left;display:flex;gap:12px;align-items:flex-start;box-sizing:border-box;">
+        <div style="font-size:18px;flex-shrink:0;margin-top:1px;">💊</div>
+        <div>
+          <div style="font-size:10px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;">Medication Notes</div>
+          <div style="font-size:12px;font-weight:600;color:var(--dark);line-height:1.5;">Rimadyl 50mg with food — AM only. Hide in peanut butter if refused.</div>
+        </div>
+      </div>
+      <button class="btn btn-secondary btn-full btn-lg" onclick="closeSheet('medicate');go('medicate-done')">Yes! 💊</button>
+      <div style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;padding-bottom:12px;" onclick="closeSheet('medicate')">Cancel</div>
+    </div>
+  </div>
+
+  <!-- ─── SHEET: Add-On (list → confirm two-state) ─────────────── -->
+  <div class="assign-sheet" id="sheet-addon" style="max-height:90%;overflow:hidden;display:flex;flex-direction:column;">
+    <div class="assign-sheet-handle"></div>
+    <!-- List state -->
+    <div id="addon-sheet-list-state" style="display:block;flex:1;min-height:0;overflow-y:auto;">
+      <div style="padding:4px 16px 10px;flex-shrink:0;">
+        <div style="font-size:17px;font-weight:900;color:var(--dark);">Perform Add On</div>
+        <div style="font-size:12px;color:var(--medium);font-weight:600;margin-top:2px;">Buddy · Orange Group · Room 4</div>
+      </div>
+      <div style="padding:0 16px 24px;">
+        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Training</div>
+        <div style="background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:16px;">
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Treadmill Walk','🏃')"><div style="width:36px;height:36px;border-radius:10px;background:#EEF4FF;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏃</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Treadmill Walk</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Training Walk','🦮')"><div style="width:36px;height:36px;border-radius:10px;background:#EEF4FF;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🦮</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Training Walk</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;cursor:pointer;" onclick="selectAddon('Pups-Choice','⭐')"><div style="width:36px;height:36px;border-radius:10px;background:#EEF4FF;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">⭐</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Pups-Choice</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+        </div>
+        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Wellness</div>
+        <div style="background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:16px;">
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Brushing','🪮')"><div style="width:36px;height:36px;border-radius:10px;background:#F0FBF0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🪮</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Brushing</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Scent Lead Walk','🐾')"><div style="width:36px;height:36px;border-radius:10px;background:#F0FBF0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🐾</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Scent Lead Walk</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Teeth Brushing','🦷')"><div style="width:36px;height:36px;border-radius:10px;background:#F0FBF0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🦷</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Teeth Brushing</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Ear Cleaning','👂')"><div style="width:36px;height:36px;border-radius:10px;background:#F0FBF0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">👂</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Ear Cleaning</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Bath','🛁')"><div style="width:36px;height:36px;border-radius:10px;background:#F0FBF0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🛁</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Bath</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;cursor:pointer;" onclick="selectAddon('One on One Cuddle Time','🤗')"><div style="width:36px;height:36px;border-radius:10px;background:#F0FBF0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🤗</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">One on One Cuddle Time</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+        </div>
+        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Treats</div>
+        <div style="background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:16px;">
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Extreme Kong','🐶')"><div style="width:36px;height:36px;border-radius:10px;background:#FFFBEE;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🐶</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Extreme Kong</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Paw-sicle','🧊')"><div style="width:36px;height:36px;border-radius:10px;background:#FFFBEE;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🧊</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Paw-sicle</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Puppacino','☕')"><div style="width:36px;height:36px;border-radius:10px;background:#FFFBEE;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">☕</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Puppacino</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;cursor:pointer;" onclick="selectAddon('PB Kong','🥜')"><div style="width:36px;height:36px;border-radius:10px;background:#FFFBEE;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🥜</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">PB Kong</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+        </div>
+        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Holiday</div>
+        <div style="background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:16px;">
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Egg-celent Egg Hunt','🥚')"><div style="width:36px;height:36px;border-radius:10px;background:#F5F0FF;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🥚</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Egg-celent Egg Hunt</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Not Tricks Just Treats','🍬')"><div style="width:36px;height:36px;border-radius:10px;background:#F5F0FF;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🍬</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Not Tricks Just Treats</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;cursor:pointer;" onclick="selectAddon('Santa Paws Photo','🎅')"><div style="width:36px;height:36px;border-radius:10px;background:#F5F0FF;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🎅</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Santa Paws Photo</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+        </div>
+        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Luxury</div>
+        <div style="background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:16px;">
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;cursor:pointer;" onclick="selectAddon('Birthday Party','🎂')"><div style="width:36px;height:36px;border-radius:10px;background:#FFF0F5;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🎂</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Birthday Party</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+        </div>
+        <div style="text-align:center;padding-top:4px;padding-bottom:8px;">
+          <span style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;" onclick="closeSheet('addon')">Cancel</span>
+        </div>
+      </div>
+    </div>
+    <!-- Confirm state -->
+    <div id="addon-sheet-confirm-state" style="display:none;flex-direction:column;align-items:center;text-align:center;padding:24px 24px 8px;gap:14px;">
+      <div style="font-size:64px;line-height:1;" id="sheet-addon-emoji">⭐</div>
+      <div style="font-size:20px;font-weight:900;color:var(--dark);" id="sheet-addon-header">Perform Add On</div>
+      <div style="font-size:14px;font-weight:600;color:var(--medium);" id="sheet-addon-question">Did you complete this for Buddy?</div>
+      <div style="background:var(--bg);border-radius:12px;padding:14px;width:100%;text-align:left;display:flex;gap:12px;align-items:center;box-sizing:border-box;">
+        <div style="font-size:16px;">📱</div>
+        <div style="font-size:12px;font-weight:600;color:var(--medium);">Parent will receive an SMS notification on completion.</div>
+      </div>
+      <button class="btn btn-secondary btn-full btn-lg" onclick="closeSheet('addon');go('addon-done')">Yes!</button>
+      <div style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;padding-bottom:12px;" onclick="showAddonList()">‹ Back to List</div>
+    </div>
+  </div>
+
+  <!-- ─── SHEET: Checkout Confirm (dynamic) ────────────────────── -->
+  <div class="assign-sheet" id="sheet-checkout" style="max-height:76%;">
+    <div class="assign-sheet-handle"></div>
+    <div style="padding:24px 24px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;">
+      <div style="font-size:64px;line-height:1;" id="sheet-checkout-emoji">🐕</div>
+      <div style="font-size:22px;font-weight:900;color:var(--dark);">Check out <span id="sheet-checkout-name">Buddy</span>?</div>
+      <div style="font-size:13px;font-weight:600;color:var(--medium);" id="sheet-checkout-detail">Golden Retriever · 🟠 Orange · Room 4</div>
+      <div style="font-size:14px;font-weight:600;color:var(--medium);">This will log checkout time<br>and notify the parent via SMS.</div>
+      <div style="background:#FFFBF0;border:1px solid #FFE8A0;border-radius:12px;padding:14px;width:100%;text-align:left;display:flex;gap:12px;align-items:flex-start;box-sizing:border-box;">
+        <div style="font-size:16px;flex-shrink:0;">🎒</div>
+        <div style="font-size:12px;font-weight:700;color:#B8860B;line-height:1.5;">Don't forget to collect all belongings before checkout.</div>
+      </div>
+      <button class="btn btn-secondary btn-full btn-lg" onclick="closeSheet('checkout');go('admin-checkout-done')">Yes, Check Out</button>
+      <div style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;padding-bottom:12px;" onclick="closeSheet('checkout')">Cancel</div>
+    </div>
+  </div>
+
+  <!-- ─── SHEET: Message Yard ───────────────────────────────────── -->
+  <div class="assign-sheet" id="sheet-message-yard" style="max-height:88%;overflow:hidden;display:flex;flex-direction:column;">
+    <div class="assign-sheet-handle"></div>
+    <div style="padding:8px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--border);">
+      <div style="font-size:17px;font-weight:900;color:var(--dark);">📣 Message Yard</div>
+      <div style="font-size:12px;color:var(--medium);font-weight:600;margin-top:2px;">Send to staff by yard</div>
+    </div>
+    <div style="overflow-y:auto;flex:1;padding:14px 16px 24px;">
+      <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Send to Yard(s)</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
+        <div class="yard-item selected" id="msg2-yard-5" onclick="toggleMsgYard2(this)" style="border-color:var(--teal);background:var(--teal-light);">
+          <div class="yard-icon" style="background:var(--orange-light);">🌿</div>
+          <div class="yard-info"><div class="yard-name">Yard 5 · <span style="color:var(--orange);">🟠 Orange</span></div><div class="yard-status">Sarah · checked in 9:02 AM</div></div>
+          <div style="font-size:18px;color:var(--teal);" id="msg2-yard-5-check">✓</div>
+        </div>
+        <div class="yard-item" id="msg2-yard-2" onclick="toggleMsgYard2(this)">
+          <div class="yard-icon" style="background:var(--pink-light);">🌿</div>
+          <div class="yard-info"><div class="yard-name">Yard 2 · <span style="color:var(--pink);">🩷 Pink</span></div><div class="yard-status">Mike · checked in 8:45 AM</div></div>
+          <div style="font-size:18px;color:var(--lighter);" id="msg2-yard-2-check">○</div>
+        </div>
+        <div class="yard-item" style="opacity:0.5;">
+          <div class="yard-icon">🌿</div>
+          <div class="yard-info"><div class="yard-name">Yard 1 · <span style="color:#4A90D9;">🔵 Blue</span></div><div class="yard-status" style="color:var(--light);">No staff checked in</div></div>
+          <div style="font-size:18px;color:var(--lighter);">—</div>
+        </div>
+        <div class="yard-item" style="opacity:0.5;">
+          <div class="yard-icon">🌿</div>
+          <div class="yard-info"><div class="yard-name">Yard 3 · <span style="color:var(--purple);">🟣 Purple</span></div><div class="yard-status" style="color:var(--light);">No staff checked in</div></div>
+          <div style="font-size:18px;color:var(--lighter);">—</div>
+        </div>
+      </div>
+      <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Message</div>
+      <textarea class="input-field" style="height:100px;margin-bottom:8px;" placeholder="Type a message to yard staff...">Rotate dogs to water station in 10 minutes. Orange group first.</textarea>
+      <div style="font-size:12px;font-weight:600;color:var(--medium);margin-bottom:16px;">Delivered as push notification to checked-in staff</div>
+      <button class="btn btn-primary btn-full btn-lg" onclick="closeSheet('message-yard')">📣 &nbsp;Send to Yard 5</button>
+    </div>
+  </div>
+
+  <!-- ─── SHEET: Note Entry ─────────────────────────────────────── -->
+  <div class="assign-sheet" id="sheet-note-entry" style="max-height:92%;overflow:hidden;display:flex;flex-direction:column;">
+    <div class="assign-sheet-handle"></div>
+    <div style="padding:8px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:17px;font-weight:900;color:var(--dark);">🎙️ Record a Note</div>
+        <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:2px;">⏱ Timestamped automatically</div>
+      </div>
+      <div style="font-size:22px;color:var(--lighter);cursor:pointer;padding:4px;" onclick="closeSheet('note-entry')">✕</div>
+    </div>
+    <div style="overflow-y:auto;flex:1;padding:20px 20px 24px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--teal);color:white;font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(59,190,199,0.35);">1</div>
+        <button class="btn btn-secondary" style="flex:1;padding:13px;" id="note-dictate-btn" onclick="noteToggleDictate(this)">🎙️ &nbsp;Dictate Note</button>
+      </div>
+      <textarea id="note-text" class="input-field" style="height:110px;margin-bottom:24px;" placeholder="Type or dictate an observation..." oninput="checkNoteReady()"></textarea>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;">
+        <div style="flex:1;height:2px;background:var(--border);border-radius:1px;"></div>
+      </div>
+      <div id="note-step2" class="step2-dimmed">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <div style="width:34px;height:34px;border-radius:50%;background:var(--teal);color:white;font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(59,190,199,0.35);">2</div>
+          <button id="note-nfc-btn" onclick="simulateScan('note')" class="btn btn-secondary" style="flex:1;padding:13px;display:flex;align-items:center;justify-content:center;gap:10px;">
+            <svg width="22" height="15" viewBox="0 0 36 24" fill="none"><circle cx="3" cy="12" r="2.5" fill="currentColor"/><path d="M9 8 Q12 12 9 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a1"/><path d="M15 5 Q20 12 15 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a2"/><path d="M21 2 Q28 12 21 22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a3"/></svg>
+            <span id="note-nfc-label">Scan Friend's Tag</span>
+          </button>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin:4px 0 14px;"><div style="flex:1;height:1px;background:var(--border);"></div><div style="font-size:12px;font-weight:800;color:var(--medium);letter-spacing:0.5px;">OR</div><div style="flex:1;height:1px;background:var(--border);"></div></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;" id="note-group-chips">
+          <button class="attach-chip" data-screen="note" data-color="#3B7DDD" onclick="toggleAttachChip(this)" style="background:#EEF3FC;border:2px solid #3B7DDD;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#3B7DDD;cursor:pointer;transition:all 0.15s;">🔵 Blue</button>
+          <button class="attach-chip" data-screen="note" data-color="#D64FA0" onclick="toggleAttachChip(this)" style="background:#FCEEF7;border:2px solid #D64FA0;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#D64FA0;cursor:pointer;transition:all 0.15s;">🩷 Pink</button>
+          <button class="attach-chip" data-screen="note" data-color="#7B5EA7" onclick="toggleAttachChip(this)" style="background:#F2EEF9;border:2px solid #7B5EA7;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#7B5EA7;cursor:pointer;transition:all 0.15s;">🟣 Purple</button>
+          <button class="attach-chip" data-screen="note" data-color="#C8A000" onclick="toggleAttachChip(this)" style="background:#FBF7E4;border:2px solid #C8A000;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#C8A000;cursor:pointer;transition:all 0.15s;">🟡 Yellow</button>
+          <button class="attach-chip" data-screen="note" data-color="#E07820" onclick="toggleAttachChip(this)" style="background:#FDF3EA;border:2px solid #E07820;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#E07820;cursor:pointer;transition:all 0.15s;">🟠 Orange</button>
+          <button class="attach-chip" data-screen="note" data-color="#8B2252" onclick="toggleAttachChip(this)" style="background:#F7EBF2;border:2px solid #8B2252;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#8B2252;cursor:pointer;transition:all 0.15s;">👑 Royal</button>
+        </div>
+        <button id="note-group-submit" onclick="submitGroupAttach('note')" class="btn btn-primary" style="width:100%;display:none;">Attach to Selected Group(s)</button>
+        <div id="note-confirm" style="display:none;background:var(--green-light);border:2px solid var(--green);border-radius:16px;padding:16px;margin-top:4px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="width:56px;height:56px;border-radius:50%;background:#D4EFD4;border:3px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🐶</div>
+            <div style="flex:1;">
+              <div id="note-confirm-name" style="font-size:16px;font-weight:900;color:#1A5C2A;">Attached to Buddy</div>
+              <div id="note-confirm-sub" style="font-size:12px;font-weight:700;color:#2A8A56;margin-top:2px;">Golden Retriever · 🟠 Orange · Room 4</div>
+              <div style="font-size:11px;font-weight:600;color:#2A8A56;margin-top:4px;">⏱ Today · 8:15 AM · Sarah</div>
+            </div>
+            <div style="font-size:22px;">✅</div>
+          </div>
+        </div>
+      </div><!-- /note-step2 -->
+    </div>
+  </div>
+
+  <!-- ─── SHEET: Photo Entry ────────────────────────────────────── -->
+  <div class="assign-sheet" id="sheet-photo-entry" style="max-height:92%;overflow:hidden;display:flex;flex-direction:column;">
+    <div class="assign-sheet-handle"></div>
+    <div style="padding:8px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:17px;font-weight:900;color:var(--dark);">📸 Take a Photo</div>
+        <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:2px;">⏱ Timestamped automatically</div>
+      </div>
+      <div style="font-size:22px;color:var(--lighter);cursor:pointer;padding:4px;" onclick="closeSheet('photo-entry')">✕</div>
+    </div>
+    <div style="overflow-y:auto;flex:1;padding:20px 20px 24px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--teal);color:white;font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(59,190,199,0.35);">1</div>
+        <button class="btn btn-secondary" style="flex:1;padding:13px;" onclick="document.getElementById('photo-entry-preview').style.display='flex';enablePhotoStep2()">📸 &nbsp;Take Photo</button>
+      </div>
+      <div id="photo-entry-preview" style="display:none;background:var(--bg);border:2px dashed var(--border);border-radius:14px;padding:14px;align-items:center;gap:12px;margin-bottom:4px;">
+        <div style="font-size:28px;">🖼️</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--dark);">Photo ready</div><div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:2px;">IMG_1024.jpg · 1.8 MB</div></div>
+        <div style="font-size:18px;color:var(--coral);cursor:pointer;" onclick="document.getElementById('photo-entry-preview').style.display='none'">✕</div>
+      </div>
+      <div style="height:24px;"></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;">
+        <div style="flex:1;height:2px;background:var(--border);border-radius:1px;"></div>
+      </div>
+      <div id="photo-step2" class="step2-dimmed">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <div style="width:34px;height:34px;border-radius:50%;background:var(--teal);color:white;font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(59,190,199,0.35);">2</div>
+          <button id="photo-nfc-btn" onclick="simulateScan('photo')" class="btn btn-secondary" style="flex:1;padding:13px;display:flex;align-items:center;justify-content:center;gap:10px;">
+            <svg width="22" height="15" viewBox="0 0 36 24" fill="none"><circle cx="3" cy="12" r="2.5" fill="currentColor"/><path d="M9 8 Q12 12 9 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a1"/><path d="M15 5 Q20 12 15 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a2"/><path d="M21 2 Q28 12 21 22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a3"/></svg>
+            <span id="photo-nfc-label">Scan Friend's Tag</span>
+          </button>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin:4px 0 14px;"><div style="flex:1;height:1px;background:var(--border);"></div><div style="font-size:12px;font-weight:800;color:var(--medium);letter-spacing:0.5px;">OR</div><div style="flex:1;height:1px;background:var(--border);"></div></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;" id="photo-group-chips">
+          <button class="attach-chip" data-screen="photo" data-color="#3B7DDD" onclick="toggleAttachChip(this)" style="background:#EEF3FC;border:2px solid #3B7DDD;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#3B7DDD;cursor:pointer;transition:all 0.15s;">🔵 Blue</button>
+          <button class="attach-chip" data-screen="photo" data-color="#D64FA0" onclick="toggleAttachChip(this)" style="background:#FCEEF7;border:2px solid #D64FA0;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#D64FA0;cursor:pointer;transition:all 0.15s;">🩷 Pink</button>
+          <button class="attach-chip" data-screen="photo" data-color="#7B5EA7" onclick="toggleAttachChip(this)" style="background:#F2EEF9;border:2px solid #7B5EA7;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#7B5EA7;cursor:pointer;transition:all 0.15s;">🟣 Purple</button>
+          <button class="attach-chip" data-screen="photo" data-color="#C8A000" onclick="toggleAttachChip(this)" style="background:#FBF7E4;border:2px solid #C8A000;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#C8A000;cursor:pointer;transition:all 0.15s;">🟡 Yellow</button>
+          <button class="attach-chip" data-screen="photo" data-color="#E07820" onclick="toggleAttachChip(this)" style="background:#FDF3EA;border:2px solid #E07820;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#E07820;cursor:pointer;transition:all 0.15s;">🟠 Orange</button>
+          <button class="attach-chip" data-screen="photo" data-color="#8B2252" onclick="toggleAttachChip(this)" style="background:#F7EBF2;border:2px solid #8B2252;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#8B2252;cursor:pointer;transition:all 0.15s;">👑 Royal</button>
+        </div>
+        <button id="photo-group-submit" onclick="submitGroupAttach('photo')" class="btn btn-primary" style="width:100%;display:none;">Attach to Selected Group(s)</button>
+        <div id="photo-confirm" style="display:none;background:var(--green-light);border:2px solid var(--green);border-radius:16px;padding:16px;margin-top:4px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="width:56px;height:56px;border-radius:50%;background:#D4EFD4;border:3px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🐶</div>
+            <div style="flex:1;">
+              <div id="photo-confirm-name" style="font-size:16px;font-weight:900;color:#1A5C2A;">Attached to Buddy</div>
+              <div id="photo-confirm-sub" style="font-size:12px;font-weight:700;color:#2A8A56;margin-top:2px;">Golden Retriever · 🟠 Orange · Room 4</div>
+              <div style="font-size:11px;font-weight:600;color:#2A8A56;margin-top:4px;">⏱ Today · 8:15 AM · Sarah</div>
+            </div>
+            <div style="font-size:22px;">✅</div>
+          </div>
+        </div>
+      </div><!-- /photo-step2 -->
+    </div>
+  </div>
+
 </div><!-- /phone-frame -->
 
 <script>
@@ -4315,6 +4448,21 @@
     max:    { name:'Max',    emoji:'🐾', breed:'German Shepherd',       age:'4 yrs', sex:'Male',   intact:'Neutered', weight:'75 lbs', groupLabel:'🟡 Yellow', groupBg:'#FFF8E1', groupColor:'#B8860B', room:'Room A', kennel:'Kennel 2',  parent:'Jennifer Rivera', vaccStatus:'current',  vaccExpires:'Dec 20, 2026', feeding:'Purina Pro Plan Large Breed · 3 cups AM / 3 cups PM',      meds:'Apoquel 16mg — 1 tab with AM meal (allergies)',       specialNote:'Strong puller on leash. Use slip lead only.' },
     daisy:  { name:'Daisy',  emoji:'🐶', breed:'Labrador Retriever',    age:'2 yrs', sex:'Female', intact:'Spayed',   weight:'55 lbs', groupLabel:'🟣 Purple', groupBg:'#F0EBFF', groupColor:'#7C3AED', room:'Room B', kennel:'Kennel 9',  parent:'David Park',      vaccStatus:'current',  vaccExpires:'Jun 5, 2026',  feeding:'Purina ONE SmartBlend · 2.5 cups AM / 2.5 cups PM',        meds:'',                                                    specialNote:'' },
     rosie:  { name:'Rosie',  emoji:'🦮', breed:'Bernese Mountain Dog',  age:'6 yrs', sex:'Female', intact:'Spayed',   weight:'90 lbs', groupLabel:'🟣 Purple', groupBg:'#F0EBFF', groupColor:'#7C3AED', room:'Room C', kennel:'Kennel 11', parent:'Amanda Foster',   vaccStatus:'current',  vaccExpires:'Nov 8, 2026',  feeding:'Taste of the Wild · 3 cups AM / 3 cups PM',               meds:'Carprofen 75mg — 1 tab AM / 1 tab PM with food (joint pain)', specialNote:'Hip dysplasia — no jumping, no stairs.' },
+  }
+  function toggleMsgYard2(el) {
+    const yid = el.id;
+    const check = document.getElementById(yid + '-check');
+    if (el.classList.contains('selected')) {
+      el.classList.remove('selected');
+      el.style.borderColor = '';
+      el.style.background = '';
+      if (check) check.textContent = '○';
+    } else {
+      el.classList.add('selected');
+      el.style.borderColor = 'var(--teal)';
+      el.style.background = 'var(--teal-light)';
+      if (check) { check.textContent = '✓'; check.style.color = 'var(--teal)'; }
+    }
   };
 
   function openDogProfile(id, backScreen) {
@@ -4349,6 +4497,31 @@
     document.getElementById('dp-note').textContent = d.specialNote;
     go('dog-profile');
   }
+
+  // ── Global bottom sheet helpers ───────────────────────────────
+  const GLOBAL_SHEETS = ['sheet-feed','sheet-medicate','sheet-addon','sheet-checkout','sheet-message-yard','sheet-note-entry','sheet-photo-entry'];
+  function openSheet(id) {
+    document.getElementById('global-sheet-overlay').style.display = 'block';
+    document.getElementById('sheet-' + id).classList.add('open');
+  }
+  function closeSheet(id) {
+    document.getElementById('sheet-' + id).classList.remove('open');
+    document.getElementById('global-sheet-overlay').style.display = 'none';
+  }
+  function closeActiveSheet() {
+    GLOBAL_SHEETS.forEach(sid => {
+      const el = document.getElementById(sid);
+      if (el) el.classList.remove('open');
+    });
+    document.getElementById('global-sheet-overlay').style.display = 'none';
+  }
+  function openCheckoutConfirm(name, emoji, detail) {
+    document.getElementById('sheet-checkout-name').textContent = name;
+    document.getElementById('sheet-checkout-emoji').textContent = emoji;
+    document.getElementById('sheet-checkout-detail').textContent = detail;
+    openSheet('checkout');
+  }
+  // ─────────────────────────────────────────────────────────────
 
   function go(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -4804,11 +4977,16 @@
 
   // Add-On select screen
   function selectAddon(name, emoji) {
-    document.getElementById('addon-confirm-header').textContent = name + ' — Buddy';
-    document.getElementById('addon-confirm-emoji').textContent = emoji;
-    document.getElementById('addon-confirm-question').textContent = 'Did you complete ' + name + ' for Buddy?';
+    document.getElementById('sheet-addon-emoji').textContent = emoji;
+    document.getElementById('sheet-addon-header').textContent = name + ' — Buddy';
+    document.getElementById('sheet-addon-question').textContent = 'Did you complete ' + name + ' for Buddy?';
     document.getElementById('addon-done-name').textContent = name;
-    go('addon-confirm');
+    document.getElementById('addon-sheet-list-state').style.display = 'none';
+    document.getElementById('addon-sheet-confirm-state').style.display = 'flex';
+  }
+  function showAddonList() {
+    document.getElementById('addon-sheet-list-state').style.display = 'block';
+    document.getElementById('addon-sheet-confirm-state').style.display = 'none';
   }
 
   // Staff Assignments screen
