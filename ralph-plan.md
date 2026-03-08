@@ -140,11 +140,12 @@ Features will be built in this sequence. Each phase is a loop iteration: generat
 
 ### Phase 5 — Employee Core
 - [ ] Employee home screen
-- [ ] Friend action menu (feed, medicate, care note, photo, check out)
-- [ ] Feed confirm + logging
-- [ ] Medicate confirm + logging
-- [ ] Care note entry + attachment
-- [ ] Photo capture + attachment
+- [ ] Friend action menu (feed, medicate, add-on, care note, photo)
+- [ ] Feed confirm sheet + in-sheet success + logging
+- [ ] Medicate confirm sheet + in-sheet success + logging
+- [ ] Add On sheet (assigned add-ons only) + confirm + in-sheet success + logging + SMS trigger
+- [ ] Care note entry (1-step from Friend menu; 2-step from Employee bottom nav)
+- [ ] Photo capture (1-step from Friend menu; 2-step from Employee bottom nav)
 
 ### Phase 6 — Employee Yard
 - [ ] Yard NFC check-in / check-out

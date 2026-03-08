@@ -14,14 +14,15 @@
 
 ### Friend (Dog)
 - Tap NFC tag for action menu
-  - Check Out (check-in handled via Admin page)
   - Feed
   - Medicate
-  - Perform Add On
-  - Care Note → point-in-time action (2-step: dictate/type → attach via NFC or color group)
-  - Photo → point-in-time action (2-step: take photo → attach via NFC or color group)
+  - Perform Add On (shows only today's assigned add-ons; empty state if none)
+  - Care Note → 1-step from Friend menu (dog identity known from NFC scan; no attachment step needed)
+  - Photo → 1-step from Friend menu (same; no attachment step needed)
   - Special Care Note (pinned to action menu footer; set at check-in)
 - Friend profile header shows: name, breed, age, color group pill, room pill, kennel pill
+- Each action confirms in-sheet with a success panel (auto-closes after 2 seconds)
+- Check-in and check-out are both handled via Admin, not the Friend action menu
 
 ---
 
@@ -154,18 +155,14 @@ These are repeatable actions that produce a discrete timestamped record each tim
 
 ### Care Note
 - Triggered from: Employee Home bottom nav (🎙️ Care Note) or Friend action menu
-- Step 1: Dictate or type note
-- Step 2 (unlocks after step 1): Attach to friend
-  - Option A: Scan Friend's NFC tag → confirmation card (dog name, breed, group, room, timestamp)
-  - Option B: Select one or more color groups → attaches to all dogs in those groups
+- **From Friend action menu:** 1-step — dictate or type note, then save. Dog is already identified from NFC scan; no attachment step needed.
+- **From Employee bottom nav:** 2-step — dictate/type note → attach via NFC scan or color group selection
 - Logged with timestamp + staff name
 
 ### Photo
 - Triggered from: Employee Home bottom nav (📸 Photo) or Friend action menu
-- Step 1: Take photo
-- Step 2 (unlocks after step 1): Attach to friend
-  - Option A: Scan Friend's NFC tag → confirmation card (dog name, breed, group, room, timestamp)
-  - Option B: Select one or more color groups → attaches to all dogs in those groups
+- **From Friend action menu:** 1-step — take photo, then save. Dog already identified; no attachment step needed.
+- **From Employee bottom nav:** 2-step — take photo → attach via NFC scan or color group selection
 - Logged with timestamp + staff name
 
 ### Tiff (Altercation Report)
@@ -186,13 +183,15 @@ These are repeatable actions that produce a discrete timestamped record each tim
 - Shows medication name + dose before confirmation
 
 ### Perform Add On
-- Triggered from: Friend action menu → Perform Add On
+- Triggered from: Friend action menu → Add On
+- Shows only today's assigned add-ons for that dog; empty state if none assigned
+- Employee selects add-on → confirm sheet → Yes! → in-sheet success + auto-close
 - Parent notified on completion (if SMS enabled)
 - Logged with timestamp + staff name
 
 ### Check Out (Friend)
-- Triggered from: Friend action menu → Check Out  OR  Admin Home → Check Out Friend
-- Admin flow: select from checked-in dog list → confirm screen → done screen with SMS confirmation
+- Triggered from: Admin Home → Check Out Friend (not available from Friend action menu)
+- Flow: select from checked-in dog list → confirm sheet → done screen with SMS confirmation
 - Logged with timestamp + staff name
 - Parent notified (if SMS enabled)
 
@@ -333,14 +332,13 @@ A persistent NFC signal animation (three arcs, highlighting in sequence) appears
 ```
 Tap tag → Friend profile header (name, breed, age, color group pill, room pill, kennel pill)
   ├── Special Care Note (pinned to footer if present)
-  ├── 📤 Check Out
-  ├── 🍽️ Feed        → Feed Confirm (2-tap)
-  ├── 💊 Medicate
-  ├── ⭐ Perform Add On
-  ├── 🎙️ Care Note   → 2-step entry flow
-  └── 📸 Photo       → 2-step entry flow
+  ├── 🍽️ Feed        → confirm sheet → in-sheet success (auto-close 2s)
+  ├── 💊 Medicate    → confirm sheet → in-sheet success (auto-close 2s)
+  ├── ⭐ Add On      → assigned add-ons list → confirm sheet → in-sheet success (auto-close 2s)
+  ├── 🎙️ Care Note   → 1-step entry sheet (dog already known)
+  └── 📸 Photo       → 1-step entry sheet (dog already known)
 ```
-Note: Check-in is handled through the Admin page, not the employee Friend action menu.
+Note: Check-in and check-out are handled through the Admin page, not the Friend action menu.
 
 **Room Tag**
 ```
@@ -389,18 +387,45 @@ Admin Home → Check Out Friend
   → "Parent Notified — SMS sent"
 ```
 
-**Feed Confirm (2-tap)**
+**Feed / Medicate Confirm**
 ```
-Friend action menu → Feed → "Mark [Dog] as Fed?" → shows last fed time → "Yes, Fed!" → Done ✓
+Friend action menu → Feed (or Medicate)
+  → confirm sheet slides up (shows feeding/med notes, dog identity in subheader)
+  → "Yes!" → in-sheet success panel with timestamp + staff name → auto-closes (2s)
 ```
 
-**Care Note (2 steps)**
+**Add On**
+```
+Friend action menu → Add On
+  → sheet shows today's assigned add-ons only (empty state if none)
+  → tap add-on → confirm sheet (add-on emoji + "Did you complete X for Buddy?")
+  → "Yes!" → in-sheet success panel → auto-closes (2s)
+  → parent notified via SMS (if enabled)
+```
+
+**Care Note — from Friend action menu (1-step)**
+```
+Friend action menu → Care Note
+  → sheet slides up with dog identity in subheader
+  → Dictate Note or type in textarea
+  → Save Note → in-sheet success → auto-closes (2s)
+```
+
+**Care Note — from Employee bottom nav (2-step)**
 ```
 Step 1 — Dictate or type note (Step 2 dimmed until content exists)
 Step 2 — Attach: scan Friend NFC tag  OR  select color group chip(s)
 ```
 
-**Photo (2 steps)**
+**Photo — from Friend action menu (1-step)**
+```
+Friend action menu → Photo
+  → sheet slides up with dog identity in subheader
+  → Take Photo → preview appears
+  → Save Photo → in-sheet success → auto-closes (2s)
+```
+
+**Photo — from Employee bottom nav (2-step)**
 ```
 Step 1 — Take photo (Step 2 dimmed until photo taken)
 Step 2 — Attach: scan Friend NFC tag  OR  select color group chip(s)
@@ -454,16 +479,9 @@ Employee Home bottom nav → 🐕 Groups  OR  Admin Home → Groups
 | `employee-home` | Employee Home | Login |
 | `admin-home` | Admin Dashboard | Login |
 | `nfc-friend` | Friend Action Menu | NFC pill, NFC tag |
-| `feed-confirm` | Feed Confirm | Friend action menu |
-| `feed-done` | Fed ✓ | Feed confirm |
-| `medicate-confirm` | Medicate Confirm | Friend action menu |
-| `medicate-done` | Medicated ✓ | Medicate confirm |
-| `addon-select` | Add On Select | Friend action menu |
-| `addon-confirm` | Add On Confirm | Add on select |
-| `addon-done` | Add On Done ✓ | Add on confirm |
 | `note-entry` | Care Note | Employee home, friend menu |
 | `photo-entry` | Photo | Employee home, friend menu |
-| `capture-done` | Done ✓ | Note/Photo entry |
+Note: Feed, Medicate, Add On, Care Note (friend menu), and Photo (friend menu) confirmations all happen via bottom sheets on the Friend action menu screen — no separate confirm/done screens.
 | `checkin-room` | Check-In: Room | Admin arriving |
 | `checkin-colorgroup` | Check-In: Color Group | Check-in room |
 | `checkin-schedule` | Check-In: Schedule | Check-in color group |

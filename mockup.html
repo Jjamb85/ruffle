@@ -678,26 +678,14 @@
     </div>
 
     <!-- Buttons — fill available space evenly -->
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:space-evenly;width:83%;margin:0 auto;padding:12px 0;min-height:0;overflow:hidden;">
-      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="openSheet('feed')">
-        <div class="action-icon">🍽️</div><div class="action-label" style="font-size:13px;color:var(--teal-dark);">Feed</div>
-      </button>
-      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="openSheet('medicate')">
-        <div class="action-icon">💊</div><div class="action-label" style="font-size:13px;color:var(--teal-dark);">Medicate</div>
-      </button>
-      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="openSheet('addon')">
-        <div class="action-icon">⭐</div><div class="action-label" style="font-size:13px;color:var(--teal-dark);">Perform Add On</div>
-      </button>
-      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="openSheet('note-entry')">
-        <div class="action-icon">🎙️</div><div class="action-label" style="font-size:13px;color:var(--teal-dark);">Care Note</div>
-      </button>
-      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;" onclick="openSheet('photo-entry')">
-        <div class="action-icon">📸</div><div class="action-label" style="font-size:13px;color:var(--teal-dark);">Photo</div>
-      </button>
-      <button class="action-btn" style="background:var(--teal-light);border:2px solid var(--teal-dark);flex-direction:row;justify-content:flex-start;padding:16px 20px;gap:14px;">
-        <div class="action-icon">📤</div><div class="action-label" style="font-size:13px;color:var(--teal-dark);">Check Out</div>
-      </button>
+    <div id="nfc-friend-actions" style="flex:1;display:flex;flex-direction:column;justify-content:space-evenly;width:83%;margin:0 auto;padding:12px 0;min-height:0;overflow:hidden;">
+      <button class="btn btn-secondary btn-full btn-lg" onclick="openSheet('feed')">🍽️ &nbsp;Feed</button>
+      <button class="btn btn-secondary btn-full btn-lg" onclick="openSheet('medicate')">💊 &nbsp;Medicate</button>
+      <button class="btn btn-secondary btn-full btn-lg" onclick="openSheet('addon')">⭐ &nbsp;Add On</button>
+      <button class="btn btn-secondary btn-full btn-lg" onclick="openSheet('note-entry')">🎙️ &nbsp;Care Note</button>
+      <button class="btn btn-secondary btn-full btn-lg" onclick="openSheet('photo-entry')">📸 &nbsp;Photo</button>
     </div>
+
 
     <!-- Special care note footer -->
     <div style="background:white;border-top:1px solid var(--border);padding:14px 24px 28px;flex-shrink:0;display:flex;align-items:flex-start;gap:12px;">
@@ -4093,70 +4081,58 @@
             <div style="text-align:center;font-size:10px;font-weight:800;color:var(--lighter);padding:2px 0;">Sa</div>
           </div>
           <!-- Day grid (March 2026 starts on Sunday) -->
-          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;">
             <!-- Row 1: 1–7 -->
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--lighter);">1</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--lighter);">2</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--lighter);">3</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--lighter);">4</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--lighter);">5</div></div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--lighter);">1</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--lighter);">2</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--lighter);">3</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--lighter);">4</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--lighter);">5</div>
             <!-- Day 6 — today, shift, pre-selected -->
-            <div onclick="selectScheduleDay(6)" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px 0;cursor:pointer;">
-              <div id="sday-6" style="width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;background:var(--teal);color:white;">6</div>
-              <div class="sday-dot" style="width:5px;height:5px;border-radius:50%;background:var(--teal);"></div>
-            </div>
+            <div id="sday-6" onclick="selectScheduleDay(6)" style="height:44px;border-radius:10px;border:1px solid var(--teal);background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:white;cursor:pointer;">6</div>
             <!-- Day 7 — shift -->
-            <div onclick="selectScheduleDay(7)" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px 0;cursor:pointer;">
-              <div id="sday-7" style="width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:var(--teal-dark);">7</div>
-              <div class="sday-dot" style="width:5px;height:5px;border-radius:50%;background:var(--teal);"></div>
-            </div>
+            <div id="sday-7" onclick="selectScheduleDay(7)" style="height:44px;border-radius:10px;border:1px solid var(--teal);background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:var(--teal-dark);cursor:pointer;">7</div>
             <!-- Row 2: 8–14 -->
             <!-- Day 8 — shift -->
-            <div onclick="selectScheduleDay(8)" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px 0;cursor:pointer;">
-              <div id="sday-8" style="width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:var(--teal-dark);">8</div>
-              <div class="sday-dot" style="width:5px;height:5px;border-radius:50%;background:var(--teal);"></div>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">9</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">10</div></div>
+            <div id="sday-8" onclick="selectScheduleDay(8)" style="height:44px;border-radius:10px;border:1px solid var(--teal);background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:var(--teal-dark);cursor:pointer;">8</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">9</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">10</div>
             <!-- Day 11 — shift -->
-            <div onclick="selectScheduleDay(11)" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px 0;cursor:pointer;">
-              <div id="sday-11" style="width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:var(--teal-dark);">11</div>
-              <div class="sday-dot" style="width:5px;height:5px;border-radius:50%;background:var(--teal);"></div>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">12</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">13</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">14</div></div>
+            <div id="sday-11" onclick="selectScheduleDay(11)" style="height:44px;border-radius:10px;border:1px solid var(--teal);background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:var(--teal-dark);cursor:pointer;">11</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">12</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">13</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">14</div>
             <!-- Row 3: 15–21 -->
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">15</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">16</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">17</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">18</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">19</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">20</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">21</div></div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">15</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">16</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">17</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">18</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">19</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">20</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">21</div>
             <!-- Row 4: 22–28 -->
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">22</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">23</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">24</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">25</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">26</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">27</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">28</div></div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">22</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">23</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">24</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">25</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">26</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">27</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">28</div>
             <!-- Row 5: 29–31 -->
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">29</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">30</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;padding:3px 0;"><div style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">31</div></div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">29</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">30</div>
+            <div style="height:44px;border-radius:10px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--medium);">31</div>
           </div>
         </div>
 
         <!-- Selected shift card — defaults to today, updates on tap -->
-        <div id="schedule-shift-card" style="background:var(--teal-light);border-radius:16px;padding:16px;">
-          <div style="font-size:11px;font-weight:800;color:var(--teal-dark);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Today — Thursday, Mar 6</div>
-          <div style="font-size:28px;font-weight:900;color:var(--teal-dark);margin-bottom:10px;">7 AM – 3 PM</div>
+        <div id="schedule-shift-card" style="background:var(--teal);border-radius:16px;padding:16px;">
+          <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,0.75);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Today — Thursday, Mar 6</div>
+          <div style="font-size:28px;font-weight:900;color:white;margin-bottom:10px;">7 AM – 3 PM</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <div style="background:white;color:var(--teal-dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🌿 Yard 3 Primary</div>
-            <div style="background:white;color:var(--teal-dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🍽️ Feedings</div>
-            <div style="background:white;color:var(--teal-dark);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">💊 Meds</div>
+            <div style="background:rgba(255,255,255,0.2);color:white;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🌿 Yard 3 Primary</div>
+            <div style="background:rgba(255,255,255,0.2);color:white;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">🍽️ Feedings</div>
+            <div style="background:rgba(255,255,255,0.2);color:white;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">💊 Meds</div>
           </div>
         </div>
 
@@ -4171,12 +4147,14 @@
   <div class="assign-overlay" id="global-sheet-overlay" onclick="closeActiveSheet()"></div>
 
   <!-- ─── SHEET: Feed Confirm ─────────────────────────────────── -->
-  <div class="assign-sheet" id="sheet-feed" style="max-height:72%;">
+  <div class="assign-sheet" id="sheet-feed" style="max-height:88%;">
     <div class="assign-sheet-handle"></div>
-    <div style="padding:24px 24px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;">
-      <div style="font-size:64px;line-height:1;">🍽️</div>
+    <div style="padding:8px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--border);">
+      <div style="font-size:17px;font-weight:900;color:var(--dark);">Feed</div>
+      <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:2px;">Buddy · Golden Retriever · 🟠 Orange · Room 4</div>
+    </div>
+    <div style="padding:20px 24px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;">
       <div style="font-size:22px;font-weight:900;color:var(--dark);">Did you feed Buddy?</div>
-      <div style="font-size:14px;font-weight:600;color:var(--medium);">This will complete the feeding task<br>and log the time.</div>
       <div style="background:var(--bg);border-radius:12px;padding:14px;width:100%;text-align:left;display:flex;gap:12px;align-items:flex-start;box-sizing:border-box;">
         <div style="font-size:18px;flex-shrink:0;margin-top:1px;">🍖</div>
         <div>
@@ -4184,18 +4162,20 @@
           <div style="font-size:12px;font-weight:600;color:var(--dark);line-height:1.5;">1 cup dry kibble AM &amp; PM. No treats — on a diet. Slow feeder bowl required.</div>
         </div>
       </div>
-      <button class="btn btn-secondary btn-full btn-lg" onclick="closeSheet('feed');go('feed-done')">Yes! 🍽️</button>
+      <button class="btn btn-secondary btn-full btn-lg" onclick="showSheetConfirm('feed','Buddy\'s feeding has been logged.')">Yes!</button>
       <div style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;padding-bottom:12px;" onclick="closeSheet('feed')">Cancel</div>
     </div>
   </div>
 
   <!-- ─── SHEET: Medicate Confirm ──────────────────────────────── -->
-  <div class="assign-sheet" id="sheet-medicate" style="max-height:72%;">
+  <div class="assign-sheet" id="sheet-medicate" style="max-height:88%;">
     <div class="assign-sheet-handle"></div>
-    <div style="padding:24px 24px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;">
-      <div style="font-size:64px;line-height:1;">💊</div>
+    <div style="padding:8px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--border);">
+      <div style="font-size:17px;font-weight:900;color:var(--dark);">Medicate</div>
+      <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:2px;">Buddy · Golden Retriever · 🟠 Orange · Room 4</div>
+    </div>
+    <div style="padding:20px 24px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;">
       <div style="font-size:22px;font-weight:900;color:var(--dark);">Did you medicate Buddy?</div>
-      <div style="font-size:14px;font-weight:600;color:var(--medium);">This will complete the medication task<br>and log the time.</div>
       <div style="background:var(--bg);border-radius:12px;padding:14px;width:100%;text-align:left;display:flex;gap:12px;align-items:flex-start;box-sizing:border-box;">
         <div style="font-size:18px;flex-shrink:0;margin-top:1px;">💊</div>
         <div>
@@ -4203,52 +4183,39 @@
           <div style="font-size:12px;font-weight:600;color:var(--dark);line-height:1.5;">Rimadyl 50mg with food — AM only. Hide in peanut butter if refused.</div>
         </div>
       </div>
-      <button class="btn btn-secondary btn-full btn-lg" onclick="closeSheet('medicate');go('medicate-done')">Yes! 💊</button>
+      <button class="btn btn-secondary btn-full btn-lg" onclick="showSheetConfirm('medicate','Buddy\'s medication has been logged.')">Yes!</button>
       <div style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;padding-bottom:12px;" onclick="closeSheet('medicate')">Cancel</div>
     </div>
   </div>
 
-  <!-- ─── SHEET: Add-On (list → confirm two-state) ─────────────── -->
-  <div class="assign-sheet" id="sheet-addon" style="max-height:90%;overflow:hidden;display:flex;flex-direction:column;">
+  <!-- ─── SHEET: Add-On (assigned add-ons → confirm two-state) ─── -->
+  <div class="assign-sheet" id="sheet-addon" style="max-height:88%;overflow:hidden;display:flex;flex-direction:column;">
     <div class="assign-sheet-handle"></div>
-    <!-- List state -->
+    <!-- List state: today's assigned add-ons -->
     <div id="addon-sheet-list-state" style="display:block;flex:1;min-height:0;overflow-y:auto;">
-      <div style="padding:4px 16px 10px;flex-shrink:0;">
-        <div style="font-size:17px;font-weight:900;color:var(--dark);">Perform Add On</div>
+      <div style="padding:4px 16px 12px;flex-shrink:0;">
+        <div style="font-size:17px;font-weight:900;color:var(--dark);">Today's Add-Ons</div>
         <div style="font-size:12px;color:var(--medium);font-weight:600;margin-top:2px;">Buddy · Orange Group · Room 4</div>
       </div>
       <div style="padding:0 16px 24px;">
-        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Training</div>
+        <!-- Assigned add-ons for today -->
         <div style="background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:16px;">
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Treadmill Walk','🏃')"><div style="width:36px;height:36px;border-radius:10px;background:#EEF4FF;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏃</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Treadmill Walk</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Training Walk','🦮')"><div style="width:36px;height:36px;border-radius:10px;background:#EEF4FF;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🦮</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Training Walk</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;cursor:pointer;" onclick="selectAddon('Pups-Choice','⭐')"><div style="width:36px;height:36px;border-radius:10px;background:#EEF4FF;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">⭐</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Pups-Choice</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-        </div>
-        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Wellness</div>
-        <div style="background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:16px;">
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Brushing','🪮')"><div style="width:36px;height:36px;border-radius:10px;background:#F0FBF0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🪮</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Brushing</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Scent Lead Walk','🐾')"><div style="width:36px;height:36px;border-radius:10px;background:#F0FBF0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🐾</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Scent Lead Walk</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Teeth Brushing','🦷')"><div style="width:36px;height:36px;border-radius:10px;background:#F0FBF0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🦷</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Teeth Brushing</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Ear Cleaning','👂')"><div style="width:36px;height:36px;border-radius:10px;background:#F0FBF0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">👂</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Ear Cleaning</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Bath','🛁')"><div style="width:36px;height:36px;border-radius:10px;background:#F0FBF0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🛁</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Bath</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;cursor:pointer;" onclick="selectAddon('One on One Cuddle Time','🤗')"><div style="width:36px;height:36px;border-radius:10px;background:#F0FBF0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🤗</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">One on One Cuddle Time</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-        </div>
-        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Treats</div>
-        <div style="background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:16px;">
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Extreme Kong','🐶')"><div style="width:36px;height:36px;border-radius:10px;background:#FFFBEE;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🐶</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Extreme Kong</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Paw-sicle','🧊')"><div style="width:36px;height:36px;border-radius:10px;background:#FFFBEE;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🧊</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Paw-sicle</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Puppacino','☕')"><div style="width:36px;height:36px;border-radius:10px;background:#FFFBEE;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">☕</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Puppacino</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;cursor:pointer;" onclick="selectAddon('PB Kong','🥜')"><div style="width:36px;height:36px;border-radius:10px;background:#FFFBEE;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🥜</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">PB Kong</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-        </div>
-        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Holiday</div>
-        <div style="background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:16px;">
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Egg-celent Egg Hunt','🥚')"><div style="width:36px;height:36px;border-radius:10px;background:#F5F0FF;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🥚</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Egg-celent Egg Hunt</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Not Tricks Just Treats','🍬')"><div style="width:36px;height:36px;border-radius:10px;background:#F5F0FF;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🍬</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Not Tricks Just Treats</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;cursor:pointer;" onclick="selectAddon('Santa Paws Photo','🎅')"><div style="width:36px;height:36px;border-radius:10px;background:#F5F0FF;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🎅</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Santa Paws Photo</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
-        </div>
-        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Luxury</div>
-        <div style="background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:16px;">
-          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;cursor:pointer;" onclick="selectAddon('Birthday Party','🎂')"><div style="width:36px;height:36px;border-radius:10px;background:#FFF0F5;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🎂</div><div style="font-size:14px;font-weight:700;color:var(--dark);flex:1;">Birthday Party</div><div style="font-size:18px;color:var(--lighter);">›</div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="selectAddon('Brushing','🪮')">
+            <div style="width:36px;height:36px;border-radius:10px;background:#F0FBF0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🪮</div>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:700;color:var(--dark);">Brushing</div>
+              <div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:2px;">Wellness</div>
+            </div>
+            <div style="font-size:18px;color:var(--lighter);">›</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:13px 16px;cursor:pointer;" onclick="selectAddon('Puppacino','☕')">
+            <div style="width:36px;height:36px;border-radius:10px;background:#FFFBEE;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">☕</div>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:700;color:var(--dark);">Puppacino</div>
+              <div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:2px;">Treat</div>
+            </div>
+            <div style="font-size:18px;color:var(--lighter);">›</div>
+          </div>
         </div>
         <div style="text-align:center;padding-top:4px;padding-bottom:8px;">
           <span style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;" onclick="closeSheet('addon')">Cancel</span>
@@ -4256,21 +4223,25 @@
       </div>
     </div>
     <!-- Confirm state -->
-    <div id="addon-sheet-confirm-state" style="display:none;flex-direction:column;align-items:center;text-align:center;padding:24px 24px 8px;gap:14px;">
-      <div style="font-size:64px;line-height:1;" id="sheet-addon-emoji">⭐</div>
-      <div style="font-size:20px;font-weight:900;color:var(--dark);" id="sheet-addon-header">Perform Add On</div>
-      <div style="font-size:14px;font-weight:600;color:var(--medium);" id="sheet-addon-question">Did you complete this for Buddy?</div>
+    <div id="addon-sheet-confirm-state" style="display:none;flex-direction:column;">
+      <div style="padding:8px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--border);">
+        <div style="font-size:17px;font-weight:900;color:var(--dark);" id="sheet-addon-header">Add On</div>
+        <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:2px;">Buddy · Golden Retriever · 🟠 Orange · Room 4</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 24px 8px;gap:14px;">
+      <div style="font-size:20px;font-weight:900;color:var(--dark);" id="sheet-addon-question">Did you complete this for Buddy?</div>
       <div style="background:var(--bg);border-radius:12px;padding:14px;width:100%;text-align:left;display:flex;gap:12px;align-items:center;box-sizing:border-box;">
-        <div style="font-size:16px;">📱</div>
+        <div style="font-size:32px;line-height:1;flex-shrink:0;" id="sheet-addon-emoji">⭐</div>
         <div style="font-size:12px;font-weight:600;color:var(--medium);">Parent will receive an SMS notification on completion.</div>
       </div>
-      <button class="btn btn-secondary btn-full btn-lg" onclick="closeSheet('addon');go('addon-done')">Yes!</button>
+      <button class="btn btn-secondary btn-full btn-lg" onclick="showSheetConfirm('addon',currentAddonName + ' logged for Buddy.')">Yes!</button>
       <div style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;padding-bottom:12px;" onclick="showAddonList()">‹ Back to List</div>
+      </div>
     </div>
   </div>
 
   <!-- ─── SHEET: Checkout Confirm (dynamic) ────────────────────── -->
-  <div class="assign-sheet" id="sheet-checkout" style="max-height:76%;">
+  <div class="assign-sheet" id="sheet-checkout" style="max-height:88%;">
     <div class="assign-sheet-handle"></div>
     <div style="padding:24px 24px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;">
       <div style="font-size:64px;line-height:1;" id="sheet-checkout-emoji">🐕</div>
@@ -4325,111 +4296,46 @@
   </div>
 
   <!-- ─── SHEET: Note Entry ─────────────────────────────────────── -->
-  <div class="assign-sheet" id="sheet-note-entry" style="max-height:92%;overflow:hidden;display:flex;flex-direction:column;">
+  <div class="assign-sheet" id="sheet-note-entry" style="max-height:88%;overflow:hidden;display:flex;flex-direction:column;">
     <div class="assign-sheet-handle"></div>
     <div style="padding:8px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
       <div>
-        <div style="font-size:17px;font-weight:900;color:var(--dark);">🎙️ Record a Note</div>
-        <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:2px;">⏱ Timestamped automatically</div>
+        <div style="font-size:17px;font-weight:900;color:var(--dark);">Care Note</div>
+        <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:2px;">Buddy · Golden Retriever · 🟠 Orange · Room 4</div>
       </div>
       <div style="font-size:22px;color:var(--lighter);cursor:pointer;padding:4px;" onclick="closeSheet('note-entry')">✕</div>
     </div>
-    <div style="overflow-y:auto;flex:1;padding:20px 20px 24px;">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-        <div style="width:34px;height:34px;border-radius:50%;background:var(--teal);color:white;font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(59,190,199,0.35);">1</div>
-        <button class="btn btn-secondary" style="flex:1;padding:13px;" id="note-dictate-btn" onclick="noteToggleDictate(this)">🎙️ &nbsp;Dictate Note</button>
+    <div style="overflow-y:auto;flex:1;padding:16px 16px 8px;">
+      <button class="btn btn-secondary btn-full btn-lg" style="margin-bottom:12px;" id="note-dictate-btn" onclick="noteToggleDictate(this)">Dictate Note</button>
+      <textarea id="note-text" class="input-field" style="height:120px;margin-bottom:16px;" placeholder="Type or dictate an observation..."></textarea>
+      <button class="btn btn-secondary btn-full btn-lg" style="margin-bottom:12px;" onclick="showSheetConfirm('note-entry','Care note saved for Buddy.')">Save Note</button>
+      <div style="text-align:center;padding-bottom:16px;">
+        <span style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;" onclick="closeSheet('note-entry')">Cancel</span>
       </div>
-      <textarea id="note-text" class="input-field" style="height:110px;margin-bottom:24px;" placeholder="Type or dictate an observation..." oninput="checkNoteReady()"></textarea>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;">
-        <div style="flex:1;height:2px;background:var(--border);border-radius:1px;"></div>
-      </div>
-      <div id="note-step2" class="step2-dimmed">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-          <div style="width:34px;height:34px;border-radius:50%;background:var(--teal);color:white;font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(59,190,199,0.35);">2</div>
-          <button id="note-nfc-btn" onclick="simulateScan('note')" class="btn btn-secondary" style="flex:1;padding:13px;display:flex;align-items:center;justify-content:center;gap:10px;">
-            <svg width="22" height="15" viewBox="0 0 36 24" fill="none"><circle cx="3" cy="12" r="2.5" fill="currentColor"/><path d="M9 8 Q12 12 9 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a1"/><path d="M15 5 Q20 12 15 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a2"/><path d="M21 2 Q28 12 21 22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a3"/></svg>
-            <span id="note-nfc-label">Scan Friend's Tag</span>
-          </button>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;margin:4px 0 14px;"><div style="flex:1;height:1px;background:var(--border);"></div><div style="font-size:12px;font-weight:800;color:var(--medium);letter-spacing:0.5px;">OR</div><div style="flex:1;height:1px;background:var(--border);"></div></div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;" id="note-group-chips">
-          <button class="attach-chip" data-screen="note" data-color="#3B7DDD" onclick="toggleAttachChip(this)" style="background:#EEF3FC;border:2px solid #3B7DDD;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#3B7DDD;cursor:pointer;transition:all 0.15s;">🔵 Blue</button>
-          <button class="attach-chip" data-screen="note" data-color="#D64FA0" onclick="toggleAttachChip(this)" style="background:#FCEEF7;border:2px solid #D64FA0;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#D64FA0;cursor:pointer;transition:all 0.15s;">🩷 Pink</button>
-          <button class="attach-chip" data-screen="note" data-color="#7B5EA7" onclick="toggleAttachChip(this)" style="background:#F2EEF9;border:2px solid #7B5EA7;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#7B5EA7;cursor:pointer;transition:all 0.15s;">🟣 Purple</button>
-          <button class="attach-chip" data-screen="note" data-color="#C8A000" onclick="toggleAttachChip(this)" style="background:#FBF7E4;border:2px solid #C8A000;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#C8A000;cursor:pointer;transition:all 0.15s;">🟡 Yellow</button>
-          <button class="attach-chip" data-screen="note" data-color="#E07820" onclick="toggleAttachChip(this)" style="background:#FDF3EA;border:2px solid #E07820;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#E07820;cursor:pointer;transition:all 0.15s;">🟠 Orange</button>
-          <button class="attach-chip" data-screen="note" data-color="#8B2252" onclick="toggleAttachChip(this)" style="background:#F7EBF2;border:2px solid #8B2252;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#8B2252;cursor:pointer;transition:all 0.15s;">👑 Royal</button>
-        </div>
-        <button id="note-group-submit" onclick="submitGroupAttach('note')" class="btn btn-primary" style="width:100%;display:none;">Attach to Selected Group(s)</button>
-        <div id="note-confirm" style="display:none;background:var(--green-light);border:2px solid var(--green);border-radius:16px;padding:16px;margin-top:4px;">
-          <div style="display:flex;align-items:center;gap:14px;">
-            <div style="width:56px;height:56px;border-radius:50%;background:#D4EFD4;border:3px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🐶</div>
-            <div style="flex:1;">
-              <div id="note-confirm-name" style="font-size:16px;font-weight:900;color:#1A5C2A;">Attached to Buddy</div>
-              <div id="note-confirm-sub" style="font-size:12px;font-weight:700;color:#2A8A56;margin-top:2px;">Golden Retriever · 🟠 Orange · Room 4</div>
-              <div style="font-size:11px;font-weight:600;color:#2A8A56;margin-top:4px;">⏱ Today · 8:15 AM · Sarah</div>
-            </div>
-            <div style="font-size:22px;">✅</div>
-          </div>
-        </div>
-      </div><!-- /note-step2 -->
     </div>
   </div>
 
   <!-- ─── SHEET: Photo Entry ────────────────────────────────────── -->
-  <div class="assign-sheet" id="sheet-photo-entry" style="max-height:92%;overflow:hidden;display:flex;flex-direction:column;">
+  <div class="assign-sheet" id="sheet-photo-entry" style="max-height:88%;overflow:hidden;display:flex;flex-direction:column;">
     <div class="assign-sheet-handle"></div>
     <div style="padding:8px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
       <div>
-        <div style="font-size:17px;font-weight:900;color:var(--dark);">📸 Take a Photo</div>
-        <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:2px;">⏱ Timestamped automatically</div>
+        <div style="font-size:17px;font-weight:900;color:var(--dark);">Take a Photo</div>
+        <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:2px;">Buddy · Golden Retriever · 🟠 Orange · Room 4</div>
       </div>
       <div style="font-size:22px;color:var(--lighter);cursor:pointer;padding:4px;" onclick="closeSheet('photo-entry')">✕</div>
     </div>
-    <div style="overflow-y:auto;flex:1;padding:20px 20px 24px;">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-        <div style="width:34px;height:34px;border-radius:50%;background:var(--teal);color:white;font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(59,190,199,0.35);">1</div>
-        <button class="btn btn-secondary" style="flex:1;padding:13px;" onclick="document.getElementById('photo-entry-preview').style.display='flex';enablePhotoStep2()">📸 &nbsp;Take Photo</button>
-      </div>
-      <div id="photo-entry-preview" style="display:none;background:var(--bg);border:2px dashed var(--border);border-radius:14px;padding:14px;align-items:center;gap:12px;margin-bottom:4px;">
+    <div style="overflow-y:auto;flex:1;padding:16px 16px 8px;">
+      <button class="btn btn-secondary btn-full btn-lg" style="margin-bottom:10px;" onclick="document.getElementById('photo-entry-preview').style.display='flex';">Take Photo</button>
+      <div id="photo-entry-preview" style="display:none;background:var(--bg);border:2px dashed var(--border);border-radius:14px;padding:14px;align-items:center;gap:12px;margin-bottom:10px;">
         <div style="font-size:28px;">🖼️</div>
         <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--dark);">Photo ready</div><div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:2px;">IMG_1024.jpg · 1.8 MB</div></div>
         <div style="font-size:18px;color:var(--coral);cursor:pointer;" onclick="document.getElementById('photo-entry-preview').style.display='none'">✕</div>
       </div>
-      <div style="height:24px;"></div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;">
-        <div style="flex:1;height:2px;background:var(--border);border-radius:1px;"></div>
+      <button class="btn btn-secondary btn-full btn-lg" style="margin-bottom:12px;" onclick="showSheetConfirm('photo-entry','Photo saved for Buddy.')">Save Photo</button>
+      <div style="text-align:center;padding-bottom:16px;">
+        <span style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;" onclick="closeSheet('photo-entry')">Cancel</span>
       </div>
-      <div id="photo-step2" class="step2-dimmed">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-          <div style="width:34px;height:34px;border-radius:50%;background:var(--teal);color:white;font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(59,190,199,0.35);">2</div>
-          <button id="photo-nfc-btn" onclick="simulateScan('photo')" class="btn btn-secondary" style="flex:1;padding:13px;display:flex;align-items:center;justify-content:center;gap:10px;">
-            <svg width="22" height="15" viewBox="0 0 36 24" fill="none"><circle cx="3" cy="12" r="2.5" fill="currentColor"/><path d="M9 8 Q12 12 9 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a1"/><path d="M15 5 Q20 12 15 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a2"/><path d="M21 2 Q28 12 21 22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="nfc-a3"/></svg>
-            <span id="photo-nfc-label">Scan Friend's Tag</span>
-          </button>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;margin:4px 0 14px;"><div style="flex:1;height:1px;background:var(--border);"></div><div style="font-size:12px;font-weight:800;color:var(--medium);letter-spacing:0.5px;">OR</div><div style="flex:1;height:1px;background:var(--border);"></div></div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;" id="photo-group-chips">
-          <button class="attach-chip" data-screen="photo" data-color="#3B7DDD" onclick="toggleAttachChip(this)" style="background:#EEF3FC;border:2px solid #3B7DDD;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#3B7DDD;cursor:pointer;transition:all 0.15s;">🔵 Blue</button>
-          <button class="attach-chip" data-screen="photo" data-color="#D64FA0" onclick="toggleAttachChip(this)" style="background:#FCEEF7;border:2px solid #D64FA0;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#D64FA0;cursor:pointer;transition:all 0.15s;">🩷 Pink</button>
-          <button class="attach-chip" data-screen="photo" data-color="#7B5EA7" onclick="toggleAttachChip(this)" style="background:#F2EEF9;border:2px solid #7B5EA7;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#7B5EA7;cursor:pointer;transition:all 0.15s;">🟣 Purple</button>
-          <button class="attach-chip" data-screen="photo" data-color="#C8A000" onclick="toggleAttachChip(this)" style="background:#FBF7E4;border:2px solid #C8A000;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#C8A000;cursor:pointer;transition:all 0.15s;">🟡 Yellow</button>
-          <button class="attach-chip" data-screen="photo" data-color="#E07820" onclick="toggleAttachChip(this)" style="background:#FDF3EA;border:2px solid #E07820;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#E07820;cursor:pointer;transition:all 0.15s;">🟠 Orange</button>
-          <button class="attach-chip" data-screen="photo" data-color="#8B2252" onclick="toggleAttachChip(this)" style="background:#F7EBF2;border:2px solid #8B2252;border-radius:12px;padding:10px 6px;font-size:13px;font-weight:800;color:#8B2252;cursor:pointer;transition:all 0.15s;">👑 Royal</button>
-        </div>
-        <button id="photo-group-submit" onclick="submitGroupAttach('photo')" class="btn btn-primary" style="width:100%;display:none;">Attach to Selected Group(s)</button>
-        <div id="photo-confirm" style="display:none;background:var(--green-light);border:2px solid var(--green);border-radius:16px;padding:16px;margin-top:4px;">
-          <div style="display:flex;align-items:center;gap:14px;">
-            <div style="width:56px;height:56px;border-radius:50%;background:#D4EFD4;border:3px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🐶</div>
-            <div style="flex:1;">
-              <div id="photo-confirm-name" style="font-size:16px;font-weight:900;color:#1A5C2A;">Attached to Buddy</div>
-              <div id="photo-confirm-sub" style="font-size:12px;font-weight:700;color:#2A8A56;margin-top:2px;">Golden Retriever · 🟠 Orange · Room 4</div>
-              <div style="font-size:11px;font-weight:600;color:#2A8A56;margin-top:4px;">⏱ Today · 8:15 AM · Sarah</div>
-            </div>
-            <div style="font-size:22px;">✅</div>
-          </div>
-        </div>
-      </div><!-- /photo-step2 -->
     </div>
   </div>
 
@@ -4476,34 +4382,30 @@
   function selectScheduleDay(day) {
     if (!scheduleShifts[day]) return;
     selectedSchedDay = day;
-    // Update circle styles
+    // Update pill styles
     shiftDays.forEach(d => {
       const el = document.getElementById('sday-' + d);
       if (!el) return;
       if (d === day) {
         el.style.background = 'var(--teal)';
+        el.style.borderColor = 'var(--teal)';
         el.style.color = 'white';
-      } else if (d === 6) {
-        // today but not selected — show teal ring
-        el.style.background = 'transparent';
-        el.style.color = 'var(--teal-dark)';
-        el.style.boxShadow = '0 0 0 2px var(--teal)';
       } else {
-        el.style.background = 'transparent';
+        el.style.background = 'var(--teal-light)';
+        el.style.borderColor = 'var(--teal)';
         el.style.color = 'var(--teal-dark)';
-        el.style.boxShadow = '';
       }
     });
     // Update card
     const shift = scheduleShifts[day];
     const card = document.getElementById('schedule-shift-card');
     const isToday = shift.today;
-    card.style.background = isToday ? 'var(--teal-light)' : 'white';
+    card.style.background = isToday ? 'var(--teal)' : 'white';
     card.style.border = isToday ? 'none' : '1px solid var(--border)';
-    const labelColor = isToday ? 'var(--teal-dark)' : 'var(--medium)';
-    const timeColor  = isToday ? 'var(--teal-dark)' : 'var(--dark)';
-    const tagBg      = isToday ? 'white' : 'var(--bg)';
-    const tagColor   = isToday ? 'var(--teal-dark)' : 'var(--dark)';
+    const labelColor = isToday ? 'rgba(255,255,255,0.75)' : 'var(--medium)';
+    const timeColor  = isToday ? 'white' : 'var(--dark)';
+    const tagBg      = isToday ? 'rgba(255,255,255,0.2)' : 'var(--bg)';
+    const tagColor   = isToday ? 'white' : 'var(--dark)';
     const tagsHtml = shift.tags.map(t =>
       `<div style="background:${tagBg};color:${tagColor};border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;">${t}</div>`
     ).join('');
@@ -4549,20 +4451,68 @@
 
   // ── Global bottom sheet helpers ───────────────────────────────
   const GLOBAL_SHEETS = ['sheet-feed','sheet-medicate','sheet-addon','sheet-checkout','sheet-message-yard','sheet-note-entry','sheet-photo-entry'];
+  let _sheetConfirmTimer = null;
+
   function openSheet(id) {
     document.getElementById('global-sheet-overlay').style.display = 'block';
     document.getElementById('sheet-' + id).classList.add('open');
   }
   function closeSheet(id) {
-    document.getElementById('sheet-' + id).classList.remove('open');
+    if (_sheetConfirmTimer) { clearTimeout(_sheetConfirmTimer); _sheetConfirmTimer = null; }
+    const sheet = document.getElementById('sheet-' + id);
+    if (!sheet) return;
+    // Slide the sheet out immediately
+    sheet.classList.remove('open');
     document.getElementById('global-sheet-overlay').style.display = 'none';
+    // Clean up confirm panel after the slide animation finishes
+    setTimeout(() => {
+      const panel = sheet.querySelector('.sheet-confirm-panel');
+      if (panel) {
+        panel.remove();
+        Array.from(sheet.children).forEach(c => {
+          const orig = c.getAttribute('data-sheet-display');
+          if (orig !== null) {
+            c.style.display = orig;
+            c.removeAttribute('data-sheet-display');
+          }
+        });
+      }
+    }, 350);
+  }
+  function showSheetConfirm(sheetId, msg) {
+    const sheet = document.getElementById('sheet-' + sheetId);
+    // Hide existing children, saving their current display value
+    Array.from(sheet.children).forEach(c => {
+      if (!c.classList.contains('assign-sheet-handle')) {
+        c.setAttribute('data-sheet-display', c.style.display);
+        c.style.display = 'none';
+      }
+    });
+    const now = new Date();
+    const h = now.getHours() % 12 || 12;
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const ampm = now.getHours() < 12 ? 'AM' : 'PM';
+    const panel = document.createElement('div');
+    panel.className = 'sheet-confirm-panel';
+    panel.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 24px;gap:16px;flex:1;';
+    panel.innerHTML = `
+      <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--green),#3AAF72);display:flex;align-items:center;justify-content:center;font-size:40px;box-shadow:0 8px 32px rgba(82,199,136,0.4);" class="nfc-pulse">✓</div>
+      <div style="font-size:24px;font-weight:900;color:var(--dark);">Done! 🎉</div>
+      <div style="font-size:14px;font-weight:600;color:var(--medium);line-height:1.6;">${msg}</div>
+      <div style="background:var(--green-light);border-radius:12px;padding:10px 18px;width:100%;box-sizing:border-box;">
+        <div style="font-size:13px;font-weight:700;color:#2A8A56;">Logged at ${h}:${m} ${ampm} · Sarah</div>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:var(--lighter);">Closing automatically…</div>
+    `;
+    sheet.appendChild(panel);
+    if (_sheetConfirmTimer) clearTimeout(_sheetConfirmTimer);
+    _sheetConfirmTimer = setTimeout(() => closeSheet(sheetId), 2000);
   }
   function closeActiveSheet() {
     GLOBAL_SHEETS.forEach(sid => {
-      const el = document.getElementById(sid);
-      if (el) el.classList.remove('open');
+      const id = sid.replace('sheet-', '');
+      closeSheet(id);
     });
-    document.getElementById('global-sheet-overlay').style.display = 'none';
   }
   function openCheckoutConfirm(name, emoji, detail) {
     document.getElementById('sheet-checkout-name').textContent = name;
@@ -5024,12 +4974,13 @@
     document.getElementById('kr-kennel-sheet').classList.remove('open');
   }
 
-  // Add-On select screen
+  // Add-On select
+  let currentAddonName = '';
   function selectAddon(name, emoji) {
+    currentAddonName = name;
     document.getElementById('sheet-addon-emoji').textContent = emoji;
-    document.getElementById('sheet-addon-header').textContent = name + ' — Buddy';
+    document.getElementById('sheet-addon-header').textContent = name;
     document.getElementById('sheet-addon-question').textContent = 'Did you complete ' + name + ' for Buddy?';
-    document.getElementById('addon-done-name').textContent = name;
     document.getElementById('addon-sheet-list-state').style.display = 'none';
     document.getElementById('addon-sheet-confirm-state').style.display = 'flex';
   }
@@ -5037,6 +4988,38 @@
     document.getElementById('addon-sheet-list-state').style.display = 'block';
     document.getElementById('addon-sheet-confirm-state').style.display = 'none';
   }
+
+  // Swipe-to-dismiss bottom sheets
+  function initSheetSwipe(id) {
+    const sheet = document.getElementById('sheet-' + id);
+    if (!sheet) return;
+    const handle = sheet.querySelector('.assign-sheet-handle');
+    if (!handle) return;
+    let startY = 0, isDragging = false;
+    handle.addEventListener('touchstart', e => {
+      startY = e.touches[0].clientY;
+      isDragging = true;
+      sheet.style.transition = 'none';
+    }, {passive: true});
+    window.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      const dy = e.touches[0].clientY - startY;
+      if (dy > 0) sheet.style.transform = 'translateY(' + dy + 'px)';
+    }, {passive: true});
+    window.addEventListener('touchend', e => {
+      if (!isDragging) return;
+      isDragging = false;
+      const dy = e.changedTouches[0].clientY - startY;
+      sheet.style.transition = 'transform 0.3s cubic-bezier(0.32,0.72,0,1)';
+      if (dy > 100) {
+        sheet.style.transform = 'translateY(100%)';
+        setTimeout(() => { sheet.style.transform = ''; closeSheet(id); }, 280);
+      } else {
+        sheet.style.transform = '';
+      }
+    }, {passive: true});
+  }
+  ['feed','medicate','addon','note-entry','photo-entry'].forEach(initSheetSwipe);
 
   // Staff Assignments screen
   function openStaffTaskSheet(staffName) {
