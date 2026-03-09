@@ -298,9 +298,8 @@
 
     /* STATS */
     .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .stat-card { background: white; border-radius: 14px; padding: 14px 12px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.12); }
-    .stat-number { font-size: 28px; font-weight: 900; color: var(--teal-dark); line-height: 1; }
-    .stat-label { font-size: 11px; font-weight: 700; color: var(--medium); margin-top: 4px; }
+    .stat-card { display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px 8px; background:white; border-radius:14px; border-top:3px solid var(--teal); box-shadow:0 2px 12px rgba(0,0,0,0.12); cursor:pointer; transition:transform 0.1s; }
+    .stat-card:active { transform: scale(0.95); }
 
     /* TOGGLE */
     .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: white; border-radius: 12px; }
@@ -629,17 +628,17 @@
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px 16px 28px;background:white;border-top:1px solid var(--border);flex-shrink:0;">
       <div class="quick-action" onclick="openSheet('note-entry')">
         <div class="qa-icon" style="background:var(--teal-light);">🎙️</div>
-        <div class="qa-label">Care Note</div>
+        <div class="qa-label">Note</div>
       </div>
       <div class="quick-action" onclick="openSheet('photo-entry')">
         <div class="qa-icon" style="background:#EAF4FF;">📸</div>
         <div class="qa-label">Photo</div>
       </div>
-      <div class="quick-action" onclick="">
-        <div class="qa-icon" style="background:var(--pink-light);">💬</div>
+      <div class="quick-action" onclick="openSheet('message-yard')">
+        <div class="qa-icon" style="background:var(--yellow-light);">📣</div>
         <div class="qa-label">Message</div>
       </div>
-      <div class="quick-action" onclick="go('incident-report')">
+      <div class="quick-action" onclick="openSheet('tiff')">
         <div class="qa-icon" style="background:#FFF0F0;">⚠️</div>
         <div class="qa-label">Tiff</div>
       </div>
@@ -1489,82 +1488,9 @@
     <div id="yard-checkin-toast" style="position:absolute;bottom:20px;left:20px;right:20px;background:var(--dark);color:white;border-radius:14px;padding:14px 18px;font-size:14px;font-weight:700;display:none;z-index:200;text-align:center;">✅ Checked into Yard 5</div>
   </div>
 
-  <!-- ══════════════════════════════════════════ -->
-  <!-- INCIDENT REPORT                            -->
-  <!-- ══════════════════════════════════════════ -->
-  <div class="screen" id="screen-incident-report">
-    <div class="top-nav">
-      <button class="back-btn" onclick="go('employee-home')">‹</button>
-      <div class="nav-title">Report Tiff</div>
-      <div style="background:var(--teal-light);border-radius:14px;padding:6px 9px;display:flex;align-items:center;">
-        <svg width="28" height="18" viewBox="0 0 36 24" fill="none"><circle cx="3" cy="12" r="2.5" fill="#2471A3"/><path d="M9 8 Q12 12 9 16" stroke="#2471A3" stroke-width="2.5" stroke-linecap="round" class="nfc-a1"/><path d="M15 5 Q20 12 15 19" stroke="#2471A3" stroke-width="2.5" stroke-linecap="round" class="nfc-a2"/><path d="M21 2 Q28 12 21 22" stroke="#2471A3" stroke-width="2.5" stroke-linecap="round" class="nfc-a3"/></svg>
-      </div>
-    </div>
-    <div class="scroll-content">
-      <div class="p-16">
-
-        <!-- Yard context badge -->
-        <div id="tiff-yard-badge" style="background:var(--orange-light);border:2px solid var(--orange);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:18px;">
-          <div style="font-size:20px;">📍</div>
-          <div>
-            <div style="font-size:13px;font-weight:800;color:#C45C1A;" id="tiff-yard-label">Yard 5 · 🟠 Orange Group</div>
-            <div style="font-size:11px;font-weight:600;color:#A04014;margin-top:2px;" id="tiff-yard-sub">2 dogs in yard — dogs assigned after submit</div>
-          </div>
-        </div>
-
-        <!-- Dictate + Photo -->
-        <div style="display:flex;gap:10px;margin-bottom:14px;">
-          <button class="btn btn-secondary" style="flex:1;padding:13px;" id="dictate-btn" onclick="toggleDictate(this)">
-            🎙️ &nbsp;Dictate Note
-          </button>
-          <button class="btn btn-secondary" style="flex:1;padding:13px;" onclick="document.getElementById('photo-preview').style.display='flex'">
-            📸 &nbsp;Take Photo
-          </button>
-        </div>
-
-        <!-- Photo preview -->
-        <div id="photo-preview" style="display:none;background:var(--bg);border:2px dashed var(--border);border-radius:14px;padding:14px;align-items:center;gap:12px;margin-bottom:14px;">
-          <div style="font-size:28px;">🖼️</div>
-          <div style="flex:1;">
-            <div style="font-size:13px;font-weight:800;color:var(--dark);">Photo attached</div>
-            <div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:2px;">IMG_0842.jpg · 2.1 MB</div>
-          </div>
-          <div style="font-size:18px;color:var(--coral);cursor:pointer;" onclick="document.getElementById('photo-preview').style.display='none'">✕</div>
-        </div>
-
-        <!-- Description -->
-        <div style="font-size:13px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">What Happened?</div>
-        <textarea id="incident-desc" class="input-field" style="height:180px;margin-bottom:16px;" placeholder="Describe the tiff...">Buddy and Rex had a brief scuffle near the water station. No injuries. Separated immediately.</textarea>
-
-        <!-- Severity -->
-        <div style="font-size:13px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Severity</div>
-        <div class="severity-row mb-20">
-          <button class="severity-btn low">🟡 Low</button>
-          <button class="severity-btn medium selected">🟠 Medium</button>
-          <button class="severity-btn high">🔴 High</button>
-        </div>
-
-        <button class="btn btn-danger btn-full btn-lg" onclick="showTiffDogAssign()">🚨 &nbsp;Submit Report</button>
-        <div style="text-align:center;margin-top:12px;font-size:12px;font-weight:600;color:var(--light);">You'll assign dogs after submitting</div>
-      </div>
-    </div>
-
-    <!-- Dog assignment overlay -->
-    <div id="tiff-dog-overlay" onclick="closeTiffDogAssign()" style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:none;z-index:100;"></div>
-
-    <!-- Dog assignment sheet -->
-    <div id="tiff-dog-sheet" style="position:absolute;bottom:0;left:0;right:0;background:white;border-radius:24px 24px 0 0;padding:20px 20px 32px;z-index:101;transform:translateY(100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);">
-      <div style="width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px;"></div>
-      <div style="font-size:18px;font-weight:900;color:var(--dark);margin-bottom:4px;">Who was involved?</div>
-      <div style="font-size:13px;font-weight:600;color:var(--medium);margin-bottom:16px;" id="tiff-dog-sheet-sub">Tap dogs from Yard 5 · Orange Group</div>
-      <div class="chip-group mb-20" id="tiff-yard-dogs">
-        <div class="chip selected">🐕 Buddy</div>
-        <div class="chip">🐕 Rex</div>
-      </div>
-      <button onclick="submitTiffFinal()" style="width:100%;padding:14px;border-radius:14px;border:none;background:var(--coral);font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;color:white;cursor:pointer;margin-bottom:10px;">Submit Report ✓</button>
-      <button onclick="closeTiffDogAssign()" style="width:100%;padding:12px;border-radius:14px;border:2px solid var(--border);background:white;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--medium);cursor:pointer;">← Back to Edit</button>
-    </div>
-  </div>
+  <!-- ─── SHEET: Tiff Report ───────────────────────────────────── -->
+  <!-- (kept as screen placeholder for tiff-done navigation) -->
+  <div class="screen" id="screen-incident-report" style="display:none;"></div>
 
   <!-- ══════════════════════════════════════════ -->
   <!-- TIFF DONE                                  -->
@@ -1740,11 +1666,18 @@
       <div class="p-16">
         <!-- Stats -->
         <div class="stats-row mb-20">
-          <div class="stat-card"><div class="stat-number">3</div><div class="stat-label">Pending Bookings</div></div>
-          <div class="stat-card" onclick="go('admin-arriving')" style="cursor:pointer;">
-            <div class="stat-number">5</div><div class="stat-label">Arriving Today</div>
+          <div class="stat-card">
+            <div class="qa-icon" style="background:var(--teal-light);">3️⃣</div>
+            <div class="qa-label">Pending</div>
           </div>
-          <div class="stat-card" onclick="go('admin-checkout')" style="cursor:pointer;"><div class="stat-number">9</div><div class="stat-label">Checked In</div></div>
+          <div class="stat-card" onclick="go('admin-arriving')">
+            <div class="qa-icon" style="background:var(--teal-light);">5️⃣</div>
+            <div class="qa-label">Arriving Today</div>
+          </div>
+          <div class="stat-card" onclick="go('admin-checkout')">
+            <div class="qa-icon" style="background:var(--teal-light);">9️⃣</div>
+            <div class="qa-label">Checked In</div>
+          </div>
         </div>
 
         <!-- Section divider -->
@@ -1757,13 +1690,13 @@
             <div class="qa-label">Notifications</div>
           </div>
           <div class="quick-action" onclick="go('admin-send-sms')">
-            <div class="qa-icon" style="background:var(--pink-light);">📱</div><div class="qa-label">Text Hub</div>
+            <div class="qa-icon" style="background:var(--pink-light);">📱</div><div class="qa-label">Text Parents</div>
           </div>
           <div class="quick-action" onclick="go('admin-email-inbox')">
             <div class="qa-icon" style="background:#EAF4FF;">📧</div><div class="qa-label">Email Inbox</div>
           </div>
-          <div class="quick-action" onclick="openSheet('message-yard')">
-            <div class="qa-icon" style="background:var(--yellow-light);">📣</div><div class="qa-label">Message Yard</div>
+          <div class="quick-action" onclick="go('admin-message-yard')">
+            <div class="qa-icon" style="background:var(--yellow-light);">📣</div><div class="qa-label">Message</div>
           </div>
           <div class="quick-action" onclick="go('admin-parents')">
             <div class="qa-icon" style="background:var(--purple-light);">👤</div><div class="qa-label">Parent Directory</div>
@@ -2070,7 +2003,7 @@
       <div style="position:absolute;font-size:120px;opacity:0.06;right:-20px;bottom:-20px;transform:rotate(-15deg);pointer-events:none;">🐾</div>
       <button class="back-btn" onclick="go('admin-home')" style="background:rgba(255,255,255,0.2);color:white;flex-shrink:0;">‹</button>
       <div>
-        <div style="font-size:20px;font-weight:900;color:white;line-height:1.1;">Yard Assignment</div>
+        <div style="font-size:20px;font-weight:900;color:white;line-height:1.1;">Yard Assign</div>
         <div style="font-size:12px;color:rgba(255,255,255,0.75);font-weight:600;margin-top:3px;">Assign color groups to yards</div>
       </div>
     </div>
@@ -2146,61 +2079,70 @@
   <div class="screen" id="screen-admin-message-yard">
     <div class="top-nav">
       <button class="back-btn" onclick="go('admin-home')">‹</button>
-      <div><div class="nav-title">Message Yard</div><div class="nav-subtitle">Send to staff by yard</div></div>
-      <div style="background:var(--teal-light);border-radius:14px;padding:6px 9px;display:flex;align-items:center;">
-        <svg width="28" height="18" viewBox="0 0 36 24" fill="none"><circle cx="3" cy="12" r="2.5" fill="#2471A3"/><path d="M9 8 Q12 12 9 16" stroke="#2471A3" stroke-width="2.5" stroke-linecap="round" class="nfc-a1"/><path d="M15 5 Q20 12 15 19" stroke="#2471A3" stroke-width="2.5" stroke-linecap="round" class="nfc-a2"/><path d="M21 2 Q28 12 21 22" stroke="#2471A3" stroke-width="2.5" stroke-linecap="round" class="nfc-a3"/></svg>
-      </div>
+      <div><div class="nav-title">Message</div><div class="nav-subtitle">Send to staff by yard</div></div>
+      <div></div>
     </div>
     <div class="scroll-content">
       <div class="p-16">
 
-        <!-- Send to -->
-        <div style="font-size:13px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Send to Yard(s)</div>
-        <div class="gap-10 mb-20">
-          <!-- Yard 5 — staffed -->
-          <div class="yard-item selected" id="msg-yard-5" onclick="toggleMsgYard(this)" style="border-color:var(--teal);background:var(--teal-light);">
-            <div class="yard-icon" style="background:var(--orange-light);">🌿</div>
+        <!-- Yard filter -->
+        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Yard</div>
+        <div style="position:relative;margin-bottom:20px;">
+          <select id="amsg-yard-select" onchange="amsgFilterByYard()" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:12px;padding:11px 14px;font-size:14px;font-family:inherit;color:var(--dark);background:white;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer;">
+            <option value="all">All Yards</option>
+            <option value="yard5">Yard 5 — Orange</option>
+            <option value="yard2">Yard 2 — Pink</option>
+            <option value="yard1">Yard 1 — Blue</option>
+            <option value="yard3">Yard 3 — Purple</option>
+            <option value="indoor">Indoor</option>
+          </select>
+          <div style="position:absolute;right:14px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:11px;color:var(--medium);">▼</div>
+        </div>
+
+        <!-- Staff (filtered by yard) -->
+        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Staff</div>
+        <div id="amsg-staff-list" class="gap-10 mb-20">
+          <div class="yard-item" id="amsg-sarah" data-yard="yard5" onclick="adminMsgToggle(this)">
+            <div class="yard-icon" style="background:var(--teal-light);font-size:18px;">👤</div>
             <div class="yard-info">
-              <div class="yard-name">Yard 5 · <span style="color:var(--orange);">🟠 Orange</span></div>
-              <div class="yard-status">Sarah · checked in 9:02 AM</div>
+              <div class="yard-name">Sarah K.</div>
+              <div class="yard-status">Yard 5 · checked in 9:02 AM</div>
             </div>
-            <div style="font-size:18px;color:var(--teal);" id="msg-yard-5-check">✓</div>
+            <div class="amsg-check" style="font-size:18px;color:var(--lighter);">○</div>
           </div>
-          <!-- Yard 2 — staffed -->
-          <div class="yard-item" id="msg-yard-2" onclick="toggleMsgYard(this)">
-            <div class="yard-icon" style="background:var(--pink-light);">🌿</div>
+          <div class="yard-item" id="amsg-mike" data-yard="yard2" onclick="adminMsgToggle(this)">
+            <div class="yard-icon" style="background:var(--teal-light);font-size:18px;">👤</div>
             <div class="yard-info">
-              <div class="yard-name">Yard 2 · <span style="color:var(--pink);">🩷 Pink</span></div>
-              <div class="yard-status">Mike · checked in 8:45 AM</div>
+              <div class="yard-name">Mike R.</div>
+              <div class="yard-status">Yard 2 · checked in 8:45 AM</div>
             </div>
-            <div style="font-size:18px;color:var(--lighter);" id="msg-yard-2-check">○</div>
+            <div class="amsg-check" style="font-size:18px;color:var(--lighter);">○</div>
           </div>
-          <!-- Yard 1 — no staff -->
-          <div class="yard-item" style="opacity:0.5;">
-            <div class="yard-icon">🌿</div>
+          <div class="yard-item" id="amsg-alex" data-yard="indoor" onclick="adminMsgToggle(this)">
+            <div class="yard-icon" style="background:var(--teal-light);font-size:18px;">👤</div>
             <div class="yard-info">
-              <div class="yard-name">Yard 1 · <span style="color:#4A90D9;">🔵 Blue</span></div>
-              <div class="yard-status" style="color:var(--light);">No staff checked in</div>
+              <div class="yard-name">Alex T.</div>
+              <div class="yard-status">Indoor / Front desk · checked in 8:00 AM</div>
             </div>
-            <div style="font-size:18px;color:var(--lighter);">—</div>
+            <div class="amsg-check" style="font-size:18px;color:var(--lighter);">○</div>
           </div>
-          <!-- Yard 3 — no staff -->
-          <div class="yard-item" style="opacity:0.5;">
-            <div class="yard-icon">🌿</div>
+          <div class="yard-item" id="amsg-jordan" data-yard="indoor" onclick="adminMsgToggle(this)">
+            <div class="yard-icon" style="background:var(--teal-light);font-size:18px;">👤</div>
             <div class="yard-info">
-              <div class="yard-name">Yard 3 · <span style="color:var(--purple);">🟣 Purple</span></div>
-              <div class="yard-status" style="color:var(--light);">No staff checked in</div>
+              <div class="yard-name">Jordan L.</div>
+              <div class="yard-status">Indoor / Kennels · checked in 8:30 AM</div>
             </div>
-            <div style="font-size:18px;color:var(--lighter);">—</div>
+            <div class="amsg-check" style="font-size:18px;color:var(--lighter);">○</div>
           </div>
+          <div id="amsg-staff-empty" style="display:none;font-size:13px;font-weight:600;color:var(--lighter);padding:8px 2px;">No staff checked into this yard</div>
         </div>
 
         <!-- Message -->
-        <div style="font-size:13px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Message</div>
-        <textarea class="input-field" style="height:120px;margin-bottom:8px;" placeholder="Type a message to yard staff...">Rotate dogs to water station in 10 minutes. Orange group first.</textarea>
-        <div style="font-size:12px;font-weight:600;color:var(--medium);margin-bottom:20px;">Delivered as push notification to checked-in staff</div>
+        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Message</div>
+        <textarea class="input-field" style="height:120px;margin-bottom:8px;" placeholder="Type a message...">Rotate dogs to water station in 10 minutes. Orange group first.</textarea>
+        <div style="font-size:12px;font-weight:600;color:var(--medium);margin-bottom:20px;">Delivered as push notification</div>
 
-        <button class="btn btn-primary btn-full btn-lg" onclick="go('admin-home')">📣 &nbsp;Send to Yard 5</button>
+        <button id="amsg-send-btn" class="btn btn-primary btn-full btn-lg" onclick="go('admin-home')">Send Message</button>
       </div>
     </div>
   </div>
@@ -2592,7 +2534,7 @@
       <div style="position:absolute;font-size:120px;opacity:0.06;right:-20px;bottom:-20px;transform:rotate(-15deg);pointer-events:none;">🐾</div>
       <button class="back-btn" onclick="go('admin-home')" style="background:rgba(255,255,255,0.2);color:white;flex-shrink:0;">‹</button>
       <div style="flex:1;">
-        <div style="font-size:20px;font-weight:900;color:white;line-height:1.1;">Scheduling</div>
+        <div style="font-size:20px;font-weight:900;color:white;line-height:1.1;">Kennel Planning</div>
         <div style="font-size:12px;color:rgba(255,255,255,0.75);font-weight:600;margin-top:3px;">March 2026</div>
       </div>
       <button onclick="go('admin-arriving')" style="background:white;border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--teal-dark);cursor:pointer;flex-shrink:0;line-height:1;">+</button>
@@ -2742,9 +2684,8 @@
       </div>
       <div style="padding:0 16px 8px;flex-shrink:0;">
         <div style="display:flex;gap:8px;">
-          <div style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--teal-dark);"><div style="width:10px;height:10px;border-radius:3px;background:var(--teal-light);border:2px solid var(--teal-light);"></div>Available</div>
-          <div style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--medium);"><div style="width:10px;height:10px;border-radius:3px;background:#F8F9FA;border:2px solid var(--border);opacity:0.5;"></div>Occupied</div>
-          <div style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:#B8860B;"><div style="width:10px;height:10px;border-radius:3px;background:#FFF8E1;border:2px solid #F9C846;"></div>Cleaning</div>
+          <div style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--teal-dark);"><div style="width:10px;height:10px;border-radius:3px;background:var(--teal-light);border:2px solid var(--teal-light);"></div>Open</div>
+          <div style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--medium);"><div style="width:10px;height:10px;border-radius:3px;background:#F8F9FA;border:2px solid var(--border);opacity:0.5;"></div>Booked</div>
         </div>
       </div>
       <div class="assign-grid">
@@ -2753,16 +2694,16 @@
         <div class="assign-cell occupied"><div style="font-size:15px;font-weight:900;color:var(--dark);">3</div><div style="font-size:10px;font-weight:700;color:var(--medium);">Milo</div></div>
         <div class="assign-cell occupied"><div style="font-size:15px;font-weight:900;color:var(--dark);">4</div><div style="font-size:10px;font-weight:700;color:var(--medium);">Buddy</div></div>
         <div class="assign-cell occupied"><div style="font-size:15px;font-weight:900;color:var(--dark);">5</div><div style="font-size:10px;font-weight:700;color:var(--medium);">Bella</div></div>
-        <div class="assign-cell available" onclick="selectAssignment('Room 6')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">6</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Ready</div></div>
-        <div class="assign-cell available" onclick="selectAssignment('Room 7')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">7</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Ready</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Room 6')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">6</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Room 7')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">7</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
         <div class="assign-cell occupied"><div style="font-size:15px;font-weight:900;color:var(--dark);">8</div><div style="font-size:10px;font-weight:700;color:var(--medium);">Charlie</div></div>
-        <div class="assign-cell cleaning"><div style="font-size:15px;font-weight:900;color:#B8860B;">9</div><div style="font-size:10px;font-weight:700;color:#B8860B;">Cleaning</div></div>
-        <div class="assign-cell available" onclick="selectAssignment('Room 10')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">10</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Ready</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Room 9')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">9</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Room 10')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">10</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
         <div class="assign-cell occupied"><div style="font-size:15px;font-weight:900;color:var(--dark);">11</div><div style="font-size:10px;font-weight:700;color:var(--medium);">Daisy</div></div>
-        <div class="assign-cell available" onclick="selectAssignment('Room 12')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">12</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Ready</div></div>
-        <div class="assign-cell cleaning"><div style="font-size:15px;font-weight:900;color:#B8860B;">13</div><div style="font-size:10px;font-weight:700;color:#B8860B;">Cleaning</div></div>
-        <div class="assign-cell available" onclick="selectAssignment('Room 14')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">14</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Ready</div></div>
-        <div class="assign-cell available" onclick="selectAssignment('Room 15')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">15</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Ready</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Room 12')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">12</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Room 13')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">13</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Room 14')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">14</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Room 15')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">15</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
       </div>
     </div>
 
@@ -2775,27 +2716,26 @@
       </div>
       <div style="padding:0 16px 8px;flex-shrink:0;">
         <div style="display:flex;gap:8px;">
-          <div style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--teal-dark);"><div style="width:10px;height:10px;border-radius:3px;background:var(--teal-light);border:2px solid var(--teal-light);"></div>Available</div>
-          <div style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--medium);"><div style="width:10px;height:10px;border-radius:3px;background:#F8F9FA;border:2px solid var(--border);opacity:0.5;"></div>Occupied</div>
-          <div style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:#B8860B;"><div style="width:10px;height:10px;border-radius:3px;background:#FFF8E1;border:2px solid #F9C846;"></div>Cleaning</div>
+          <div style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--teal-dark);"><div style="width:10px;height:10px;border-radius:3px;background:var(--teal-light);border:2px solid var(--teal-light);"></div>Open</div>
+          <div style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--medium);"><div style="width:10px;height:10px;border-radius:3px;background:#F8F9FA;border:2px solid var(--border);opacity:0.5;"></div>Booked</div>
         </div>
       </div>
       <div class="assign-grid">
         <div class="assign-cell occupied"><div style="font-size:15px;font-weight:900;color:var(--dark);">1</div><div style="font-size:10px;font-weight:700;color:var(--medium);">Rosie</div></div>
-        <div class="assign-cell available" onclick="selectAssignment('Kennel 2')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">2</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Ready</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Kennel 2')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">2</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
         <div class="assign-cell occupied"><div style="font-size:15px;font-weight:900;color:var(--dark);">3</div><div style="font-size:10px;font-weight:700;color:var(--medium);">Bella</div></div>
-        <div class="assign-cell available" onclick="selectAssignment('Kennel 4')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">4</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Ready</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Kennel 4')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">4</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
         <div class="assign-cell occupied"><div style="font-size:15px;font-weight:900;color:var(--dark);">5</div><div style="font-size:10px;font-weight:700;color:var(--medium);">Milo</div></div>
         <div class="assign-cell occupied"><div style="font-size:15px;font-weight:900;color:var(--dark);">6</div><div style="font-size:10px;font-weight:700;color:var(--medium);">Daisy</div></div>
         <div class="assign-cell occupied"><div style="font-size:15px;font-weight:900;color:var(--dark);">7</div><div style="font-size:10px;font-weight:700;color:var(--medium);">Max</div></div>
-        <div class="assign-cell available" onclick="selectAssignment('Kennel 8')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">8</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Ready</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Kennel 8')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">8</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
         <div class="assign-cell occupied"><div style="font-size:15px;font-weight:900;color:var(--dark);">9</div><div style="font-size:10px;font-weight:700;color:var(--medium);">Charlie</div></div>
-        <div class="assign-cell available" onclick="selectAssignment('Kennel 10')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">10</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Ready</div></div>
-        <div class="assign-cell cleaning"><div style="font-size:15px;font-weight:900;color:#B8860B;">11</div><div style="font-size:10px;font-weight:700;color:#B8860B;">Cleaning</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Kennel 10')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">10</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Kennel 11')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">11</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
         <div class="assign-cell occupied"><div style="font-size:15px;font-weight:900;color:var(--dark);">12</div><div style="font-size:10px;font-weight:700;color:var(--medium);">Buddy</div></div>
-        <div class="assign-cell available" onclick="selectAssignment('Kennel 13')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">13</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Ready</div></div>
-        <div class="assign-cell available" onclick="selectAssignment('Kennel 14')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">14</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Ready</div></div>
-        <div class="assign-cell available" onclick="selectAssignment('Kennel 15')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">15</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Ready</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Kennel 13')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">13</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Kennel 14')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">14</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
+        <div class="assign-cell available" onclick="selectAssignment('Kennel 15')"><div style="font-size:15px;font-weight:900;color:var(--teal-dark);">15</div><div style="font-size:10px;font-weight:700;color:var(--teal-dark);">Open</div></div>
       </div>
     </div>
 
@@ -3428,220 +3368,307 @@
       </div>
     </div>
 
-    <!-- Tabs -->
-    <div style="background:white;border-bottom:1px solid var(--border);display:flex;flex-shrink:0;">
-      <div id="kr-tab-rooms" onclick="krTab('rooms')" style="flex:1;text-align:center;padding:12px;font-size:14px;font-weight:800;color:var(--teal-dark);border-bottom:3px solid var(--teal-dark);cursor:pointer;">Rooms</div>
-      <div id="kr-tab-kennels" onclick="krTab('kennels')" style="flex:1;text-align:center;padding:12px;font-size:14px;font-weight:800;color:var(--medium);border-bottom:3px solid transparent;cursor:pointer;">Kennels</div>
-    </div>
+
 
     <div class="scroll-content">
 
       <!-- ROOMS TAB -->
       <div id="kr-rooms" style="padding:12px 16px 80px;">
 
-        <!-- Room card macro: occupied -->
-        <div style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:10px;overflow:hidden;">
-          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;" onclick="openRoomEdit(this)">
-            <div style="width:42px;height:42px;border-radius:10px;background:#FFF0F5;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:15px;font-weight:900;color:var(--dark);">Room 1</div>
-              <div style="font-size:12px;color:var(--medium);font-weight:600;">Kennel 1 · 🦮 Rosie</div>
-            </div>
-            <div style="background:#FFEBEE;color:#C62828;font-size:11px;font-weight:800;padding:3px 9px;border-radius:8px;flex-shrink:0;">Occupied</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
-          </div>
-        </div>
-
-        <div style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:10px;overflow:hidden;">
-          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;" onclick="openRoomEdit(this)">
-            <div style="width:42px;height:42px;border-radius:10px;background:#F0F4FF;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:15px;font-weight:900;color:var(--dark);">Room 2</div>
-              <div style="font-size:12px;color:var(--medium);font-weight:600;">Kennel 7 · 🐾 Max</div>
-            </div>
-            <div style="background:#FFEBEE;color:#C62828;font-size:11px;font-weight:800;padding:3px 9px;border-radius:8px;flex-shrink:0;">Occupied</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
-          </div>
-        </div>
-
-        <div style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:10px;overflow:hidden;">
-          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;" onclick="openRoomEdit(this)">
-            <div style="width:42px;height:42px;border-radius:10px;background:#FFF8E1;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:15px;font-weight:900;color:var(--dark);">Room 3</div>
-              <div style="font-size:12px;color:var(--medium);font-weight:600;">Kennel 5 · 🦴 Milo</div>
-            </div>
-            <div style="background:#FFEBEE;color:#C62828;font-size:11px;font-weight:800;padding:3px 9px;border-radius:8px;flex-shrink:0;">Occupied</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
-          </div>
-        </div>
-
-        <div style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:10px;overflow:hidden;">
-          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;" onclick="openRoomEdit(this)">
+        <div data-kr="room" style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;">
             <div style="width:42px;height:42px;border-radius:10px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:15px;font-weight:900;color:var(--dark);">Room 4</div>
-              <div style="font-size:12px;color:var(--medium);font-weight:600;">Kennel 12 · 🐕 Buddy</div>
+            <div style="flex:1;min-width:0;"><div class="kr-room-name" style="font-size:15px;font-weight:900;color:var(--dark);">Room 1</div><div style="font-size:12px;color:var(--medium);font-weight:600;">1 kennel</div></div>
+            <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+              <div style="font-size:13px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('room',this)">Change</div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
             </div>
-            <div style="background:#FFEBEE;color:#C62828;font-size:11px;font-weight:800;padding:3px 9px;border-radius:8px;flex-shrink:0;">Occupied</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
+          </div>
+          <div style="border-top:1px solid var(--border);">
+            <div data-kr="kennel" style="display:flex;align-items:center;gap:10px;padding:10px 16px;">
+              <div style="font-size:16px;flex-shrink:0;">🏷️</div>
+              <div class="kr-kennel-name" style="flex:1;min-width:0;font-size:14px;font-weight:700;color:var(--dark);">Kennel 1</div>
+              <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+                <div style="font-size:12px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('kennel',this)">Change</div>
+                <div style="font-size:12px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:10px;overflow:hidden;">
-          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;" onclick="openRoomEdit(this)">
-            <div style="width:42px;height:42px;border-radius:10px;background:#F5F0FF;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:15px;font-weight:900;color:var(--dark);">Room 5</div>
-              <div style="font-size:12px;color:var(--medium);font-weight:600;">Kennel 3 · 🐶 Bella</div>
+        <div data-kr="room" style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;">
+            <div style="width:42px;height:42px;border-radius:10px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
+            <div style="flex:1;min-width:0;"><div class="kr-room-name" style="font-size:15px;font-weight:900;color:var(--dark);">Room 2</div><div style="font-size:12px;color:var(--medium);font-weight:600;">1 kennel</div></div>
+            <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+              <div style="font-size:13px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('room',this)">Change</div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
             </div>
-            <div style="background:#FFEBEE;color:#C62828;font-size:11px;font-weight:800;padding:3px 9px;border-radius:8px;flex-shrink:0;">Occupied</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
+          </div>
+          <div style="border-top:1px solid var(--border);">
+            <div data-kr="kennel" style="display:flex;align-items:center;gap:10px;padding:10px 16px;">
+              <div style="font-size:16px;flex-shrink:0;">🏷️</div>
+              <div class="kr-kennel-name" style="flex:1;min-width:0;font-size:14px;font-weight:700;color:var(--dark);">Kennel 7</div>
+              <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+                <div style="font-size:12px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('kennel',this)">Change</div>
+                <div style="font-size:12px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Clean/Ready rooms -->
-        <div style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:10px;overflow:hidden;">
-          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;" onclick="openRoomEdit(this)">
-            <div style="width:42px;height:42px;border-radius:10px;background:#F0FBF2;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:15px;font-weight:900;color:var(--dark);">Room 6</div>
-              <div style="font-size:12px;color:var(--medium);font-weight:600;">No kennel assigned · Empty</div>
+        <div data-kr="room" style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;">
+            <div style="width:42px;height:42px;border-radius:10px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
+            <div style="flex:1;min-width:0;"><div class="kr-room-name" style="font-size:15px;font-weight:900;color:var(--dark);">Room 3</div><div style="font-size:12px;color:var(--medium);font-weight:600;">1 kennel</div></div>
+            <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+              <div style="font-size:13px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('room',this)">Change</div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
             </div>
-            <div style="background:var(--green-light);color:var(--green);font-size:11px;font-weight:800;padding:3px 9px;border-radius:8px;flex-shrink:0;">Ready</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
+          </div>
+          <div style="border-top:1px solid var(--border);">
+            <div data-kr="kennel" style="display:flex;align-items:center;gap:10px;padding:10px 16px;">
+              <div style="font-size:16px;flex-shrink:0;">🏷️</div>
+              <div class="kr-kennel-name" style="flex:1;min-width:0;font-size:14px;font-weight:700;color:var(--dark);">Kennel 5</div>
+              <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+                <div style="font-size:12px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('kennel',this)">Change</div>
+                <div style="font-size:12px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:10px;overflow:hidden;">
-          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;" onclick="openRoomEdit(this)">
-            <div style="width:42px;height:42px;border-radius:10px;background:#F0FBF2;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:15px;font-weight:900;color:var(--dark);">Room 7</div>
-              <div style="font-size:12px;color:var(--medium);font-weight:600;">No kennel assigned · Empty</div>
+        <div data-kr="room" style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;">
+            <div style="width:42px;height:42px;border-radius:10px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
+            <div style="flex:1;min-width:0;"><div class="kr-room-name" style="font-size:15px;font-weight:900;color:var(--dark);">Room 4</div><div style="font-size:12px;color:var(--medium);font-weight:600;">1 kennel</div></div>
+            <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+              <div style="font-size:13px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('room',this)">Change</div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
             </div>
-            <div style="background:var(--green-light);color:var(--green);font-size:11px;font-weight:800;padding:3px 9px;border-radius:8px;flex-shrink:0;">Ready</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
+          </div>
+          <div style="border-top:1px solid var(--border);">
+            <div data-kr="kennel" style="display:flex;align-items:center;gap:10px;padding:10px 16px;">
+              <div style="font-size:16px;flex-shrink:0;">🏷️</div>
+              <div class="kr-kennel-name" style="flex:1;min-width:0;font-size:14px;font-weight:700;color:var(--dark);">Kennel 12</div>
+              <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+                <div style="font-size:12px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('kennel',this)">Change</div>
+                <div style="font-size:12px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Cleaning room -->
-        <div style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:10px;overflow:hidden;">
-          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;" onclick="openRoomEdit(this)">
-            <div style="width:42px;height:42px;border-radius:10px;background:#FFF8E1;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:15px;font-weight:900;color:var(--dark);">Room 9</div>
-              <div style="font-size:12px;color:var(--medium);font-weight:600;">Kennel 11 · Empty</div>
+        <div data-kr="room" style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;">
+            <div style="width:42px;height:42px;border-radius:10px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
+            <div style="flex:1;min-width:0;"><div class="kr-room-name" style="font-size:15px;font-weight:900;color:var(--dark);">Room 5</div><div style="font-size:12px;color:var(--medium);font-weight:600;">1 kennel</div></div>
+            <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+              <div style="font-size:13px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('room',this)">Change</div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
             </div>
-            <div style="background:#FFF8E1;color:#B8860B;font-size:11px;font-weight:800;padding:3px 9px;border-radius:8px;flex-shrink:0;">Cleaning</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
+          </div>
+          <div style="border-top:1px solid var(--border);">
+            <div data-kr="kennel" style="display:flex;align-items:center;gap:10px;padding:10px 16px;">
+              <div style="font-size:16px;flex-shrink:0;">🏷️</div>
+              <div class="kr-kennel-name" style="flex:1;min-width:0;font-size:14px;font-weight:700;color:var(--dark);">Kennel 3</div>
+              <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+                <div style="font-size:12px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('kennel',this)">Change</div>
+                <div style="font-size:12px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:10px;overflow:hidden;">
-          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;" onclick="openRoomEdit(this)">
-            <div style="width:42px;height:42px;border-radius:10px;background:#F0FBF2;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:15px;font-weight:900;color:var(--dark);">Room 10</div>
-              <div style="font-size:12px;color:var(--medium);font-weight:600;">No kennel assigned · Empty</div>
+        <div data-kr="room" style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;">
+            <div style="width:42px;height:42px;border-radius:10px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
+            <div style="flex:1;min-width:0;"><div class="kr-room-name" style="font-size:15px;font-weight:900;color:var(--dark);">Room 6</div><div style="font-size:12px;color:var(--medium);font-weight:600;">No kennels</div></div>
+            <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+              <div style="font-size:13px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('room',this)">Change</div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
             </div>
-            <div style="background:var(--green-light);color:var(--green);font-size:11px;font-weight:800;padding:3px 9px;border-radius:8px;flex-shrink:0;">Ready</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
+          </div>
+        </div>
+
+        <div data-kr="room" style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;">
+            <div style="width:42px;height:42px;border-radius:10px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
+            <div style="flex:1;min-width:0;"><div class="kr-room-name" style="font-size:15px;font-weight:900;color:var(--dark);">Room 7</div><div style="font-size:12px;color:var(--medium);font-weight:600;">No kennels</div></div>
+            <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+              <div style="font-size:13px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('room',this)">Change</div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+            </div>
+          </div>
+        </div>
+
+        <div data-kr="room" style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;">
+            <div style="width:42px;height:42px;border-radius:10px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
+            <div style="flex:1;min-width:0;"><div class="kr-room-name" style="font-size:15px;font-weight:900;color:var(--dark);">Room 8</div><div style="font-size:12px;color:var(--medium);font-weight:600;">1 kennel</div></div>
+            <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+              <div style="font-size:13px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('room',this)">Change</div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--border);">
+            <div data-kr="kennel" style="display:flex;align-items:center;gap:10px;padding:10px 16px;">
+              <div style="font-size:16px;flex-shrink:0;">🏷️</div>
+              <div class="kr-kennel-name" style="flex:1;min-width:0;font-size:14px;font-weight:700;color:var(--dark);">Kennel 9</div>
+              <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+                <div style="font-size:12px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('kennel',this)">Change</div>
+                <div style="font-size:12px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div data-kr="room" style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;">
+            <div style="width:42px;height:42px;border-radius:10px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
+            <div style="flex:1;min-width:0;"><div class="kr-room-name" style="font-size:15px;font-weight:900;color:var(--dark);">Room 9</div><div style="font-size:12px;color:var(--medium);font-weight:600;">1 kennel</div></div>
+            <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+              <div style="font-size:13px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('room',this)">Change</div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--border);">
+            <div data-kr="kennel" style="display:flex;align-items:center;gap:10px;padding:10px 16px;">
+              <div style="font-size:16px;flex-shrink:0;">🏷️</div>
+              <div class="kr-kennel-name" style="flex:1;min-width:0;font-size:14px;font-weight:700;color:var(--dark);">Kennel 11</div>
+              <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+                <div style="font-size:12px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('kennel',this)">Change</div>
+                <div style="font-size:12px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div data-kr="room" style="background:white;border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;">
+            <div style="width:42px;height:42px;border-radius:10px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🚪</div>
+            <div style="flex:1;min-width:0;"><div class="kr-room-name" style="font-size:15px;font-weight:900;color:var(--dark);">Room 10</div><div style="font-size:12px;color:var(--medium);font-weight:600;">No kennels</div></div>
+            <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+              <div style="font-size:13px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="krOpenRename('room',this)">Change</div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+            </div>
           </div>
         </div>
 
       </div>
 
-      <!-- KENNELS TAB -->
-      <div id="kr-kennels" style="padding:12px 16px 80px;display:none;">
+      <!-- KENNELS TAB removed -->
+      <div id="kr-kennels" style="display:none;">
 
-        <div style="display:flex;flex-direction:column;gap:8px;">
-
-          <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="openKennelEdit(this)">
-            <div style="width:40px;height:40px;border-radius:10px;background:#FFF0F5;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏷️</div>
-            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 1</div><div style="font-size:12px;color:var(--medium);font-weight:600;">Room 1 · 🦮 Rosie</div></div>
-            <div style="background:#FFEBEE;color:#C62828;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;">Occupied</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
+        <div style="margin-bottom:18px;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Room 1</div>
+          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+            <div style="font-size:18px;flex-shrink:0;">🏷️</div>
+            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 1</div></div>
+            <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
           </div>
-
-          <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="openKennelEdit(this)">
-            <div style="width:40px;height:40px;border-radius:10px;background:#F0FBF2;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏷️</div>
-            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 2</div><div style="font-size:12px;color:var(--medium);font-weight:600;">Unassigned to room · Empty</div></div>
-            <div style="background:var(--green-light);color:var(--green);font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;">Available</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
-          </div>
-
-          <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="openKennelEdit(this)">
-            <div style="width:40px;height:40px;border-radius:10px;background:#F5F0FF;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏷️</div>
-            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 3</div><div style="font-size:12px;color:var(--medium);font-weight:600;">Room 5 · 🐶 Bella</div></div>
-            <div style="background:#FFEBEE;color:#C62828;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;">Occupied</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
-          </div>
-
-          <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="openKennelEdit(this)">
-            <div style="width:40px;height:40px;border-radius:10px;background:#F0FBF2;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏷️</div>
-            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 4</div><div style="font-size:12px;color:var(--medium);font-weight:600;">Unassigned to room · Empty</div></div>
-            <div style="background:var(--green-light);color:var(--green);font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;">Available</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
-          </div>
-
-          <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="openKennelEdit(this)">
-            <div style="width:40px;height:40px;border-radius:10px;background:#FFF8E1;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏷️</div>
-            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 5</div><div style="font-size:12px;color:var(--medium);font-weight:600;">Room 3 · 🦴 Milo</div></div>
-            <div style="background:#FFEBEE;color:#C62828;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;">Occupied</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
-          </div>
-
-          <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="openKennelEdit(this)">
-            <div style="width:40px;height:40px;border-radius:10px;background:#FFFBF0;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏷️</div>
-            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 6</div><div style="font-size:12px;color:var(--medium);font-weight:600;">Room 11 · 🐶 Daisy</div></div>
-            <div style="background:#FFEBEE;color:#C62828;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;">Occupied</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
-          </div>
-
-          <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="openKennelEdit(this)">
-            <div style="width:40px;height:40px;border-radius:10px;background:#F0F4FF;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏷️</div>
-            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 7</div><div style="font-size:12px;color:var(--medium);font-weight:600;">Room 2 · 🐾 Max</div></div>
-            <div style="background:#FFEBEE;color:#C62828;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;">Occupied</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
-          </div>
-
-          <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="openKennelEdit(this)">
-            <div style="width:40px;height:40px;border-radius:10px;background:#F0FBF2;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏷️</div>
-            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 8</div><div style="font-size:12px;color:var(--medium);font-weight:600;">Unassigned to room · Empty</div></div>
-            <div style="background:var(--green-light);color:var(--green);font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;">Available</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
-          </div>
-
-          <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="openKennelEdit(this)">
-            <div style="width:40px;height:40px;border-radius:10px;background:#F0FBF2;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏷️</div>
-            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 9</div><div style="font-size:12px;color:var(--medium);font-weight:600;">Room 8 · 🐕 Charlie</div></div>
-            <div style="background:#FFEBEE;color:#C62828;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;">Occupied</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
-          </div>
-
-          <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="openKennelEdit(this)">
-            <div style="width:40px;height:40px;border-radius:10px;background:#F0FBF2;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏷️</div>
-            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 10</div><div style="font-size:12px;color:var(--medium);font-weight:600;">Unassigned to room · Empty</div></div>
-            <div style="background:var(--green-light);color:var(--green);font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;">Available</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
-          </div>
-
-          <div style="background:white;border-radius:14px;border:1px solid #FFF3CD;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="openKennelEdit(this)">
-            <div style="width:40px;height:40px;border-radius:10px;background:#FFF8E1;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏷️</div>
-            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 11</div><div style="font-size:12px;color:var(--medium);font-weight:600;">Room 9 · Empty</div></div>
-            <div style="background:#FFF8E1;color:#B8860B;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;">Cleaning</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
-          </div>
-
-          <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="openKennelEdit(this)">
-            <div style="width:40px;height:40px;border-radius:10px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏷️</div>
-            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 12</div><div style="font-size:12px;color:var(--medium);font-weight:600;">Room 4 · 🐕 Buddy</div></div>
-            <div style="background:#FFEBEE;color:#C62828;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;">Occupied</div>
-            <div style="font-size:18px;color:var(--lighter);">›</div>
-          </div>
-
         </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Room 2</div>
+          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+            <div style="font-size:18px;flex-shrink:0;">🏷️</div>
+            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 7</div></div>
+            <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Room 3</div>
+          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+            <div style="font-size:18px;flex-shrink:0;">🏷️</div>
+            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 5</div></div>
+            <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Room 4</div>
+          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+            <div style="font-size:18px;flex-shrink:0;">🏷️</div>
+            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 12</div></div>
+            <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Room 5</div>
+          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+            <div style="font-size:18px;flex-shrink:0;">🏷️</div>
+            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 3</div></div>
+            <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Room 6</div>
+          <div style="font-size:13px;font-weight:600;color:var(--lighter);padding:4px 2px;">No kennels assigned</div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Room 7</div>
+          <div style="font-size:13px;font-weight:600;color:var(--lighter);padding:4px 2px;">No kennels assigned</div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Room 8</div>
+          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+            <div style="font-size:18px;flex-shrink:0;">🏷️</div>
+            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 9</div></div>
+            <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Room 9</div>
+          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+            <div style="font-size:18px;flex-shrink:0;">🏷️</div>
+            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 11</div></div>
+            <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Room 10</div>
+          <div style="font-size:13px;font-weight:600;color:var(--lighter);padding:4px 2px;">No kennels assigned</div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Unassigned</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+              <div style="font-size:18px;flex-shrink:0;">🏷️</div>
+              <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 2</div></div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+            </div>
+            <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+              <div style="font-size:18px;flex-shrink:0;">🏷️</div>
+              <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 4</div></div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+            </div>
+            <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+              <div style="font-size:18px;flex-shrink:0;">🏷️</div>
+              <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 6</div></div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+            </div>
+            <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+              <div style="font-size:18px;flex-shrink:0;">🏷️</div>
+              <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 8</div></div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+            </div>
+            <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+              <div style="font-size:18px;flex-shrink:0;">🏷️</div>
+              <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:900;color:var(--dark);">Kennel 10</div></div>
+              <div style="font-size:13px;font-weight:700;color:#C62828;cursor:pointer;" onclick="krRemove(this)">Remove</div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -3662,60 +3689,28 @@
         <div style="font-size:17px;font-weight:900;color:var(--dark);" id="kr-sheet-title">Edit Room 1</div>
         <button onclick="closeKrSheet()" style="background:var(--border);border:none;border-radius:50%;width:28px;height:28px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--medium);">✕</button>
       </div>
-      <div style="padding:0 16px 28px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;">
+      <div style="padding:0 16px 28px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;">
         <div>
           <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Room Name / Number</div>
           <input id="kr-room-name-input" type="text" value="Room 1" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:12px;padding:11px 14px;font-size:15px;font-family:inherit;font-weight:700;outline:none;">
         </div>
-        <div>
-          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Assigned Kennel</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;">🏷️ Kennel 1 <span style="color:var(--teal-dark);font-size:15px;cursor:pointer;">✕</span></div>
-            <div style="background:white;color:var(--medium);border:1.5px dashed var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;">+ Add Kennel</div>
-          </div>
-        </div>
-        <div>
-          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Status</div>
-          <div style="display:flex;gap:8px;">
-            <div style="flex:1;padding:10px;border-radius:10px;border:2px solid var(--teal-dark);background:var(--teal-light);text-align:center;font-size:13px;font-weight:800;color:var(--teal-dark);cursor:pointer;">Ready</div>
-            <div style="flex:1;padding:10px;border-radius:10px;border:2px solid var(--border);text-align:center;font-size:13px;font-weight:800;color:var(--medium);cursor:pointer;">Cleaning</div>
-            <div style="flex:1;padding:10px;border-radius:10px;border:2px solid var(--border);text-align:center;font-size:13px;font-weight:800;color:var(--medium);cursor:pointer;">Offline</div>
-          </div>
-        </div>
-        <button onclick="closeKrSheet()" class="btn btn-secondary btn-full" style="margin-top:4px;">Save Changes</button>
-        <div style="text-align:center;font-size:13px;font-weight:700;color:#C62828;cursor:pointer;padding:4px;">Remove Room</div>
+        <button onclick="krSaveRename()" class="btn btn-primary btn-full" style="margin-top:4px;">Save</button>
       </div>
     </div>
 
-    <!-- Kennel edit sheet -->
+    <!-- Kennel edit/add sheet -->
     <div class="assign-sheet" id="kr-kennel-sheet">
       <div class="assign-sheet-handle"></div>
       <div style="padding:16px 16px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
         <div style="font-size:17px;font-weight:900;color:var(--dark);" id="kr-kennel-title">Edit Kennel 1</div>
         <button onclick="closeKrSheet()" style="background:var(--border);border:none;border-radius:50%;width:28px;height:28px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--medium);">✕</button>
       </div>
-      <div style="padding:0 16px 28px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;">
+      <div style="padding:0 16px 28px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;">
         <div>
-          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Kennel ID</div>
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Kennel ID / Name</div>
           <input id="kr-kennel-id-input" type="text" value="Kennel 1" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:12px;padding:11px 14px;font-size:15px;font-family:inherit;font-weight:700;outline:none;">
         </div>
-        <div>
-          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Assigned Room</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;">🚪 Room 1 <span style="color:var(--teal-dark);font-size:15px;cursor:pointer;">✕</span></div>
-            <div style="background:white;color:var(--medium);border:1.5px dashed var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;">Change Room</div>
-          </div>
-        </div>
-        <div>
-          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Status</div>
-          <div style="display:flex;gap:8px;">
-            <div style="flex:1;padding:10px;border-radius:10px;border:2px solid var(--teal-dark);background:var(--teal-light);text-align:center;font-size:13px;font-weight:800;color:var(--teal-dark);cursor:pointer;">Available</div>
-            <div style="flex:1;padding:10px;border-radius:10px;border:2px solid var(--border);text-align:center;font-size:13px;font-weight:800;color:var(--medium);cursor:pointer;">Cleaning</div>
-            <div style="flex:1;padding:10px;border-radius:10px;border:2px solid var(--border);text-align:center;font-size:13px;font-weight:800;color:var(--medium);cursor:pointer;">Offline</div>
-          </div>
-        </div>
-        <button onclick="closeKrSheet()" class="btn btn-secondary btn-full" style="margin-top:4px;">Save Changes</button>
-        <div style="text-align:center;font-size:13px;font-weight:700;color:#C62828;cursor:pointer;padding:4px;">Remove Kennel</div>
+        <button onclick="krSaveRename()" class="btn btn-primary btn-full" style="margin-top:4px;">Save</button>
       </div>
     </div>
 
@@ -3842,7 +3837,7 @@
       <div style="position:absolute;font-size:120px;opacity:0.06;right:-20px;bottom:-20px;transform:rotate(-15deg);pointer-events:none;">🐾</div>
       <button class="back-btn" onclick="go('admin-home')" style="background:rgba(255,255,255,0.2);color:white;flex-shrink:0;">‹</button>
       <div>
-        <div style="font-size:20px;font-weight:900;color:white;line-height:1.1;">Text Hub</div>
+        <div style="font-size:20px;font-weight:900;color:white;line-height:1.1;">Text Parents</div>
         <div style="font-size:12px;color:rgba(255,255,255,0.75);font-weight:600;margin-top:3px;">Message parents / owners</div>
       </div>
     </div>
@@ -4996,41 +4991,38 @@
     </div>
   </div>
 
-  <!-- ─── SHEET: Message Yard ───────────────────────────────────── -->
+  <!-- ─── SHEET: Message ───────────────────────────────────────── -->
   <div class="assign-sheet" id="sheet-message-yard" style="max-height:88%;overflow:hidden;display:flex;flex-direction:column;">
     <div class="assign-sheet-handle"></div>
     <div style="padding:8px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--border);">
-      <div style="font-size:17px;font-weight:900;color:var(--dark);">📣 Message Yard</div>
-      <div style="font-size:12px;color:var(--medium);font-weight:600;margin-top:2px;">Send to staff by yard</div>
+      <div style="font-size:17px;font-weight:900;color:var(--dark);">Message</div>
+      <div style="font-size:12px;color:var(--medium);font-weight:600;margin-top:2px;">Send to employees or yards</div>
     </div>
     <div style="overflow-y:auto;flex:1;padding:14px 16px 24px;">
-      <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Send to Yard(s)</div>
-      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
-        <div class="yard-item selected" id="msg2-yard-5" onclick="toggleMsgYard2(this)" style="border-color:var(--teal);background:var(--teal-light);">
-          <div class="yard-icon" style="background:var(--orange-light);">🌿</div>
-          <div class="yard-info"><div class="yard-name">Yard 5 · <span style="color:var(--orange);">🟠 Orange</span></div><div class="yard-status">Sarah · checked in 9:02 AM</div></div>
-          <div style="font-size:18px;color:var(--teal);" id="msg2-yard-5-check">✓</div>
-        </div>
-        <div class="yard-item" id="msg2-yard-2" onclick="toggleMsgYard2(this)">
-          <div class="yard-icon" style="background:var(--pink-light);">🌿</div>
-          <div class="yard-info"><div class="yard-name">Yard 2 · <span style="color:var(--pink);">🩷 Pink</span></div><div class="yard-status">Mike · checked in 8:45 AM</div></div>
-          <div style="font-size:18px;color:var(--lighter);" id="msg2-yard-2-check">○</div>
-        </div>
-        <div class="yard-item" style="opacity:0.5;">
-          <div class="yard-icon">🌿</div>
-          <div class="yard-info"><div class="yard-name">Yard 1 · <span style="color:#4A90D9;">🔵 Blue</span></div><div class="yard-status" style="color:var(--light);">No staff checked in</div></div>
-          <div style="font-size:18px;color:var(--lighter);">—</div>
-        </div>
-        <div class="yard-item" style="opacity:0.5;">
-          <div class="yard-icon">🌿</div>
-          <div class="yard-info"><div class="yard-name">Yard 3 · <span style="color:var(--purple);">🟣 Purple</span></div><div class="yard-status" style="color:var(--light);">No staff checked in</div></div>
-          <div style="font-size:18px;color:var(--lighter);">—</div>
+
+      <!-- Selected recipient chips -->
+      <div id="msg-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;"></div>
+
+      <!-- Search input + dropdown -->
+      <div style="position:relative;margin-bottom:14px;">
+        <input id="msg-search" type="text" class="input-field" style="margin-bottom:0;padding-right:36px;"
+          placeholder="Search yards or employees…"
+          oninput="msgFilter(this.value)"
+          onfocus="document.getElementById('msg-dd').style.display='block';" />
+        <div style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--lighter);pointer-events:none;">🔍</div>
+        <div id="msg-dd" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:white;border:2px solid var(--border);border-radius:12px;overflow:hidden;z-index:10;box-shadow:0 4px 16px rgba(0,0,0,0.10);">
+          <div id="msg-dd-list"></div>
         </div>
       </div>
+
+      <!-- Message textarea -->
       <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Message</div>
-      <textarea class="input-field" style="height:100px;margin-bottom:8px;" placeholder="Type a message to yard staff...">Rotate dogs to water station in 10 minutes. Orange group first.</textarea>
-      <div style="font-size:12px;font-weight:600;color:var(--medium);margin-bottom:16px;">Delivered as push notification to checked-in staff</div>
-      <button class="btn btn-primary btn-full btn-lg" onclick="closeSheet('message-yard')">📣 &nbsp;Send to Yard 5</button>
+      <textarea class="input-field" id="msg-body" style="height:100px;margin-bottom:8px;" placeholder="Type a message…"></textarea>
+      <div style="font-size:12px;font-weight:600;color:var(--medium);margin-bottom:16px;">Delivered as push notification</div>
+      <button id="msg-send-btn" class="btn btn-primary btn-full btn-lg" onclick="closeSheet('message-yard')">Send Message</button>
+      <div style="text-align:center;padding:12px 0 4px;">
+        <span style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;" onclick="closeSheet('message-yard')">Cancel</span>
+      </div>
     </div>
   </div>
 
@@ -5040,14 +5032,37 @@
     <div style="padding:8px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
       <div>
         <div style="font-size:17px;font-weight:900;color:var(--dark);">Care Note</div>
-        <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:2px;">Buddy · Golden Retriever · 🟠 Orange · Room 4</div>
       </div>
       <div style="font-size:22px;color:var(--lighter);cursor:pointer;padding:4px;" onclick="closeSheet('note-entry')">✕</div>
     </div>
     <div style="overflow-y:auto;flex:1;padding:16px 16px 8px;">
-      <button class="btn btn-secondary btn-full btn-lg" style="margin-bottom:12px;" id="note-dictate-btn" onclick="noteToggleDictate(this)">Dictate Note</button>
-      <textarea id="note-text" class="input-field" style="height:120px;margin-bottom:16px;" placeholder="Type or dictate an observation..."></textarea>
-      <button class="btn btn-secondary btn-full btn-lg" style="margin-bottom:12px;" onclick="showSheetConfirm('note-entry','Care note saved for Buddy.')">Save Note</button>
+
+      <!-- Link to record via NFC -->
+      <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Link to Record</div>
+      <div id="note-nfc-btn" onclick="noteNfcScan()" style="display:flex;align-items:center;gap:12px;border:2px dashed var(--border);border-radius:14px;padding:12px 14px;cursor:pointer;background:var(--bg);margin-bottom:14px;">
+        <svg width="28" height="18" viewBox="0 0 36 24" fill="none" style="flex-shrink:0;">
+          <circle cx="3" cy="12" r="2.5" fill="var(--teal)"/>
+          <path d="M9 8 Q12 12 9 16" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" class="nfc-a1"/>
+          <path d="M15 5 Q20 12 15 19" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" class="nfc-a2"/>
+          <path d="M21 2 Q28 12 21 22" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" class="nfc-a3"/>
+        </svg>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--dark);">Scan NFC Tag</div>
+          <div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:1px;">Friend · Room · Kennel · Yard</div>
+        </div>
+      </div>
+      <div id="note-nfc-done" style="display:none;align-items:center;gap:10px;background:var(--teal-light);border:2px solid var(--teal);border-radius:14px;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-size:20px;">🐕</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:800;color:var(--teal-dark);">Buddy · Room 4</div>
+          <div style="font-size:11px;font-weight:600;color:var(--teal-deeper);margin-top:1px;">Golden Retriever · 🟠 Orange Group</div>
+        </div>
+        <span onclick="noteNfcRescan()" style="font-size:12px;font-weight:700;color:var(--teal-dark);cursor:pointer;text-decoration:underline;">Rescan</span>
+      </div>
+
+      <button class="btn btn-primary btn-full btn-lg" style="margin-bottom:12px;" id="note-dictate-btn" onclick="noteToggleDictate(this)">Dictate Note</button>
+      <textarea id="note-text" class="input-field" style="height:110px;margin-bottom:16px;" placeholder="Type or dictate an observation..."></textarea>
+      <button class="btn btn-primary btn-full btn-lg" style="margin-bottom:12px;" onclick="showSheetConfirm('note-entry','Care note saved.')">Save Note</button>
       <div style="text-align:center;padding-bottom:16px;">
         <span style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;" onclick="closeSheet('note-entry')">Cancel</span>
       </div>
@@ -5060,18 +5075,39 @@
     <div style="padding:8px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
       <div>
         <div style="font-size:17px;font-weight:900;color:var(--dark);">Take a Photo</div>
-        <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:2px;">Buddy · Golden Retriever · 🟠 Orange · Room 4</div>
       </div>
       <div style="font-size:22px;color:var(--lighter);cursor:pointer;padding:4px;" onclick="closeSheet('photo-entry')">✕</div>
     </div>
     <div style="overflow-y:auto;flex:1;padding:16px 16px 8px;">
-      <button class="btn btn-secondary btn-full btn-lg" style="margin-bottom:10px;" onclick="document.getElementById('photo-entry-preview').style.display='flex';">Take Photo</button>
-      <div id="photo-entry-preview" style="display:none;background:var(--bg);border:2px dashed var(--border);border-radius:14px;padding:14px;align-items:center;gap:12px;margin-bottom:10px;">
-        <div style="font-size:28px;">🖼️</div>
-        <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--dark);">Photo ready</div><div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:2px;">IMG_1024.jpg · 1.8 MB</div></div>
-        <div style="font-size:18px;color:var(--coral);cursor:pointer;" onclick="document.getElementById('photo-entry-preview').style.display='none'">✕</div>
+
+      <!-- Link to record via NFC -->
+      <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Link to Record</div>
+      <div id="photo-nfc-btn" onclick="photoNfcScan()" style="display:flex;align-items:center;gap:12px;border:2px dashed var(--border);border-radius:14px;padding:12px 14px;cursor:pointer;background:var(--bg);margin-bottom:14px;">
+        <svg width="28" height="18" viewBox="0 0 36 24" fill="none" style="flex-shrink:0;">
+          <circle cx="3" cy="12" r="2.5" fill="var(--teal)"/>
+          <path d="M9 8 Q12 12 9 16" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" class="nfc-a1"/>
+          <path d="M15 5 Q20 12 15 19" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" class="nfc-a2"/>
+          <path d="M21 2 Q28 12 21 22" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" class="nfc-a3"/>
+        </svg>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--dark);">Scan NFC Tag</div>
+          <div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:1px;">Friend · Room · Kennel · Yard</div>
+        </div>
       </div>
-      <button class="btn btn-secondary btn-full btn-lg" style="margin-bottom:12px;" onclick="showSheetConfirm('photo-entry','Photo saved for Buddy.')">Save Photo</button>
+      <div id="photo-nfc-done" style="display:none;align-items:center;gap:10px;background:var(--teal-light);border:2px solid var(--teal);border-radius:14px;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-size:20px;">🐕</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:800;color:var(--teal-dark);">Buddy · Room 4</div>
+          <div style="font-size:11px;font-weight:600;color:var(--teal-deeper);margin-top:1px;">Golden Retriever · 🟠 Orange Group</div>
+        </div>
+        <span onclick="photoNfcRescan()" style="font-size:12px;font-weight:700;color:var(--teal-dark);cursor:pointer;text-decoration:underline;">Rescan</span>
+      </div>
+
+      <!-- Photo grid -->
+      <div id="photo-grid" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;"></div>
+
+      <button class="btn btn-primary btn-full btn-lg" style="margin-bottom:10px;" onclick="photoAddOne()">Add Photo</button>
+      <button class="btn btn-primary btn-full btn-lg" id="photo-save-btn" style="margin-bottom:12px;opacity:0.4;" disabled onclick="showSheetConfirm('photo-entry','Photos saved.')">Save Photos</button>
       <div style="text-align:center;padding-bottom:16px;">
         <span style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;" onclick="closeSheet('photo-entry')">Cancel</span>
       </div>
@@ -5116,6 +5152,74 @@
       <button class="btn btn-secondary btn-full btn-lg" onclick="confirmGroupChange()">Confirm</button>
       <div style="text-align:center;padding-bottom:12px;">
         <span style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;" onclick="closeSheet('change-group')">Cancel</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SHEET: Tiff Report ──────────────────────────────────── -->
+  <div class="assign-sheet" id="sheet-tiff" style="max-height:95%;overflow:hidden;display:flex;flex-direction:column;">
+    <div class="assign-sheet-handle"></div>
+    <div style="padding:8px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:17px;font-weight:900;color:var(--dark);">Report Tiff</div>
+      <div style="font-size:22px;color:var(--lighter);cursor:pointer;padding:4px;" onclick="closeSheet('tiff')">✕</div>
+    </div>
+    <div style="overflow-y:auto;flex:1;padding:16px 16px 8px;">
+
+      <!-- Yard context badge -->
+      <div style="background:var(--orange-light);border:2px solid var(--orange);border-radius:14px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="font-size:18px;">📍</div>
+        <div>
+          <div style="font-size:13px;font-weight:800;color:#C45C1A;">Yard 5 · 🟠 Orange Group</div>
+          <div style="font-size:11px;font-weight:600;color:#A04014;margin-top:1px;">2 dogs in yard</div>
+        </div>
+      </div>
+
+      <!-- Dictate + Photo -->
+      <div style="display:flex;gap:10px;margin-bottom:14px;">
+        <button class="btn btn-primary" style="flex:1;padding:13px;" id="tiff-dictate-btn" onclick="toggleDictate(this)">Dictate Note</button>
+        <button class="btn btn-primary" style="flex:1;padding:13px;" onclick="document.getElementById('tiff-photo-preview').style.display='flex'">Take Photo</button>
+      </div>
+
+      <!-- Photo preview -->
+      <div id="tiff-photo-preview" style="display:none;background:var(--bg);border:2px dashed var(--border);border-radius:14px;padding:14px;align-items:center;gap:12px;margin-bottom:14px;">
+        <div style="font-size:28px;">🖼️</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--dark);">Photo attached</div><div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:2px;">IMG_0842.jpg · 2.1 MB</div></div>
+        <div style="font-size:18px;color:var(--coral);cursor:pointer;" onclick="document.getElementById('tiff-photo-preview').style.display='none'">✕</div>
+      </div>
+
+      <!-- Description -->
+      <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">What Happened?</div>
+      <textarea class="input-field" style="height:90px;margin-bottom:14px;" placeholder="Describe the tiff…"></textarea>
+
+      <!-- Severity -->
+      <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Severity</div>
+      <div class="severity-row" style="margin-bottom:16px;">
+        <button class="severity-btn low">Low</button>
+        <button class="severity-btn medium selected">Medium</button>
+        <button class="severity-btn high">High</button>
+      </div>
+
+      <!-- Instigator -->
+      <div style="font-size:11px;font-weight:800;color:#C45C1A;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Instigator</div>
+      <div class="chip-group" style="margin-bottom:14px;" id="tiff-instigator-sheet">
+        <div class="chip" onclick="tiffSelectRole(this,'instigator')" style="border-color:var(--border);">Buddy</div>
+        <div class="chip selected" onclick="tiffSelectRole(this,'instigator')" style="border-color:var(--orange);background:var(--orange-light);color:#C45C1A;">Rex</div>
+        <div class="chip" onclick="tiffSelectRole(this,'instigator')" style="border-color:var(--border);">Luna</div>
+        <div class="chip" onclick="tiffSelectRole(this,'instigator')" style="border-color:var(--border);">Max</div>
+      </div>
+
+      <!-- Victim -->
+      <div style="font-size:11px;font-weight:800;color:#2471A3;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Victim</div>
+      <div class="chip-group" style="margin-bottom:20px;" id="tiff-victim-sheet">
+        <div class="chip selected" onclick="tiffSelectRole(this,'victim')" style="border-color:#4A90D9;background:#EEF5FF;color:#2E6BB5;">Buddy</div>
+        <div class="chip" onclick="tiffSelectRole(this,'victim')" style="border-color:var(--border);">Rex</div>
+        <div class="chip" onclick="tiffSelectRole(this,'victim')" style="border-color:var(--border);">Luna</div>
+        <div class="chip" onclick="tiffSelectRole(this,'victim')" style="border-color:var(--border);">Max</div>
+      </div>
+
+      <button class="btn btn-danger btn-full btn-lg" style="margin-bottom:12px;" onclick="showSheetConfirm('tiff','Tiff report submitted. Admin has been notified.')">Submit Report</button>
+      <div style="text-align:center;padding-bottom:16px;">
+        <span style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;" onclick="closeSheet('tiff')">Cancel</span>
       </div>
     </div>
   </div>
@@ -5206,6 +5310,71 @@
     daisy:  { name:'Daisy',  emoji:'🐶', breed:'Labrador Retriever',    age:'2 yrs', sex:'Female', intact:'Spayed',   weight:'55 lbs', groupLabel:'🟣 Purple', groupBg:'#F0EBFF', groupColor:'#7C3AED', room:'Room B', kennel:'Kennel 9',  parent:'David Park',      vaccStatus:'current',  vaccExpires:'Jun 5, 2026',  feeding:'Purina ONE SmartBlend · 2.5 cups AM / 2.5 cups PM',        meds:'',                                                    specialNote:'' },
     rosie:  { name:'Rosie',  emoji:'🦮', breed:'Bernese Mountain Dog',  age:'6 yrs', sex:'Female', intact:'Spayed',   weight:'90 lbs', groupLabel:'🟣 Purple', groupBg:'#F0EBFF', groupColor:'#7C3AED', room:'Room C', kennel:'Kennel 11', parent:'Amanda Foster',   vaccStatus:'current',  vaccExpires:'Nov 8, 2026',  feeding:'Taste of the Wild · 3 cups AM / 3 cups PM',               meds:'Carprofen 75mg — 1 tab AM / 1 tab PM with food (joint pain)', specialNote:'Hip dysplasia — no jumping, no stairs.' },
   }
+  function noteNfcScan() {
+    document.getElementById('note-nfc-btn').style.display = 'none';
+    document.getElementById('note-nfc-done').style.display = 'flex';
+  }
+  function noteNfcRescan() {
+    document.getElementById('note-nfc-done').style.display = 'none';
+    document.getElementById('note-nfc-btn').style.display = 'flex';
+  }
+  let _photoCount = 0;
+  const _photoNames = ['IMG_1024','IMG_1025','IMG_1026','IMG_1027','IMG_1028','IMG_1029'];
+  function photoAddOne() {
+    _photoCount++;
+    const idx = _photoCount;
+    const name = _photoNames[(idx - 1) % _photoNames.length];
+    const div = document.createElement('div');
+    div.id = 'photo-thumb-' + idx;
+    div.style.cssText = 'position:relative;width:calc(33.33% - 6px);aspect-ratio:1;background:var(--bg);border:2px solid var(--border);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;overflow:hidden;flex-shrink:0;';
+    div.innerHTML = '<div style="font-size:28px;">🖼️</div>'
+      + '<div style="font-size:10px;font-weight:700;color:var(--medium);text-align:center;padding:0 4px;">' + name + '.jpg</div>'
+      + '<div onclick="photoRemove(' + idx + ')" style="position:absolute;top:4px;right:4px;width:18px;height:18px;background:var(--coral);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;cursor:pointer;font-weight:900;">✕</div>';
+    document.getElementById('photo-grid').appendChild(div);
+    _photoUpdateSaveBtn();
+  }
+  function photoRemove(idx) {
+    const el = document.getElementById('photo-thumb-' + idx);
+    if (el) el.remove();
+    _photoUpdateSaveBtn();
+  }
+  function _photoUpdateSaveBtn() {
+    const count = document.getElementById('photo-grid').children.length;
+    const btn = document.getElementById('photo-save-btn');
+    if (!btn) return;
+    btn.textContent = count === 1 ? 'Save Photo' : 'Save Photos' + (count > 0 ? ' (' + count + ')' : '');
+    btn.disabled = count === 0;
+    btn.style.opacity = count === 0 ? '0.4' : '1';
+  }
+  function photoNfcScan() {
+    document.getElementById('photo-nfc-btn').style.display = 'none';
+    document.getElementById('photo-nfc-done').style.display = 'flex';
+  }
+  function photoNfcRescan() {
+    document.getElementById('photo-nfc-done').style.display = 'none';
+    document.getElementById('photo-nfc-btn').style.display = 'flex';
+  }
+  function tiffSelectRole(el, role) {
+    const isInstigator = role === 'instigator';
+    const activeStyle = isInstigator
+      ? { border: 'var(--orange)', bg: 'var(--orange-light)', color: '#C45C1A' }
+      : { border: '#4A90D9', bg: '#EEF5FF', color: '#2E6BB5' };
+    // Update whichever group the chip belongs to
+    const group = el.closest('[id^="tiff-instigator"], [id^="tiff-victim"]');
+    if (group) {
+      group.querySelectorAll('.chip').forEach(c => {
+        c.classList.remove('selected');
+        c.style.borderColor = 'var(--border)';
+        c.style.background = '';
+        c.style.color = '';
+      });
+    }
+    el.classList.add('selected');
+    el.style.borderColor = activeStyle.border;
+    el.style.background = activeStyle.bg;
+    el.style.color = activeStyle.color;
+  }
+
   function selectCkOption(el) {
     document.querySelectorAll('#ck-option-list .ck-option').forEach(o => {
       o.classList.remove('ck-selected');
@@ -5237,6 +5406,100 @@
     const group = sel ? sel.dataset.group : 'Orange';
     showSheetConfirm('change-group', `Buddy has been moved to ${group} Group.`);
   }
+
+  // ── Message sheet ─────────────────────────────────────────────
+  const msgRecipients = [
+    { id: 'all-staff',  label: 'All Staff',  sub: 'Everyone on shift',        icon: '👥', type: 'employee' },
+    { id: 'yard-5',     label: 'Yard 5',     sub: '🟠 Orange · Sarah',        icon: '🌿', type: 'yard' },
+    { id: 'yard-2',     label: 'Yard 2',     sub: '🩷 Pink · Mike',           icon: '🌿', type: 'yard' },
+    { id: 'yard-1',     label: 'Yard 1',     sub: '🔵 Blue · no staff',       icon: '🌿', type: 'yard' },
+    { id: 'yard-3',     label: 'Yard 3',     sub: '🟣 Purple · no staff',     icon: '🌿', type: 'yard' },
+    { id: 'emp-sarah',  label: 'Sarah',      sub: 'Yard 5 · checked in',      icon: '👤', type: 'employee' },
+    { id: 'emp-mike',   label: 'Mike',       sub: 'Yard 2 · checked in',      icon: '👤', type: 'employee' },
+    { id: 'emp-alex',   label: 'Alex',       sub: 'Not checked in',           icon: '👤', type: 'employee' },
+    { id: 'emp-jordan', label: 'Jordan',     sub: 'Not checked in',           icon: '👤', type: 'employee' },
+  ];
+  let msgSelected = new Set();
+
+  function msgFilter(val) {
+    const q = val.toLowerCase();
+    const dd = document.getElementById('msg-dd');
+    dd.style.display = 'block';
+    const filtered = msgRecipients.filter(r =>
+      !msgSelected.has(r.id) &&
+      (r.label.toLowerCase().includes(q) || r.sub.toLowerCase().includes(q))
+    );
+    msgRenderDd(filtered);
+  }
+
+  function msgRenderDd(list) {
+    const dl = document.getElementById('msg-dd-list');
+    if (!list.length) {
+      dl.innerHTML = '<div style="padding:12px 14px;font-size:13px;font-weight:600;color:var(--lighter);">No results</div>';
+      return;
+    }
+    dl.innerHTML = list.map(r => `
+      <div onclick="msgSelect('${r.id}')" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;background:white;" onmousedown="event.preventDefault()">
+        <div style="width:32px;height:32px;border-radius:8px;background:${r.type==='yard'?'#F0FBF2':'var(--teal-light)'};display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">${r.icon}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:700;color:var(--dark);">${r.label}</div>
+          <div style="font-size:11px;font-weight:600;color:var(--medium);">${r.sub}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  function msgSelect(id) {
+    msgSelected.add(id);
+    document.getElementById('msg-search').value = '';
+    msgRenderChips();
+    msgRenderDd(msgRecipients.filter(r => !msgSelected.has(r.id)));
+    document.getElementById('msg-search').focus();
+  }
+
+  function msgRemove(id) {
+    msgSelected.delete(id);
+    msgRenderChips();
+    msgFilter(document.getElementById('msg-search').value);
+  }
+
+  function msgRenderChips() {
+    const container = document.getElementById('msg-chips');
+    container.innerHTML = [...msgSelected].map(id => {
+      const r = msgRecipients.find(x => x.id === id);
+      return `<div style="display:inline-flex;align-items:center;gap:6px;background:var(--teal-light);border:1.5px solid var(--teal);border-radius:20px;padding:4px 10px 4px 8px;font-size:12px;font-weight:700;color:var(--teal-dark);">
+        <span>${r.icon} ${r.label}</span>
+        <span onclick="msgRemove('${id}')" style="font-size:14px;color:var(--teal-dark);cursor:pointer;line-height:1;">×</span>
+      </div>`;
+    }).join('');
+    const btn = document.getElementById('msg-send-btn');
+    if (btn) btn.textContent = msgSelected.size ? `Send to ${msgSelected.size === 1 ? [...msgSelected].map(id => msgRecipients.find(x=>x.id===id).label)[0] : msgSelected.size + ' recipients'}` : 'Send Message';
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', e => {
+    const dd = document.getElementById('msg-dd');
+    const input = document.getElementById('msg-search');
+    if (dd && input && !dd.contains(e.target) && e.target !== input) {
+      dd.style.display = 'none';
+    }
+  });
+
+  // Reset sheet when opened
+  const _origOpenSheet = openSheet;
+  openSheet = function(id) {
+    if (id === 'message-yard') {
+      msgSelected.clear();
+      msgRenderChips();
+      setTimeout(() => {
+        document.getElementById('msg-search').value = '';
+        msgRenderDd(msgRecipients);
+        document.getElementById('msg-dd').style.display = 'none';
+        const body = document.getElementById('msg-body');
+        if (body) body.value = '';
+      }, 0);
+    }
+    _origOpenSheet(id);
+  };
 
   function toggleMsgYard2(el) {
     const yid = el.id;
@@ -5335,10 +5598,17 @@
   }
 
   // ── Global bottom sheet helpers ───────────────────────────────
-  const GLOBAL_SHEETS = ['sheet-feed','sheet-medicate','sheet-addon','sheet-checkout','sheet-message-yard','sheet-note-entry','sheet-photo-entry','sheet-change-group','sheet-change-kennel'];
+  const GLOBAL_SHEETS = ['sheet-feed','sheet-medicate','sheet-addon','sheet-checkout','sheet-message-yard','sheet-note-entry','sheet-photo-entry','sheet-change-group','sheet-change-kennel','sheet-tiff'];
   let _sheetConfirmTimer = null;
 
   function openSheet(id) {
+    if (id === 'photo-entry') {
+      _photoCount = 0;
+      document.getElementById('photo-grid').innerHTML = '';
+      _photoUpdateSaveBtn();
+      document.getElementById('photo-nfc-btn').style.display = 'flex';
+      document.getElementById('photo-nfc-done').style.display = 'none';
+    }
     document.getElementById('global-sheet-overlay').style.display = 'block';
     document.getElementById('sheet-' + id).classList.add('open');
   }
@@ -5578,6 +5848,47 @@
       el.style.background = 'var(--teal-light)';
       if (check) { check.textContent = '✓'; check.style.color = 'var(--teal)'; }
     }
+  }
+
+  const _amsgSelected = new Set();
+  function adminMsgToggle(el) {
+    const check = el.querySelector('.amsg-check');
+    const isSelected = el.classList.contains('selected');
+    if (isSelected) {
+      el.classList.remove('selected');
+      el.style.borderColor = '';
+      el.style.background = '';
+      if (check) { check.textContent = '○'; check.style.color = 'var(--lighter)'; }
+      _amsgSelected.delete(el.id);
+    } else {
+      el.classList.add('selected');
+      el.style.borderColor = 'var(--teal)';
+      el.style.background = 'var(--teal-light)';
+      if (check) { check.textContent = '✓'; check.style.color = 'var(--teal)'; }
+      _amsgSelected.add(el.id);
+    }
+    const btn = document.getElementById('amsg-send-btn');
+    if (btn) btn.textContent = _amsgSelected.size > 1 ? 'Send to ' + _amsgSelected.size + ' recipients' : _amsgSelected.size === 1 ? 'Send to 1 recipient' : 'Send Message';
+  }
+  function amsgFilterByYard() {
+    const selected = document.getElementById('amsg-yard-select').value;
+    const items = document.querySelectorAll('#amsg-staff-list .yard-item[data-yard]');
+    let visibleCount = 0;
+    items.forEach(item => {
+      const show = selected === 'all' || item.dataset.yard === selected;
+      item.style.display = show ? '' : 'none';
+      if (show) { visibleCount++; }
+      else if (item.classList.contains('selected')) {
+        item.classList.remove('selected'); item.style.borderColor = ''; item.style.background = '';
+        const check = item.querySelector('.amsg-check');
+        if (check) { check.textContent = '○'; check.style.color = 'var(--lighter)'; }
+        _amsgSelected.delete(item.id);
+      }
+    });
+    const empty = document.getElementById('amsg-staff-empty');
+    if (empty) empty.style.display = visibleCount === 0 ? 'block' : 'none';
+    const btn = document.getElementById('amsg-send-btn');
+    if (btn) btn.textContent = _amsgSelected.size > 1 ? 'Send to ' + _amsgSelected.size + ' recipients' : _amsgSelected.size === 1 ? 'Send to 1 recipient' : 'Send Message';
   }
 
   // Note Entry screen dictation
@@ -6282,30 +6593,6 @@
   }
 
   // Kennels & Rooms screen
-  function krTab(tab) {
-    const roomsPanel = document.getElementById('kr-rooms');
-    const kennelsPanel = document.getElementById('kr-kennels');
-    const roomsTab = document.getElementById('kr-tab-rooms');
-    const kennelsTab = document.getElementById('kr-tab-kennels');
-    const addLabel = document.getElementById('kr-add-label');
-    if (tab === 'rooms') {
-      roomsPanel.style.display = 'block';
-      kennelsPanel.style.display = 'none';
-      roomsTab.style.borderBottom = '3px solid var(--teal-dark)';
-      roomsTab.style.color = 'var(--teal-dark)';
-      kennelsTab.style.borderBottom = '3px solid transparent';
-      kennelsTab.style.color = 'var(--medium)';
-      if (addLabel) addLabel.textContent = 'Add Room';
-    } else {
-      roomsPanel.style.display = 'none';
-      kennelsPanel.style.display = 'block';
-      roomsTab.style.borderBottom = '3px solid transparent';
-      roomsTab.style.color = 'var(--medium)';
-      kennelsTab.style.borderBottom = '3px solid var(--teal-dark)';
-      kennelsTab.style.color = 'var(--teal-dark)';
-      if (addLabel) addLabel.textContent = 'Add Kennel';
-    }
-  }
 
   function openRoomEdit(el) {
     const card = el.closest('[style*="cursor:pointer"]') || el;
@@ -6322,23 +6609,70 @@
     const kennelId = nameEl ? nameEl.textContent.trim() : 'Kennel';
     document.getElementById('kr-kennel-title').textContent = 'Edit ' + kennelId;
     document.getElementById('kr-kennel-id-input').value = kennelId;
+    const removeRow = document.getElementById('kr-kennel-remove-row');
+    if (removeRow) removeRow.style.display = 'block';
     document.getElementById('kr-overlay').style.display = 'block';
     document.getElementById('kr-kennel-sheet').classList.add('open');
   }
-  function openKrAdd() {
-    const kennelsPanel = document.getElementById('kr-kennels');
-    const isRooms = !kennelsPanel || kennelsPanel.style.display === 'none';
-    if (isRooms) {
-      document.getElementById('kr-sheet-title').textContent = 'Add New Room';
-      document.getElementById('kr-room-name-input').value = '';
+  let _krRenameEl = null, _krRenameSheet = null;
+  function krOpenRename(type, el) {
+    if (type === 'room') {
+      const card = el.closest('[data-kr="room"]');
+      _krRenameEl = card ? card.querySelector('.kr-room-name') : null;
+      document.getElementById('kr-sheet-title').textContent = 'Rename Room';
+      document.getElementById('kr-room-name-input').value = _krRenameEl ? _krRenameEl.textContent.trim() : '';
+      _krRenameSheet = 'room';
       document.getElementById('kr-overlay').style.display = 'block';
       document.getElementById('kr-room-sheet').classList.add('open');
     } else {
-      document.getElementById('kr-kennel-title').textContent = 'Add New Kennel';
-      document.getElementById('kr-kennel-id-input').value = '';
+      const row = el.closest('[data-kr="kennel"]');
+      _krRenameEl = row ? row.querySelector('.kr-kennel-name') : null;
+      document.getElementById('kr-kennel-title').textContent = 'Rename Kennel';
+      document.getElementById('kr-kennel-id-input').value = _krRenameEl ? _krRenameEl.textContent.trim() : '';
+      _krRenameSheet = 'kennel';
       document.getElementById('kr-overlay').style.display = 'block';
       document.getElementById('kr-kennel-sheet').classList.add('open');
     }
+  }
+  function krSaveRename() {
+    if (_krRenameEl) {
+      const inputId = _krRenameSheet === 'room' ? 'kr-room-name-input' : 'kr-kennel-id-input';
+      const newName = document.getElementById(inputId).value.trim();
+      if (newName) _krRenameEl.textContent = newName;
+    }
+    closeKrSheet();
+  }
+  function openKrAdd() {
+    _krRenameEl = null;
+    _krRenameSheet = 'room';
+    document.getElementById('kr-sheet-title').textContent = 'Add Room';
+    document.getElementById('kr-room-name-input').value = '';
+    document.getElementById('kr-overlay').style.display = 'block';
+    document.getElementById('kr-room-sheet').classList.add('open');
+  }
+  function openAddKennelToRoom(room) {
+    const title = document.getElementById('kr-kennel-title');
+    const input = document.getElementById('kr-kennel-id-input');
+    const roomDisplay = document.getElementById('kr-kennel-room-display');
+    const removeRow = document.getElementById('kr-kennel-remove-row');
+    if (title) title.textContent = 'Add Kennel';
+    if (input) input.value = '';
+    if (removeRow) removeRow.style.display = 'none';
+    if (roomDisplay) {
+      if (room) {
+        roomDisplay.innerHTML = '<div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;">🚪 ' + room + ' <span style="color:var(--teal-dark);font-size:15px;cursor:pointer;">✕</span></div><div style="background:white;color:var(--medium);border:1.5px dashed var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;">Change Room</div>';
+      } else {
+        roomDisplay.innerHTML = '<div style="background:white;color:var(--medium);border:1.5px dashed var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;">Select Room</div>';
+      }
+    }
+    document.getElementById('kr-overlay').style.display = 'block';
+    document.getElementById('kr-kennel-sheet').classList.add('open');
+  }
+  function krRemove(el) {
+    const kennel = el.closest('[data-kr="kennel"]');
+    const room = el.closest('[data-kr="room"]');
+    if (kennel) kennel.remove();
+    else if (room) room.remove();
   }
   function closeKrSheet() {
     document.getElementById('kr-overlay').style.display = 'none';

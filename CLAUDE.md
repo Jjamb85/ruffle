@@ -36,4 +36,4 @@ Reference: `ruff-life-reference.md` | Schema: `schema.sql` | Flags: `feature-fla
 
 ## Key Screens
 See `ruff-life-reference.md` for full screen inventory and flows.
-Notable: `admin-booked` (Scheduling), `admin-send-sms` (Text Hub with 4 tabs), `nfc-friend` (Friend action menu)
+Notable: `admin-booked` (Kennel Planning), `admin-send-sms` (Text Parents, 4 tabs), `admin-message-yard` (Message — yard dropdown + dynamic staff list), `nfc-friend` (Friend action menu)

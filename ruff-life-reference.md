@@ -50,9 +50,9 @@
 - View and manage parent directory
 - View and manage vaccination records
 - View and manage events calendar (add events)
-- Message Yard (send to all employees checked into selected yard(s))
-- Send SMS (to parents/owners)
-- Manage kennels and rooms (add, edit, assign status)
+- Message (send to staff by yard dropdown; staff list filters dynamically by yard)
+- Text Parents (SMS to parents/owners)
+- Manage kennels and rooms (add/remove rooms and kennels; rename inline)
 - Configure settings (facility, alerts, billing, integrations, security, legal)
 - Ask AI (query live operational data via natural-language prompt)
 - (Planned) View daily report
@@ -78,11 +78,11 @@
   - Mark as being cleaned
   - Mark as clean
   - Flag maintenance issue
-- Managed via Admin Home → Kennels & Rooms → Rooms tab
-  - Edit room name/number
-  - Assign kennel(s) to room
-  - Set status: Ready | Cleaning | Offline
-  - Add or remove rooms
+- Managed via Admin Home → Kennels & Rooms
+  - Add room (floating + button)
+  - Rename room (Change link → inline sheet)
+  - Remove room (Remove link)
+  - Kennels within each room listed inline; each has Change and Remove
 
 ---
 
@@ -94,11 +94,10 @@
   - Mark as clean
   - Flag maintenance issue
 - Kennel number displayed as a pill on the Friend action menu header
-- Managed via Admin Home → Kennels & Rooms → Kennels tab
-  - Edit kennel ID
-  - Assign kennel to a room
-  - Set status: Available | Cleaning | Offline
-  - Add or remove kennels
+- Managed via Admin Home → Kennels & Rooms (inline within room cards)
+  - Rename kennel (Change link → inline sheet)
+  - Remove kennel (Remove link)
+  - No separate Kennels tab — kennels are grouped under their room
 
 ---
 
@@ -251,9 +250,9 @@ Divided by category (no section labels — separated by order). "Quick Actions" 
 | # | Label | Icon | Destination |
 |---|---|---|---|
 | 1 | Notifications | 🔔 | `admin-notifications` |
-| 2 | Text Hub | 📱 | `admin-send-sms` |
+| 2 | Text Parents | 📱 | `admin-send-sms` |
 | 3 | Email Inbox | 📧 | `admin-email-inbox` |
-| 4 | Message Yard | 📣 | `admin-message-yard` sheet |
+| 4 | Message | 📣 | `admin-message-yard` screen |
 | 5 | Parent Directory | 👤 | `admin-parents` |
 
 **Planning**
@@ -440,9 +439,11 @@ Friend action menu → Photo
   → Save Photo → in-sheet success → auto-closes (2s)
 ```
 
-**Photo — from Employee bottom nav (2-step)**
+**Photo — from Employee bottom nav (multi-photo)**
 ```
-Step 1 — Take photo (Step 2 dimmed until photo taken)
+Step 1 — Add Photo (repeatable; builds a photo grid)
+        Each thumbnail has an ✕ remove button
+        Save Photos (N) button shows count; disabled until at least one photo added
 Step 2 — Attach: scan Friend NFC tag  OR  select color group chip(s)
 ```
 
@@ -470,9 +471,9 @@ Admin assigns color groups to yard
 Edge case: enemy flag added after assignment → immediate admin alert
 ```
 
-**Scheduling (Admin)**
+**Kennel Planning (Admin)**
 ```
-Admin Home → Scheduling → day-by-day calendar of all booked friends
+Admin Home → Kennel Planning → day-by-day calendar of all booked friends
   → Each row: dog name, breed, group pill, dates, room pill, kennel pill
   → Tap room/kennel pill → picker bottom sheet (Available / Occupied / Cleaning)
   → Dogs that check in are removed from the scheduling list
@@ -513,10 +514,10 @@ Note: Feed, Medicate, Add On, Care Note (friend menu), and Photo (friend menu) c
 | `admin-checkout` | Check Out Friend | Admin quick actions |
 | `admin-checkout-confirm` | Checkout Confirm | Checkout list |
 | `admin-checkout-done` | Checkout Done ✓ | Checkout confirm |
-| `admin-booked` | Scheduling | Admin quick actions |
+| `admin-booked` | Kennel Planning | Admin quick actions |
 | `admin-yard-assign` | Yard Assign | Admin quick actions |
 | `admin-conflict` | Yard Conflict | Yard assign, admin alert |
-| `admin-message-yard` | Message Yard | Admin quick actions |
+| `admin-message-yard` | Message | Admin quick actions |
 | `admin-calendar` | Events Calendar | Admin quick actions |
 | `admin-flagged` | Flagged Issues | Admin quick actions |
 | `admin-parents` | Parent Directory | Admin quick actions |
