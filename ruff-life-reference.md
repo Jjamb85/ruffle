@@ -245,24 +245,34 @@ Settings are accessible via the ⚙️ icon in the Admin Home teal header.
 
 16 items in a 3-column grid. Items marked *(placeholder)* have no wired screen yet.
 
+Divided by category (no section labels — separated by order). "Quick Actions" label replaced with a horizontal rule.
+
+**Communications**
 | # | Label | Icon | Destination |
 |---|---|---|---|
-| 1 | Check In Friend | 🐾 | `admin-arriving` |
-| 2 | Check Out Friend | 🚪 | `admin-checkout` |
-| 3 | Scheduling | 📆 | `admin-booked` |
-| 4 | Parent Directory | 👤 | `admin-parents` |
-| 5 | Vaccination Records | 💉 | `admin-vaccinations` |
-| 6 | Yard Assign | 🌿 | `admin-yard-assign` |
+| 1 | Notifications | 🔔 | `admin-notifications` |
+| 2 | Text Hub | 📱 | `admin-send-sms` |
+| 3 | Email Inbox | 📧 | `admin-email-inbox` |
+| 4 | Message Yard | 📣 | `admin-message-yard` sheet |
+| 5 | Parent Directory | 👤 | `admin-parents` |
+
+**Planning**
+| # | Label | Icon | Destination |
+|---|---|---|---|
+| 6 | Kennel Planning | 📆 | `admin-booked` |
 | 7 | Groups | 🐕 | `color-groups` |
-| 8 | Flagged Issues | 🚩 | `admin-flagged` |
-| 9 | Events Calendar | 📅 | `admin-calendar` |
-| 10 | Daily Report | 📊 | *(placeholder)* |
-| 11 | Message Yard | 📣 | `admin-message-yard` |
-| 12 | Send SMS | 📱 | *(placeholder)* |
-| 13 | Email Inbox | 📧 | *(placeholder)* |
-| 14 | Staff Assignments | 📋 | *(placeholder)* |
-| 15 | Kennels & Rooms | 🏠 | `admin-kennels` |
-| 16 | Ask AI | ? | `admin-ask-ai` |
+| 8 | Yard Assign | 🌿 | `admin-yard-assign` |
+| 9 | Staff Assignments | 📋 | `admin-staff` |
+| 10 | Kennels & Rooms | 🏠 | `admin-kennels` |
+| 11 | Events Calendar | 📅 | `admin-calendar` |
+| 12 | Vaccination Records | 💉 | `admin-vaccinations` |
+
+**Reporting**
+| # | Label | Icon | Destination |
+|---|---|---|---|
+| 13 | Daily Report | 📊 | `admin-daily-report` |
+| 14 | Flagged Issues | 🚩 | `admin-flagged` |
+| 15 | Ask AI | ? | `admin-ask-ai` |
 
 ---
 
@@ -312,7 +322,8 @@ A persistent NFC signal animation (three arcs, highlighting in sequence) appears
 │     🟡 Yellow  = Add-Ons / Grooming
 │     🟢 Green   = Yard Duty
 │     🔵 Blue    = Admin / Paperwork
-└── Bottom Nav: 🎙️ Care Note | 📸 Photo | 🐕 Groups | ⚠️ Tiff | 📅 My Schedule
+└── Bottom Nav (card-style, 4 items): 🎙️ Care Note | 📸 Photo | 💬 Message | ⚠️ Tiff
+└── "Full Month" link above calendar → navigates to employee schedule screen
 ```
 
 **Admin Home**
@@ -320,8 +331,9 @@ A persistent NFC signal animation (three arcs, highlighting in sequence) appears
 ├── 🚪 Logout icon (white circle, top-right of teal header)
 ├── ⚙️ Settings icon (white circle, second from right in teal header)
 ├── Stats: Pending Bookings | Arriving Today (tappable) | Checked In
-├── Quick Actions (3-column grid, 16 items)
-└── (No bottom nav — all navigation via Quick Actions or header icons)
+├── Horizontal rule separating stats from action grid
+├── Action grid (3-column, 15 items) grouped by: Communications → Planning → Reporting
+└── (No bottom nav — all navigation via action grid or header icons)
 ```
 
 ---
@@ -331,13 +343,15 @@ A persistent NFC signal animation (three arcs, highlighting in sequence) appears
 **Friend (Dog) Tag**
 ```
 Tap tag → Friend profile header (name, breed, age, color group pill, room pill, kennel pill)
-  ├── Special Care Note (pinned to footer if present)
-  ├── 🍽️ Feed        → confirm sheet → in-sheet success (auto-close 2s)
-  ├── 💊 Medicate    → confirm sheet → in-sheet success (auto-close 2s)
-  ├── ⭐ Add On      → assigned add-ons list → confirm sheet → in-sheet success (auto-close 2s)
-  ├── 🎙️ Care Note   → 1-step entry sheet (dog already known)
-  └── 📸 Photo       → 1-step entry sheet (dog already known)
+  ├── 🍽️ Feed              → confirm sheet → in-sheet success (auto-close 2s)
+  ├── 💊 Medicate          → confirm sheet → in-sheet success (auto-close 2s)
+  ├── ⭐ Complete Add On   → assigned add-ons list → confirm sheet → in-sheet success (auto-close 2s)
+  ├── 🎙️ Care Note         → 1-step entry sheet (dog already known)
+  ├── 📸 Photo             → 1-step entry sheet (dog already known)
+  ├── 🐕 Change Group      → slide-up sheet; select from color groups → confirm → success (auto-close 2s)
+  └── 🏠 Change Kennel     → slide-up sheet; available kennels list → confirm → success (auto-close 2s)
 ```
+Each action card shows contextual info on the right (feeding notes, med name, scheduled add-ons, current group, current kennel).
 Note: Check-in and check-out are handled through the Admin page, not the Friend action menu.
 
 **Room Tag**
@@ -467,9 +481,10 @@ Note: The Scheduling button on Admin Home shows an amber badge with the count of
 
 **Color Groups Screen**
 ```
-Employee Home bottom nav → 🐕 Groups  OR  Admin Home → Groups
+Admin Home → Groups  (admin access only)
   → Lists all color groups with currently checked-in dogs
   → Tap dog → reassignment bottom sheet → select new group + optional note
+Employee access: Change Group via NFC friend action menu (scoped to that dog only)
 ```
 
 ---

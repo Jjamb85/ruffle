@@ -250,7 +250,7 @@
     .task-card {
       display: flex; align-items: center; gap: 14px;
       padding: 14px 16px; background: white;
-      border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.12);
       cursor: pointer; transition: transform 0.1s;
     }
     .task-card:active { transform: scale(0.98); }
@@ -298,7 +298,7 @@
 
     /* STATS */
     .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .stat-card { background: white; border-radius: 14px; padding: 14px 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .stat-card { background: white; border-radius: 14px; padding: 14px 12px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.12); }
     .stat-number { font-size: 28px; font-weight: 900; color: var(--teal-dark); line-height: 1; }
     .stat-label { font-size: 11px; font-weight: 700; color: var(--medium); margin-top: 4px; }
 
@@ -395,9 +395,9 @@
 
     /* QUICK ACTIONS */
     .quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .quick-action { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 8px; background: white; border-radius: 14px; border: 2px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.1s; }
+    .quick-action { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 8px; background: white; border-radius: 14px; border: 2px solid transparent; box-shadow: 0 2px 12px rgba(0,0,0,0.12); cursor: pointer; transition: transform 0.1s; }
     .quick-action:active { transform: scale(0.95); }
-    @keyframes notifFlash { 0%,100% { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.18); } 50% { border-color: transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.05); } }
+    @keyframes notifFlash { 0%,100% { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.18); } 50% { border-color: transparent; box-shadow: 0 2px 12px rgba(0,0,0,0.12); } }
     .quick-action-alert { animation: notifFlash 1.2s ease-in-out infinite; }
     .qa-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
     .qa-label { font-size: 10px; font-weight: 800; color: var(--medium); text-align: center; line-height: 1.2; }
@@ -515,120 +515,134 @@
       <div class="brand-greeting">Good morning, Sarah!</div>
     </div>
 
-    <div class="scroll-content">
-      <div class="p-16">
+    <!-- Fixed content area — no page scroll -->
+    <div style="flex:1;display:flex;flex-direction:column;padding:16px 16px 0;min-height:0;">
 
-        <!-- NFC Pill -->
-        <div onclick="go('nfc-friend')" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark));border-radius:16px;padding:11px 16px;display:flex;align-items:center;gap:12px;margin-bottom:18px;box-shadow:0 4px 16px rgba(74,159,213,0.25);cursor:pointer;">
-          <svg width="34" height="22" viewBox="0 0 36 24" fill="none" style="flex-shrink:0;">
-            <circle cx="3" cy="12" r="2.5" fill="white"/>
-            <path d="M9 8 Q12 12 9 16" stroke="white" stroke-width="2.5" stroke-linecap="round" class="nfc-a1"/>
-            <path d="M15 5 Q20 12 15 19" stroke="white" stroke-width="2.5" stroke-linecap="round" class="nfc-a2"/>
-            <path d="M21 2 Q28 12 21 22" stroke="white" stroke-width="2.5" stroke-linecap="round" class="nfc-a3"/>
-          </svg>
-          <div>
-            <div style="font-size:13px;font-weight:800;color:white;">NFC Tags Active</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.8);font-weight:600;margin-top:1px;">Hold phone near any tag to take action</div>
-          </div>
+      <!-- NFC Pill -->
+      <div onclick="go('nfc-friend')" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark));border-radius:16px;padding:11px 16px;display:flex;align-items:center;gap:12px;margin-bottom:14px;box-shadow:0 4px 16px rgba(74,159,213,0.25);cursor:pointer;flex-shrink:0;">
+        <svg width="34" height="22" viewBox="0 0 36 24" fill="none" style="flex-shrink:0;">
+          <circle cx="3" cy="12" r="2.5" fill="white"/>
+          <path d="M9 8 Q12 12 9 16" stroke="white" stroke-width="2.5" stroke-linecap="round" class="nfc-a1"/>
+          <path d="M15 5 Q20 12 15 19" stroke="white" stroke-width="2.5" stroke-linecap="round" class="nfc-a2"/>
+          <path d="M21 2 Q28 12 21 22" stroke="white" stroke-width="2.5" stroke-linecap="round" class="nfc-a3"/>
+        </svg>
+        <div>
+          <div style="font-size:13px;font-weight:800;color:white;">NFC Tags Active</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.8);font-weight:600;margin-top:1px;">Hold phone near any tag to take action</div>
         </div>
-
-        <!-- Calendar -->
-        <div class="section-header mb-12">
-          <div class="section-title">Today's Schedule</div>
-        </div>
-        <div class="cal-container">
-          <!-- 7 AM -->
-          <div class="cal-row">
-            <div class="cal-time">7 AM</div>
-            <div class="cal-slot"></div>
-          </div>
-          <!-- 8 AM — Feed -->
-          <div class="cal-row">
-            <div class="cal-time">8 AM</div>
-            <div class="cal-slot">
-              <div class="cal-task" style="background:var(--orange-light);border-left:3px solid var(--orange);" onclick="openSheet('feed')">
-                <div class="cal-task-title" style="color:#C45C1A;">🍽️ Feed Buddy</div>
-                <div class="cal-task-sub" style="color:#A04014;">Room 4 · Orange Group <span style="background:var(--coral);color:white;border-radius:6px;padding:1px 6px;font-size:10px;margin-left:4px;">Now</span></div>
-              </div>
-            </div>
-          </div>
-          <!-- Now indicator -->
-          <div class="cal-now">
-            <div class="cal-now-label">8:15</div>
-            <div class="cal-now-dot"></div>
-            <div class="cal-now-line"></div>
-          </div>
-          <!-- 9 AM — Meds -->
-          <div class="cal-row">
-            <div class="cal-time">9 AM</div>
-            <div class="cal-slot">
-              <div class="cal-task" style="background:var(--purple-light);border-left:3px solid var(--purple);">
-                <div class="cal-task-title" style="color:#5C45A8;">💊 Medicate Max</div>
-                <div class="cal-task-sub" style="color:#4A3590;">Room 7 · Rimadyl 50mg</div>
-              </div>
-            </div>
-          </div>
-          <!-- 10 AM — Clean -->
-          <div class="cal-row">
-            <div class="cal-time">10 AM</div>
-            <div class="cal-slot">
-              <div class="cal-task" style="background:var(--teal-light);border-left:3px solid var(--teal);">
-                <div class="cal-task-title" style="color:var(--teal-dark);">🧹 Clean Room 3</div>
-                <div class="cal-task-sub" style="color:var(--teal-deeper);">Currently empty</div>
-              </div>
-            </div>
-          </div>
-          <!-- 11 AM — Add-on -->
-          <div class="cal-row">
-            <div class="cal-time">11 AM</div>
-            <div class="cal-slot">
-              <div class="cal-task" style="background:var(--yellow-light);border-left:3px solid var(--yellow);">
-                <div class="cal-task-title" style="color:#A87800;">👂 Ear Cleaning — Luna</div>
-                <div class="cal-task-sub" style="color:#8A6200;">Room 2 · Yellow Group</div>
-              </div>
-            </div>
-          </div>
-          <!-- 12 PM -->
-          <div class="cal-row">
-            <div class="cal-time">12 PM</div>
-            <div class="cal-slot"></div>
-          </div>
-          <!-- 1 PM — Yard duty -->
-          <div class="cal-row">
-            <div class="cal-time">1 PM</div>
-            <div class="cal-slot">
-              <div class="cal-task" style="background:var(--green-light);border-left:3px solid var(--green);">
-                <div class="cal-task-title" style="color:#2A8A56;">🌿 Yard Duty — Yard 3</div>
-                <div class="cal-task-sub" style="color:#1E6640;">Purple Group rotation</div>
-              </div>
-            </div>
-          </div>
-          <!-- 2 PM — Admin -->
-          <div class="cal-row">
-            <div class="cal-time">2 PM</div>
-            <div class="cal-slot">
-              <div class="cal-task" style="background:#EEF5FF;border-left:3px solid #4A90D9;">
-                <div class="cal-task-title" style="color:#2E6BB5;">📸 Photos & Daily Notes</div>
-                <div class="cal-task-sub" style="color:#1E4E9A;">Care photos + parent updates</div>
-              </div>
-            </div>
-          </div>
-          <!-- 3 PM -->
-          <div class="cal-row">
-            <div class="cal-time">3 PM</div>
-            <div class="cal-slot"></div>
-          </div>
-        </div>
-
       </div>
+
+      <!-- Calendar header with Full Month link -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-shrink:0;">
+        <div class="section-title">Today's Schedule</div>
+        <div style="font-size:13px;font-weight:700;color:var(--teal-dark);cursor:pointer;" onclick="go('employee-schedule')">Full Month</div>
+      </div>
+
+      <!-- Calendar fills remaining space -->
+      <div class="cal-container" style="flex:1;overflow-y:auto;margin-bottom:12px;">
+        <!-- 7 AM -->
+        <div class="cal-row">
+          <div class="cal-time">7 AM</div>
+          <div class="cal-slot"></div>
+        </div>
+        <!-- 8 AM — Feed -->
+        <div class="cal-row">
+          <div class="cal-time">8 AM</div>
+          <div class="cal-slot">
+            <div class="cal-task" style="background:var(--orange-light);border-left:3px solid var(--orange);" onclick="openSheet('feed')">
+              <div class="cal-task-title" style="color:#C45C1A;">🍽️ Feed Buddy</div>
+              <div class="cal-task-sub" style="color:#A04014;">Room 4 · Orange Group <span style="background:var(--coral);color:white;border-radius:6px;padding:1px 6px;font-size:10px;margin-left:4px;">Now</span></div>
+            </div>
+          </div>
+        </div>
+        <!-- Now indicator -->
+        <div class="cal-now">
+          <div class="cal-now-label">8:15</div>
+          <div class="cal-now-dot"></div>
+          <div class="cal-now-line"></div>
+        </div>
+        <!-- 9 AM — Meds -->
+        <div class="cal-row">
+          <div class="cal-time">9 AM</div>
+          <div class="cal-slot">
+            <div class="cal-task" style="background:var(--purple-light);border-left:3px solid var(--purple);">
+              <div class="cal-task-title" style="color:#5C45A8;">💊 Medicate Max</div>
+              <div class="cal-task-sub" style="color:#4A3590;">Room 7 · Rimadyl 50mg</div>
+            </div>
+          </div>
+        </div>
+        <!-- 10 AM — Clean -->
+        <div class="cal-row">
+          <div class="cal-time">10 AM</div>
+          <div class="cal-slot">
+            <div class="cal-task" style="background:var(--teal-light);border-left:3px solid var(--teal);">
+              <div class="cal-task-title" style="color:var(--teal-dark);">🧹 Clean Room 3</div>
+              <div class="cal-task-sub" style="color:var(--teal-deeper);">Currently empty</div>
+            </div>
+          </div>
+        </div>
+        <!-- 11 AM — Add-on -->
+        <div class="cal-row">
+          <div class="cal-time">11 AM</div>
+          <div class="cal-slot">
+            <div class="cal-task" style="background:var(--yellow-light);border-left:3px solid var(--yellow);">
+              <div class="cal-task-title" style="color:#A87800;">👂 Ear Cleaning — Luna</div>
+              <div class="cal-task-sub" style="color:#8A6200;">Room 2 · Yellow Group</div>
+            </div>
+          </div>
+        </div>
+        <!-- 12 PM -->
+        <div class="cal-row">
+          <div class="cal-time">12 PM</div>
+          <div class="cal-slot"></div>
+        </div>
+        <!-- 1 PM — Yard duty -->
+        <div class="cal-row">
+          <div class="cal-time">1 PM</div>
+          <div class="cal-slot">
+            <div class="cal-task" style="background:var(--green-light);border-left:3px solid var(--green);">
+              <div class="cal-task-title" style="color:#2A8A56;">🌿 Yard Duty — Yard 3</div>
+              <div class="cal-task-sub" style="color:#1E6640;">Purple Group rotation</div>
+            </div>
+          </div>
+        </div>
+        <!-- 2 PM — Admin -->
+        <div class="cal-row">
+          <div class="cal-time">2 PM</div>
+          <div class="cal-slot">
+            <div class="cal-task" style="background:#EEF5FF;border-left:3px solid #4A90D9;">
+              <div class="cal-task-title" style="color:#2E6BB5;">📸 Photos & Daily Notes</div>
+              <div class="cal-task-sub" style="color:#1E4E9A;">Care photos + parent updates</div>
+            </div>
+          </div>
+        </div>
+        <!-- 3 PM -->
+        <div class="cal-row">
+          <div class="cal-time">3 PM</div>
+          <div class="cal-slot"></div>
+        </div>
+      </div>
+
     </div>
 
-    <div class="bottom-nav">
-      <div class="nav-item" onclick="openSheet('note-entry')"><div class="nav-icon">🎙️</div><div class="nav-label">Care Note</div></div>
-      <div class="nav-item" onclick="openSheet('photo-entry')"><div class="nav-icon">📸</div><div class="nav-label">Photo</div></div>
-      <div class="nav-item" onclick="go('color-groups')"><div class="nav-icon">🐕</div><div class="nav-label">Groups</div></div>
-      <div class="nav-item" onclick="go('incident-report')"><div class="nav-icon">⚠️</div><div class="nav-label">Tiff</div></div>
-      <div class="nav-item" onclick="go('employee-schedule')"><div class="nav-icon">📅</div><div class="nav-label">My Schedule</div></div>
+    <!-- Card-style action nav -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px 16px 28px;background:white;border-top:1px solid var(--border);flex-shrink:0;">
+      <div class="quick-action" onclick="openSheet('note-entry')">
+        <div class="qa-icon" style="background:var(--teal-light);">🎙️</div>
+        <div class="qa-label">Care Note</div>
+      </div>
+      <div class="quick-action" onclick="openSheet('photo-entry')">
+        <div class="qa-icon" style="background:#EAF4FF;">📸</div>
+        <div class="qa-label">Photo</div>
+      </div>
+      <div class="quick-action" onclick="">
+        <div class="qa-icon" style="background:var(--pink-light);">💬</div>
+        <div class="qa-label">Message</div>
+      </div>
+      <div class="quick-action" onclick="go('incident-report')">
+        <div class="qa-icon" style="background:#FFF0F0;">⚠️</div>
+        <div class="qa-label">Tiff</div>
+      </div>
     </div>
   </div>
 
@@ -710,23 +724,51 @@
       </div>
     </div>
 
-    <!-- Buttons — fill available space evenly -->
-    <div id="nfc-friend-actions" style="flex:1;display:flex;flex-direction:column;justify-content:space-evenly;width:83%;margin:0 auto;padding:12px 0;min-height:0;overflow:hidden;">
-      <button class="btn btn-secondary btn-full btn-lg" onclick="openSheet('feed')">🍽️ &nbsp;Feed</button>
-      <button class="btn btn-secondary btn-full btn-lg" onclick="openSheet('medicate')">💊 &nbsp;Medicate</button>
-      <button class="btn btn-secondary btn-full btn-lg" onclick="openSheet('addon')">⭐ &nbsp;Add On</button>
-      <button class="btn btn-secondary btn-full btn-lg" onclick="openSheet('note-entry')">🎙️ &nbsp;Care Note</button>
-      <button class="btn btn-secondary btn-full btn-lg" onclick="openSheet('photo-entry')">📸 &nbsp;Photo</button>
-    </div>
+    <!-- Action cards -->
+    <div id="nfc-friend-actions" style="flex:1;display:flex;flex-direction:column;justify-content:space-evenly;padding:12px 16px;min-height:0;overflow:hidden;">
 
-
-    <!-- Special care note footer -->
-    <div style="background:white;border-top:1px solid var(--border);padding:14px 24px 28px;flex-shrink:0;display:flex;align-items:flex-start;gap:12px;">
-      <div style="font-size:18px;flex-shrink:0;margin-top:2px;">📌</div>
-      <div>
-        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Special Care Note</div>
-        <div style="font-size:13px;font-weight:600;color:var(--dark);line-height:1.5;">Buddy is shy at first — give a few minutes before yard time.</div>
+      <div onclick="openSheet('feed')" style="display:flex;align-items:center;gap:12px;background:white;border-radius:14px;border:2px solid transparent;box-shadow:0 2px 12px rgba(0,0,0,0.12);padding:12px 14px;cursor:pointer;">
+        <div class="qa-icon" style="background:var(--orange-light);flex-shrink:0;">🍽️</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:800;color:var(--dark);">Feed</div></div>
+        <div style="font-size:11px;font-weight:600;color:var(--medium);text-align:right;max-width:130px;line-height:1.3;">1 cup dry kibble · AM &amp; PM</div>
       </div>
+
+      <div onclick="openSheet('medicate')" style="display:flex;align-items:center;gap:12px;background:white;border-radius:14px;border:2px solid transparent;box-shadow:0 2px 12px rgba(0,0,0,0.12);padding:12px 14px;cursor:pointer;">
+        <div class="qa-icon" style="background:var(--purple-light);flex-shrink:0;">💊</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:800;color:var(--dark);">Medicate</div></div>
+        <div style="font-size:11px;font-weight:600;color:var(--medium);text-align:right;max-width:130px;line-height:1.3;">Rimadyl 50mg · AM only</div>
+      </div>
+
+      <div onclick="openSheet('addon')" style="display:flex;align-items:center;gap:12px;background:white;border-radius:14px;border:2px solid transparent;box-shadow:0 2px 12px rgba(0,0,0,0.12);padding:12px 14px;cursor:pointer;">
+        <div class="qa-icon" style="background:var(--yellow-light);flex-shrink:0;">⭐</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:800;color:var(--dark);">Complete Add On</div></div>
+        <div style="font-size:11px;font-weight:600;color:var(--medium);text-align:right;max-width:130px;line-height:1.3;">Brushing · Pups-choice</div>
+      </div>
+
+      <div onclick="openSheet('note-entry')" style="display:flex;align-items:center;gap:12px;background:white;border-radius:14px;border:2px solid transparent;box-shadow:0 2px 12px rgba(0,0,0,0.12);padding:12px 14px;cursor:pointer;">
+        <div class="qa-icon" style="background:var(--teal-light);flex-shrink:0;">🎙️</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:800;color:var(--dark);">Care Note</div></div>
+        <div style="font-size:11px;font-weight:600;color:var(--medium);text-align:right;max-width:130px;line-height:1.3;">Timestamped · logged to record</div>
+      </div>
+
+      <div onclick="openSheet('photo-entry')" style="display:flex;align-items:center;gap:12px;background:white;border-radius:14px;border:2px solid transparent;box-shadow:0 2px 12px rgba(0,0,0,0.12);padding:12px 14px;cursor:pointer;">
+        <div class="qa-icon" style="background:#EAF4FF;flex-shrink:0;">📸</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:800;color:var(--dark);">Photo</div></div>
+        <div style="font-size:11px;font-weight:600;color:var(--medium);text-align:right;max-width:130px;line-height:1.3;">Saved to record · notifies parent</div>
+      </div>
+
+      <div onclick="openSheet('change-group')" style="display:flex;align-items:center;gap:12px;background:white;border-radius:14px;border:2px solid transparent;box-shadow:0 2px 12px rgba(0,0,0,0.12);padding:12px 14px;cursor:pointer;">
+        <div class="qa-icon" style="background:#F0F4FF;flex-shrink:0;">🐕</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:800;color:var(--dark);">Change Group</div></div>
+        <div style="font-size:11px;font-weight:600;color:var(--medium);text-align:right;max-width:130px;line-height:1.3;">🟠 Orange Group</div>
+      </div>
+
+      <div onclick="openSheet('change-kennel')" style="display:flex;align-items:center;gap:12px;background:white;border-radius:14px;border:2px solid transparent;box-shadow:0 2px 12px rgba(0,0,0,0.12);padding:12px 14px;cursor:pointer;">
+        <div class="qa-icon" style="background:#F0FBF2;flex-shrink:0;">🏠</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:800;color:var(--dark);">Change Kennel</div></div>
+        <div style="font-size:11px;font-weight:600;color:var(--medium);text-align:right;max-width:130px;line-height:1.3;">🏷️ Kennel 12</div>
+      </div>
+
     </div>
   </div>
 
@@ -1705,40 +1747,14 @@
           <div class="stat-card" onclick="go('admin-checkout')" style="cursor:pointer;"><div class="stat-number">9</div><div class="stat-label">Checked In</div></div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="section-header mb-12"><div class="section-title">Quick Actions</div></div>
+        <!-- Section divider -->
+        <hr style="border:none;border-top:1px solid var(--border);margin:0 0 20px;">
+
         <div class="quick-actions mb-20" style="grid-template-columns:repeat(3,1fr);">
+          <!-- Communications -->
           <div class="quick-action quick-action-alert" onclick="go('admin-notifications')" style="position:relative;">
             <div class="qa-icon" style="background:#FFF0F0;position:relative;">🔔<span style="position:absolute;top:-4px;right:-4px;background:#ef4444;color:white;font-size:9px;font-weight:900;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px;line-height:1;">3</span></div>
             <div class="qa-label">Notifications</div>
-          </div>
-          <div class="quick-action" onclick="go('admin-booked')">
-            <div class="qa-icon" style="background:#F0F8FF;position:relative;">📆<span style="position:absolute;top:-4px;right:-4px;background:#F59E0B;color:white;font-size:9px;font-weight:900;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px;line-height:1;">2</span></div>
-            <div class="qa-label">Scheduling</div>
-          </div>
-          <div class="quick-action" onclick="go('admin-parents')">
-            <div class="qa-icon" style="background:var(--purple-light);">👤</div><div class="qa-label">Parent Directory</div>
-          </div>
-          <div class="quick-action" onclick="go('admin-vaccinations')">
-            <div class="qa-icon" style="background:var(--green-light);">💉</div><div class="qa-label">Vaccination Records</div>
-          </div>
-          <div class="quick-action" onclick="go('admin-yard-assign')">
-            <div class="qa-icon" style="background:#F0FBF2;">🌿</div><div class="qa-label">Yard Assign</div>
-          </div>
-          <div class="quick-action" onclick="colorGroupsBack='admin-home';go('color-groups')">
-            <div class="qa-icon" style="background:#F0F4FF;">🐕</div><div class="qa-label">Groups</div>
-          </div>
-          <div class="quick-action" onclick="go('admin-flagged')">
-            <div class="qa-icon" style="background:#FFF0F0;">🚩</div><div class="qa-label">Flagged Issues</div>
-          </div>
-          <div class="quick-action" onclick="go('admin-calendar')">
-            <div class="qa-icon" style="background:#EAF4FF;">📅</div><div class="qa-label">Events Calendar</div>
-          </div>
-          <div class="quick-action" onclick="go('admin-daily-report')">
-            <div class="qa-icon" style="background:#FFF8E1;">📊</div><div class="qa-label">Daily Report</div>
-          </div>
-          <div class="quick-action" onclick="openSheet('message-yard')">
-            <div class="qa-icon" style="background:var(--yellow-light);">📣</div><div class="qa-label">Message Yard</div>
           </div>
           <div class="quick-action" onclick="go('admin-send-sms')">
             <div class="qa-icon" style="background:var(--pink-light);">📱</div><div class="qa-label">Text Hub</div>
@@ -1746,11 +1762,43 @@
           <div class="quick-action" onclick="go('admin-email-inbox')">
             <div class="qa-icon" style="background:#EAF4FF;">📧</div><div class="qa-label">Email Inbox</div>
           </div>
+          <div class="quick-action" onclick="openSheet('message-yard')">
+            <div class="qa-icon" style="background:var(--yellow-light);">📣</div><div class="qa-label">Message Yard</div>
+          </div>
+          <div class="quick-action" onclick="go('admin-parents')">
+            <div class="qa-icon" style="background:var(--purple-light);">👤</div><div class="qa-label">Parent Directory</div>
+          </div>
+
+          <!-- Planning -->
+          <div class="quick-action" onclick="go('admin-booked')">
+            <div class="qa-icon" style="background:#F0F8FF;position:relative;">📆<span style="position:absolute;top:-4px;right:-4px;background:#F59E0B;color:white;font-size:9px;font-weight:900;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px;line-height:1;">2</span></div>
+            <div class="qa-label">Kennel Planning</div>
+          </div>
+          <div class="quick-action" onclick="colorGroupsBack='admin-home';go('color-groups')">
+            <div class="qa-icon" style="background:#F0F4FF;">🐕</div><div class="qa-label">Groups</div>
+          </div>
+          <div class="quick-action" onclick="go('admin-yard-assign')">
+            <div class="qa-icon" style="background:#F0FBF2;">🌿</div><div class="qa-label">Yard Assign</div>
+          </div>
           <div class="quick-action" onclick="go('admin-staff')">
             <div class="qa-icon" style="background:var(--purple-light);">📋</div><div class="qa-label">Staff Assignments</div>
           </div>
           <div class="quick-action" onclick="go('admin-kennels')">
             <div class="qa-icon" style="background:#F0FBF2;">🏠</div><div class="qa-label">Kennels &amp; Rooms</div>
+          </div>
+          <div class="quick-action" onclick="go('admin-calendar')">
+            <div class="qa-icon" style="background:#EAF4FF;">📅</div><div class="qa-label">Events Calendar</div>
+          </div>
+          <div class="quick-action" onclick="go('admin-vaccinations')">
+            <div class="qa-icon" style="background:var(--green-light);">💉</div><div class="qa-label">Vaccination Records</div>
+          </div>
+
+          <!-- Reporting -->
+          <div class="quick-action" onclick="go('admin-daily-report')">
+            <div class="qa-icon" style="background:#FFF8E1;">📊</div><div class="qa-label">Daily Report</div>
+          </div>
+          <div class="quick-action" onclick="go('admin-flagged')">
+            <div class="qa-icon" style="background:#FFF0F0;">🚩</div><div class="qa-label">Flagged Issues</div>
           </div>
           <div class="quick-action" onclick="go('admin-ask-ai')">
             <div class="qa-icon" style="background:linear-gradient(135deg,#E8F4FD,#D0E8FF);"><span style="font-size:22px;font-weight:900;color:#1D6FA8;line-height:1;">?</span></div><div class="qa-label">Ask AI</div>
@@ -5030,6 +5078,120 @@
     </div>
   </div>
 
+  <!-- ─── SHEET: Change Group ───────────────────────────────────── -->
+  <div class="assign-sheet" id="sheet-change-group" style="max-height:88%;">
+    <div class="assign-sheet-handle"></div>
+    <div style="padding:8px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--border);">
+      <div style="font-size:17px;font-weight:900;color:var(--dark);">Change Group</div>
+      <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:2px;">Buddy · Golden Retriever · 🟠 Orange · Room 4</div>
+    </div>
+    <div style="padding:16px 16px 8px;display:flex;flex-direction:column;gap:12px;">
+      <div style="font-size:13px;font-weight:700;color:var(--medium);">Select a new group for Buddy:</div>
+      <div style="display:flex;flex-direction:column;gap:8px;" id="cg-option-list">
+        <div class="cg-option" data-group="Red"    data-color="#EF4444" data-bg="#FFF0F0" onclick="selectCgOption(this)" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:2px solid var(--border);background:white;cursor:pointer;">
+          <div style="width:18px;height:18px;border-radius:50%;background:#EF4444;flex-shrink:0;"></div>
+          <div style="font-size:14px;font-weight:700;color:var(--dark);">Red Group</div>
+        </div>
+        <div class="cg-option cg-selected" data-group="Orange" data-color="#F59E0B" data-bg="#FFF8E6" onclick="selectCgOption(this)" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:2px solid var(--teal);background:var(--teal-light);cursor:pointer;">
+          <div style="width:18px;height:18px;border-radius:50%;background:#F59E0B;flex-shrink:0;"></div>
+          <div style="font-size:14px;font-weight:700;color:var(--dark);">Orange Group <span style="font-size:11px;font-weight:600;color:var(--medium);">(current)</span></div>
+        </div>
+        <div class="cg-option" data-group="Yellow" data-color="#EAB308" data-bg="#FEFCE8" onclick="selectCgOption(this)" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:2px solid var(--border);background:white;cursor:pointer;">
+          <div style="width:18px;height:18px;border-radius:50%;background:#EAB308;flex-shrink:0;"></div>
+          <div style="font-size:14px;font-weight:700;color:var(--dark);">Yellow Group</div>
+        </div>
+        <div class="cg-option" data-group="Green"  data-color="#22C55E" data-bg="#F0FBF2" onclick="selectCgOption(this)" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:2px solid var(--border);background:white;cursor:pointer;">
+          <div style="width:18px;height:18px;border-radius:50%;background:#22C55E;flex-shrink:0;"></div>
+          <div style="font-size:14px;font-weight:700;color:var(--dark);">Green Group</div>
+        </div>
+        <div class="cg-option" data-group="Blue"   data-color="#3B82F6" data-bg="#EFF6FF" onclick="selectCgOption(this)" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:2px solid var(--border);background:white;cursor:pointer;">
+          <div style="width:18px;height:18px;border-radius:50%;background:#3B82F6;flex-shrink:0;"></div>
+          <div style="font-size:14px;font-weight:700;color:var(--dark);">Blue Group</div>
+        </div>
+        <div class="cg-option" data-group="Purple" data-color="#A855F7" data-bg="#F5F0FF" onclick="selectCgOption(this)" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:2px solid var(--border);background:white;cursor:pointer;">
+          <div style="width:18px;height:18px;border-radius:50%;background:#A855F7;flex-shrink:0;"></div>
+          <div style="font-size:14px;font-weight:700;color:var(--dark);">Purple Group</div>
+        </div>
+      </div>
+      <button class="btn btn-secondary btn-full btn-lg" onclick="confirmGroupChange()">Confirm</button>
+      <div style="text-align:center;padding-bottom:12px;">
+        <span style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;" onclick="closeSheet('change-group')">Cancel</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SHEET: Change Kennel ─────────────────────────────────── -->
+  <div class="assign-sheet" id="sheet-change-kennel" style="max-height:88%;overflow:hidden;display:flex;flex-direction:column;">
+    <div class="assign-sheet-handle"></div>
+    <div style="padding:8px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--border);">
+      <div style="font-size:17px;font-weight:900;color:var(--dark);">Change Kennel</div>
+      <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:2px;">Buddy · Golden Retriever · 🏷️ Kennel 12 (current)</div>
+    </div>
+    <div style="overflow-y:auto;flex:1;padding:16px 16px 8px;">
+      <div style="font-size:13px;font-weight:700;color:var(--medium);margin-bottom:10px;">Available kennels:</div>
+      <div style="display:flex;flex-direction:column;gap:8px;" id="ck-option-list">
+
+        <div class="ck-option ck-selected" data-kennel="Kennel 12" onclick="selectCkOption(this)" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:2px solid var(--teal);background:var(--teal-light);cursor:pointer;">
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--teal-light);border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🏠</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:700;color:var(--dark);">Kennel 12 <span style="font-size:11px;font-weight:600;color:var(--medium);">(current)</span></div>
+            <div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:2px;">Building A · Standard</div>
+          </div>
+        </div>
+
+        <div class="ck-option" data-kennel="Kennel 3" onclick="selectCkOption(this)" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:2px solid var(--border);background:white;cursor:pointer;">
+          <div style="width:36px;height:36px;border-radius:10px;background:#F0FBF2;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🏠</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:700;color:var(--dark);">Kennel 3</div>
+            <div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:2px;">Building A · Standard</div>
+          </div>
+          <div style="font-size:11px;font-weight:700;color:#2A8A56;background:var(--green-light);border-radius:6px;padding:3px 8px;">Open</div>
+        </div>
+
+        <div class="ck-option" data-kennel="Kennel 7" onclick="selectCkOption(this)" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:2px solid var(--border);background:white;cursor:pointer;">
+          <div style="width:36px;height:36px;border-radius:10px;background:#F0FBF2;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🏠</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:700;color:var(--dark);">Kennel 7</div>
+            <div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:2px;">Building A · Large</div>
+          </div>
+          <div style="font-size:11px;font-weight:700;color:#2A8A56;background:var(--green-light);border-radius:6px;padding:3px 8px;">Open</div>
+        </div>
+
+        <div class="ck-option" data-kennel="Kennel 9" onclick="selectCkOption(this)" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:2px solid var(--border);background:white;cursor:pointer;">
+          <div style="width:36px;height:36px;border-radius:10px;background:#F0FBF2;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🏠</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:700;color:var(--dark);">Kennel 9</div>
+            <div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:2px;">Building B · Standard</div>
+          </div>
+          <div style="font-size:11px;font-weight:700;color:#2A8A56;background:var(--green-light);border-radius:6px;padding:3px 8px;">Open</div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:2px solid var(--border);background:#FAFAFA;opacity:0.55;">
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🏠</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:700;color:var(--dark);">Kennel 5</div>
+            <div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:2px;">Building A · Standard</div>
+          </div>
+          <div style="font-size:11px;font-weight:700;color:var(--medium);background:var(--bg);border-radius:6px;padding:3px 8px;">Occupied</div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:2px solid var(--border);background:#FAFAFA;opacity:0.55;">
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🏠</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:700;color:var(--dark);">Kennel 11</div>
+            <div style="font-size:11px;font-weight:600;color:var(--medium);margin-top:2px;">Building B · Large</div>
+          </div>
+          <div style="font-size:11px;font-weight:700;color:var(--medium);background:var(--bg);border-radius:6px;padding:3px 8px;">Occupied</div>
+        </div>
+
+      </div>
+      <button class="btn btn-secondary btn-full btn-lg" style="margin-top:16px;" onclick="confirmKennelChange()">Confirm Move</button>
+      <div style="text-align:center;padding:12px 0 16px;">
+        <span style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;" onclick="closeSheet('change-kennel')">Cancel</span>
+      </div>
+    </div>
+  </div>
+
 </div><!-- /phone-frame -->
 
 <script>
@@ -5044,6 +5206,38 @@
     daisy:  { name:'Daisy',  emoji:'🐶', breed:'Labrador Retriever',    age:'2 yrs', sex:'Female', intact:'Spayed',   weight:'55 lbs', groupLabel:'🟣 Purple', groupBg:'#F0EBFF', groupColor:'#7C3AED', room:'Room B', kennel:'Kennel 9',  parent:'David Park',      vaccStatus:'current',  vaccExpires:'Jun 5, 2026',  feeding:'Purina ONE SmartBlend · 2.5 cups AM / 2.5 cups PM',        meds:'',                                                    specialNote:'' },
     rosie:  { name:'Rosie',  emoji:'🦮', breed:'Bernese Mountain Dog',  age:'6 yrs', sex:'Female', intact:'Spayed',   weight:'90 lbs', groupLabel:'🟣 Purple', groupBg:'#F0EBFF', groupColor:'#7C3AED', room:'Room C', kennel:'Kennel 11', parent:'Amanda Foster',   vaccStatus:'current',  vaccExpires:'Nov 8, 2026',  feeding:'Taste of the Wild · 3 cups AM / 3 cups PM',               meds:'Carprofen 75mg — 1 tab AM / 1 tab PM with food (joint pain)', specialNote:'Hip dysplasia — no jumping, no stairs.' },
   }
+  function selectCkOption(el) {
+    document.querySelectorAll('#ck-option-list .ck-option').forEach(o => {
+      o.classList.remove('ck-selected');
+      o.style.borderColor = 'var(--border)';
+      o.style.background = 'white';
+    });
+    el.classList.add('ck-selected');
+    el.style.borderColor = 'var(--teal)';
+    el.style.background = 'var(--teal-light)';
+  }
+  function confirmKennelChange() {
+    const sel = document.querySelector('#ck-option-list .ck-selected');
+    const kennel = sel ? sel.dataset.kennel : 'Kennel 12';
+    showSheetConfirm('change-kennel', `Buddy has been moved to ${kennel}.`);
+  }
+
+  function selectCgOption(el) {
+    document.querySelectorAll('#cg-option-list .cg-option').forEach(o => {
+      o.classList.remove('cg-selected');
+      o.style.borderColor = 'var(--border)';
+      o.style.background = 'white';
+    });
+    el.classList.add('cg-selected');
+    el.style.borderColor = 'var(--teal)';
+    el.style.background = 'var(--teal-light)';
+  }
+  function confirmGroupChange() {
+    const sel = document.querySelector('#cg-option-list .cg-selected');
+    const group = sel ? sel.dataset.group : 'Orange';
+    showSheetConfirm('change-group', `Buddy has been moved to ${group} Group.`);
+  }
+
   function toggleMsgYard2(el) {
     const yid = el.id;
     const check = document.getElementById(yid + '-check');
@@ -5141,7 +5335,7 @@
   }
 
   // ── Global bottom sheet helpers ───────────────────────────────
-  const GLOBAL_SHEETS = ['sheet-feed','sheet-medicate','sheet-addon','sheet-checkout','sheet-message-yard','sheet-note-entry','sheet-photo-entry'];
+  const GLOBAL_SHEETS = ['sheet-feed','sheet-medicate','sheet-addon','sheet-checkout','sheet-message-yard','sheet-note-entry','sheet-photo-entry','sheet-change-group','sheet-change-kennel'];
   let _sheetConfirmTimer = null;
 
   function openSheet(id) {
