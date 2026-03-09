@@ -41,7 +41,7 @@
 ### Admin
 - View dashboard (stats: pending bookings, arriving today, checked in; conflict alerts)
 - View today's check-ins / arriving today list
-- Check in a friend (4-step flow: room → color group → schedule → done)
+- Check in a friend (4-step flow: NFC/Belongings → Groups/Kennels → Schedule → Done)
 - Check out a friend (2-step flow: select from list → confirm → done with SMS notification)
 - View and manage scheduling (day-by-day calendar with room/kennel assignment)
 - Assign color group to yard
@@ -373,11 +373,12 @@ Tap tag → Yard card (current color groups / dogs present)
 **Check-In Flow (4 steps) — Admin initiated**
 ```
 Admin Home → Check In Friend → select friend from Arriving Today list
-  Step 1 — Room: select available room or "Skip — Already Assigned"
-  Step 2 — Color Group: confirm or change group
-  Step 3 — Schedule: toggle feeding/medication, select add-ons
-  Step 4 — Done ✓: summary badges + "Parent Notified — SMS sent"
+  Step 1 — NFC/Belongings: assign NFC tag (animated button), take photo of belongings
+  Step 2 — Groups/Kennels: confirm pre-assigned kennel (Change edits inline), select color group via dropdown
+  Step 3 — Schedule: toggle feeding/medication, select add-ons via multi-select dropdowns (Training, Wellness, Treats, Holiday, Luxury)
+  Step 4 — Done ✓: "Parent Notified — SMS sent"
 ```
+Note: Kennel is pre-assigned via the Scheduling screen. Step 2 confirms it; "Change" shows available kennels inline. Completing check-in removes the dog from the Scheduling screen and updates the unassigned badge count.
 
 **Check-Out Flow — Admin initiated**
 ```
@@ -460,7 +461,9 @@ Edge case: enemy flag added after assignment → immediate admin alert
 Admin Home → Scheduling → day-by-day calendar of all booked friends
   → Each row: dog name, breed, group pill, dates, room pill, kennel pill
   → Tap room/kennel pill → picker bottom sheet (Available / Occupied / Cleaning)
+  → Dogs that check in are removed from the scheduling list
 ```
+Note: The Scheduling button on Admin Home shows an amber badge with the count of today's arriving dogs that have no kennel assigned. Once a dog completes check-in, it is removed from the scheduling list and the badge count decrements.
 
 **Color Groups Screen**
 ```
@@ -482,10 +485,10 @@ Employee Home bottom nav → 🐕 Groups  OR  Admin Home → Groups
 | `note-entry` | Care Note | Employee home, friend menu |
 | `photo-entry` | Photo | Employee home, friend menu |
 Note: Feed, Medicate, Add On, Care Note (friend menu), and Photo (friend menu) confirmations all happen via bottom sheets on the Friend action menu screen — no separate confirm/done screens.
-| `checkin-room` | Check-In: Room | Admin arriving |
-| `checkin-colorgroup` | Check-In: Color Group | Check-in room |
-| `checkin-schedule` | Check-In: Schedule | Check-in color group |
-| `checkin-done` | Check-In Done ✓ | Check-in schedule |
+| `checkin-room` | Check-In: NFC/Belongings (Step 1) | Admin arriving |
+| `checkin-colorgroup` | Check-In: Groups/Kennels (Step 2) | Check-in step 1 |
+| `checkin-schedule` | Check-In: Schedule (Step 3) | Check-in step 2 |
+| `checkin-done` | Check-In Done ✓ | Check-in step 3 |
 | `color-groups` | Color Groups | Employee bottom nav, admin quick action |
 | `nfc-yard` | Yard Action Menu | Yard NFC tag |
 | `incident-report` | Tiff Report | Employee bottom nav |

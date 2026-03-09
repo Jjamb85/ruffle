@@ -74,9 +74,41 @@
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
+      overscroll-behavior: none;
       padding-bottom: 100px;
     }
     .scroll-content::-webkit-scrollbar { display: none; }
+    .wizard-footer {
+      flex-shrink: 0;
+      background: white;
+      border-top: 1px solid var(--border);
+      padding: 16px 16px 28px;
+    }
+
+    /* ADD-ON MULTI-SELECT DROPDOWNS */
+    .addon-dd-header {
+      display: flex; align-items: center; justify-content: space-between;
+      border: 2px solid var(--border); border-radius: 12px; padding: 12px 14px;
+      cursor: pointer; background: white; margin-bottom: 4px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .addon-dd-header.has-selection { border-color: var(--teal); background: var(--teal-light); }
+    .addon-dd-list {
+      display: none; border: 2px solid var(--border); border-radius: 12px;
+      overflow: hidden; margin-bottom: 10px;
+    }
+    .addon-dd-list.open { display: block; }
+    .addon-dd-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 14px; cursor: pointer; border-bottom: 1px solid var(--border);
+      background: white; transition: background 0.1s;
+    }
+    .addon-dd-item:last-child { border-bottom: none; }
+    .addon-dd-item.selected { background: var(--teal-light); }
+    .addon-dd-item.selected::after {
+      content: '✓'; margin-left: auto; font-size: 14px;
+      font-weight: 900; color: var(--teal-dark);
+    }
 
     /* TOP NAV */
     .top-nav {
@@ -363,8 +395,10 @@
 
     /* QUICK ACTIONS */
     .quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .quick-action { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 8px; background: white; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.1s; }
+    .quick-action { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 8px; background: white; border-radius: 14px; border: 2px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.1s; }
     .quick-action:active { transform: scale(0.95); }
+    @keyframes notifFlash { 0%,100% { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.18); } 50% { border-color: transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.05); } }
+    .quick-action-alert { animation: notifFlash 1.2s ease-in-out infinite; }
     .qa-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
     .qa-label { font-size: 10px; font-weight: 800; color: var(--medium); text-align: center; line-height: 1.2; }
 
@@ -953,16 +987,38 @@
       </div>
     </div>
     <div class="step-indicator">
-      <div class="step active"><div class="step-circle">1</div><div class="step-label">Belongings</div></div>
+      <div class="step active"><div class="step-circle">1</div><div class="step-label">NFC/Belongings</div></div>
       <div class="step-line"></div>
-      <div class="step pending"><div class="step-circle">2</div><div class="step-label">Group</div></div>
+      <div class="step pending"><div class="step-circle">2</div><div class="step-label">Groups/Kennels</div></div>
       <div class="step-line"></div>
       <div class="step pending"><div class="step-circle">3</div><div class="step-label">Schedule</div></div>
       <div class="step-line"></div>
       <div class="step pending"><div class="step-circle">✓</div><div class="step-label">Done</div></div>
     </div>
-    <div class="scroll-content">
+    <div class="scroll-content" style="padding-bottom:16px;">
       <div class="p-16">
+
+        <!-- NFC Tag Assignment -->
+        <div id="ci-nfc-btn" onclick="ciAssignNfc()" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark));border-radius:18px;padding:22px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;box-shadow:0 4px 20px rgba(74,159,213,0.3);margin-bottom:20px;position:relative;overflow:hidden;">
+          <div style="position:absolute;font-size:110px;opacity:0.06;right:-10px;bottom:-20px;pointer-events:none;line-height:1;">🏷️</div>
+          <svg width="60" height="40" viewBox="0 0 36 24" fill="none">
+            <circle cx="3" cy="12" r="2.5" fill="white"/>
+            <path d="M9 8 Q12 12 9 16" stroke="white" stroke-width="2.5" stroke-linecap="round" class="nfc-a1"/>
+            <path d="M15 5 Q20 12 15 19" stroke="white" stroke-width="2.5" stroke-linecap="round" class="nfc-a2"/>
+            <path d="M21 2 Q28 12 21 22" stroke="white" stroke-width="2.5" stroke-linecap="round" class="nfc-a3"/>
+          </svg>
+          <div style="font-size:17px;font-weight:900;color:white;">Assign NFC Tag</div>
+          <div style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.75);">Tap to scan &amp; assign Buddy's tag</div>
+        </div>
+        <div id="ci-nfc-done" style="display:none;background:var(--green-light);border:2px solid var(--green);border-radius:18px;padding:16px 18px;align-items:center;gap:14px;margin-bottom:20px;">
+          <div style="width:40px;height:40px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:20px;color:white;flex-shrink:0;">✓</div>
+          <div style="flex:1;">
+            <div style="font-size:15px;font-weight:800;color:var(--dark);">NFC Tag Assigned</div>
+            <div style="font-size:12px;font-weight:600;color:var(--medium);margin-top:2px;">Tag #A4F2 · Buddy</div>
+          </div>
+          <div onclick="ciReassignNfc()" style="font-size:12px;font-weight:700;color:var(--teal-dark);cursor:pointer;flex-shrink:0;">Reassign</div>
+        </div>
+
         <div style="font-size:14px;font-weight:700;color:var(--medium);margin-bottom:4px;">Document Buddy's belongings</div>
         <div style="font-size:12px;font-weight:600;color:var(--lighter);margin-bottom:18px;">Photos are saved to Buddy's profile and shown at checkout.</div>
 
@@ -985,12 +1041,13 @@
           </div>
         </div>
 
-        <!-- Take photo button -->
-        <button onclick="ciAddPhoto()" class="btn btn-secondary btn-full" style="margin-bottom:10px;">Take Photo</button>
-        <button onclick="go('checkin-colorgroup')" class="btn btn-primary btn-full">Next →</button>
-        <div style="text-align:center;margin-top:12px;">
-          <span onclick="go('checkin-colorgroup')" style="font-size:13px;font-weight:700;color:var(--lighter);cursor:pointer;">Skip for now</span>
-        </div>
+      </div>
+    </div>
+    <div class="wizard-footer">
+      <button onclick="ciAddPhoto()" class="btn btn-secondary btn-full" style="margin-bottom:10px;">Take Photo</button>
+      <button onclick="go('checkin-colorgroup')" class="btn btn-primary btn-full">Next →</button>
+      <div style="text-align:center;margin-top:12px;">
+        <span onclick="go('checkin-colorgroup')" style="font-size:13px;font-weight:700;color:var(--lighter);cursor:pointer;">Skip for now</span>
       </div>
     </div>
   </div>
@@ -1007,44 +1064,65 @@
       </div>
     </div>
     <div class="step-indicator">
-      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Belongings</div></div>
+      <div class="step done" onclick="go('checkin-room')" style="cursor:pointer;"><div class="step-circle">✓</div><div class="step-label">NFC/Belongings</div></div>
       <div class="step-line done"></div>
-      <div class="step active"><div class="step-circle">2</div><div class="step-label">Group</div></div>
+      <div class="step active"><div class="step-circle">2</div><div class="step-label">Groups/Kennels</div></div>
       <div class="step-line"></div>
       <div class="step pending"><div class="step-circle">3</div><div class="step-label">Schedule</div></div>
       <div class="step-line"></div>
       <div class="step pending"><div class="step-circle">✓</div><div class="step-label">Done</div></div>
     </div>
-    <div class="scroll-content">
+    <div class="scroll-content" style="padding-bottom:16px;">
       <div class="p-16">
-        <div style="font-size:14px;font-weight:700;color:var(--medium);margin-bottom:14px;">Confirm or change Buddy's color group</div>
-        <div class="gap-10">
-          <div class="cgroup-btn" style="border-color:#4A90D9;background:#EEF5FF;" onclick="go('checkin-schedule')">
-            <div class="cgroup-swatch" style="background:linear-gradient(135deg,#4A90D9,#2E6BB5);"></div>
-            <div class="cgroup-info"><div class="cgroup-name">Blue Group</div><div class="cgroup-desc">Intact males · Yard 1</div></div>
-            <div style="font-size:18px;color:#4A90D9;">✓</div>
-          </div>
-          <div class="cgroup-btn" onclick="go('checkin-schedule')">
-            <div class="cgroup-swatch" style="background:linear-gradient(135deg,#FF8FB1,#E06090);"></div>
-            <div class="cgroup-info"><div class="cgroup-name">Pink Group</div><div class="cgroup-desc">Intact females · Yard 2</div></div>
-          </div>
-          <div class="cgroup-btn" onclick="go('checkin-schedule')">
-            <div class="cgroup-swatch" style="background:linear-gradient(135deg,#8B6FD4,#6B4FC0);"></div>
-            <div class="cgroup-info"><div class="cgroup-name">Purple Group</div><div class="cgroup-desc">Mellow personality · Yard 3</div></div>
-          </div>
-          <div class="cgroup-btn" onclick="go('checkin-schedule')">
-            <div class="cgroup-swatch" style="background:linear-gradient(135deg,#F9C846,#D4A012);"></div>
-            <div class="cgroup-info"><div class="cgroup-name">Yellow Group</div><div class="cgroup-desc">Easy going &amp; energetic · Yard 4</div></div>
-          </div>
-          <div class="cgroup-btn" onclick="go('checkin-schedule')">
-            <div class="cgroup-swatch" style="background:linear-gradient(135deg,#FF9B4E,#E0721A);"></div>
-            <div class="cgroup-info"><div class="cgroup-name">Orange Group</div><div class="cgroup-desc">High energy &amp; opinionated · Yard 5</div></div>
-          </div>
-          <div class="cgroup-btn" onclick="go('checkin-schedule')">
-            <div class="cgroup-swatch" style="background:linear-gradient(135deg,#1A3A8F,#0F2260);"></div>
-            <div class="cgroup-info"><div class="cgroup-name">Royal Group</div><div class="cgroup-desc">Difficult dogs · Yard 6</div></div>
-          </div>
+
+        <!-- Color Group -->
+        <div style="font-size:13px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Color Group</div>
+        <div style="position:relative;margin-bottom:6px;">
+          <div id="ci-group-swatch" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;border-radius:4px;background:linear-gradient(135deg,#4A90D9,#2E6BB5);pointer-events:none;z-index:1;"></div>
+          <select id="ci-group-select" class="input-field" onchange="ciGroupChange(this)" style="padding-left:40px;appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 14px center;">
+            <option value="blue"   data-color="linear-gradient(135deg,#4A90D9,#2E6BB5)" selected>Blue Group — Intact males · Yard 1</option>
+            <option value="pink"   data-color="linear-gradient(135deg,#FF8FB1,#E06090)">Pink Group — Intact females · Yard 2</option>
+            <option value="purple" data-color="linear-gradient(135deg,#8B6FD4,#6B4FC0)">Purple Group — Mellow personality · Yard 3</option>
+            <option value="yellow" data-color="linear-gradient(135deg,#F9C846,#D4A012)">Yellow Group — Easy going &amp; energetic · Yard 4</option>
+            <option value="orange" data-color="linear-gradient(135deg,#FF9B4E,#E0721A)">Orange Group — High energy &amp; opinionated · Yard 5</option>
+            <option value="royal"  data-color="linear-gradient(135deg,#1A3A8F,#0F2260)">Royal Group — Difficult dogs · Yard 6</option>
+          </select>
         </div>
+        <div id="ci-group-hint" style="font-size:11px;font-weight:600;color:var(--lighter);margin-bottom:24px;">Currently: Blue Group</div>
+
+        <!-- Kennel (pre-assigned from scheduling) -->
+        <div style="font-size:13px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Kennel</div>
+        <!-- Confirmed state -->
+        <div id="ci-kennel-confirmed" style="background:var(--teal-light);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;margin-bottom:6px;">
+          <div style="font-size:26px;">🏷️</div>
+          <div style="flex:1;">
+            <div id="ci-kennel-label" style="font-size:17px;font-weight:900;color:var(--teal-dark);">Kennel 12</div>
+            <div style="font-size:11px;font-weight:600;color:var(--teal-dark);opacity:0.75;margin-top:2px;">Pre-assigned in Scheduling</div>
+          </div>
+          <div onclick="ciStartKennelChange()" style="font-size:12px;font-weight:700;color:var(--teal-dark);cursor:pointer;opacity:0.7;">Change</div>
+        </div>
+        <!-- Edit state (hidden by default) -->
+        <div id="ci-kennel-edit" style="display:none;flex-direction:column;gap:10px;margin-bottom:6px;">
+          <div style="position:relative;">
+            <select id="ci-kennel-select" class="input-field" style="appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 14px center;">
+              <option value="K1">Kennel 1</option><option value="K2">Kennel 2</option><option value="K3">Kennel 3</option>
+              <option value="K4">Kennel 4</option><option value="K5">Kennel 5</option><option value="K6">Kennel 6</option>
+              <option value="K7">Kennel 7</option><option value="K8">Kennel 8</option><option value="K9">Kennel 9</option>
+              <option value="K10">Kennel 10</option><option value="K11">Kennel 11</option><option value="K12" selected>Kennel 12</option>
+              <option value="K13">Kennel 13</option><option value="K14">Kennel 14</option><option value="K15">Kennel 15</option>
+              <option value="K16">Kennel 16</option><option value="K17">Kennel 17</option><option value="K18">Kennel 18</option>
+              <option value="K19">Kennel 19</option><option value="K20">Kennel 20</option>
+            </select>
+          </div>
+          <button onclick="ciConfirmKennel()" class="btn btn-primary btn-full">Confirm Kennel</button>
+        </div>
+        <div style="font-size:11px;font-weight:600;color:var(--lighter);margin-bottom:4px;">Confirm the kennel is ready before continuing.</div>
+      </div>
+    </div>
+    <div class="wizard-footer">
+      <button onclick="go('checkin-schedule')" class="btn btn-primary btn-full">Next →</button>
+      <div style="text-align:center;margin-top:12px;">
+        <span onclick="go('checkin-schedule')" style="font-size:13px;font-weight:700;color:var(--lighter);cursor:pointer;">Skip for now</span>
       </div>
     </div>
   </div>
@@ -1056,23 +1134,18 @@
     <div class="top-nav">
       <button class="back-btn" onclick="go('checkin-colorgroup')">‹</button>
       <div class="nav-title">Check In: Buddy</div>
-      <div style="background:var(--teal-light);border-radius:14px;padding:6px 9px;display:flex;align-items:center;">
-        <svg width="28" height="18" viewBox="0 0 36 24" fill="none"><circle cx="3" cy="12" r="2.5" fill="#2471A3"/><path d="M9 8 Q12 12 9 16" stroke="#2471A3" stroke-width="2.5" stroke-linecap="round" class="nfc-a1"/><path d="M15 5 Q20 12 15 19" stroke="#2471A3" stroke-width="2.5" stroke-linecap="round" class="nfc-a2"/><path d="M21 2 Q28 12 21 22" stroke="#2471A3" stroke-width="2.5" stroke-linecap="round" class="nfc-a3"/></svg>
-      </div>
     </div>
     <div class="step-indicator">
-      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Belongings</div></div>
+      <div class="step done" onclick="go('checkin-room')" style="cursor:pointer;"><div class="step-circle">✓</div><div class="step-label">NFC/Belongings</div></div>
       <div class="step-line done"></div>
-      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Group</div></div>
+      <div class="step done" onclick="go('checkin-colorgroup')" style="cursor:pointer;"><div class="step-circle">✓</div><div class="step-label">Groups/Kennels</div></div>
       <div class="step-line done"></div>
       <div class="step active"><div class="step-circle">3</div><div class="step-label">Schedule</div></div>
       <div class="step-line"></div>
       <div class="step pending"><div class="step-circle">✓</div><div class="step-label">Done</div></div>
     </div>
-    <div class="scroll-content">
+    <div class="scroll-content" style="padding-bottom:16px;">
       <div class="p-16">
-        <div style="font-size:14px;font-weight:700;color:var(--medium);margin-bottom:14px;">Schedule add-ons &amp; meds for this stay</div>
-
         <div class="section-title mb-12">Feeding</div>
         <div class="gap-10 mb-20">
           <div class="toggle-row"><div class="toggle-label">🍽️ Morning Feeding</div><div class="toggle"></div></div>
@@ -1086,45 +1159,81 @@
 
         <div class="section-title mb-12">Add-Ons</div>
 
-        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Training</div>
-        <div class="chip-group mb-12">
-          <div class="chip">🏃 Treadmill Walk</div>
-          <div class="chip">🦮 Training Walk</div>
-          <div class="chip">⭐ Pups-Choice</div>
+        <!-- Training -->
+        <div id="addon-training-header" class="addon-dd-header" onclick="toggleAddonDd('addon-training')">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;">Training</div>
+            <div class="addon-dd-count" style="font-size:11px;font-weight:700;color:var(--lighter);">None</div>
+          </div>
+          <div class="addon-dd-chevron" style="font-size:12px;color:var(--medium);">▾</div>
+        </div>
+        <div id="addon-training-list" class="addon-dd-list">
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">🏃</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Treadmill Walk</div></div>
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">🦮</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Training Walk</div></div>
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">⭐</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Pups-Choice</div></div>
         </div>
 
-        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Wellness</div>
-        <div class="chip-group mb-12">
-          <div class="chip">🪮 Brushing</div>
-          <div class="chip">🐾 Scent Lead Walk</div>
-          <div class="chip">🦷 Teeth Brushing</div>
-          <div class="chip">👂 Ear Cleaning</div>
-          <div class="chip selected">🛁 Bath</div>
-          <div class="chip">🤗 One on One Cuddle Time</div>
+        <!-- Wellness -->
+        <div id="addon-wellness-header" class="addon-dd-header has-selection" onclick="toggleAddonDd('addon-wellness')">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="font-size:11px;font-weight:800;color:var(--teal-dark);text-transform:uppercase;letter-spacing:0.5px;">Wellness</div>
+            <div class="addon-dd-count" style="font-size:11px;font-weight:700;color:var(--teal-dark);">1 selected</div>
+          </div>
+          <div class="addon-dd-chevron" style="font-size:12px;color:var(--medium);">▾</div>
+        </div>
+        <div id="addon-wellness-list" class="addon-dd-list">
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">🪮</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Brushing</div></div>
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">🐾</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Scent Lead Walk</div></div>
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">🦷</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Teeth Brushing</div></div>
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">👂</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Ear Cleaning</div></div>
+          <div class="addon-dd-item selected" onclick="addonToggleItem(this)"><div style="font-size:18px;">🛁</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Bath</div></div>
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">🤗</div><div style="font-size:14px;font-weight:700;color:var(--dark);">One on One Cuddle Time</div></div>
         </div>
 
-        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Treats</div>
-        <div class="chip-group mb-12">
-          <div class="chip">🐶 Extreme Kong</div>
-          <div class="chip">🧊 Paw-sicle</div>
-          <div class="chip">☕ Puppacino</div>
-          <div class="chip">🥜 PB Kong</div>
+        <!-- Treats -->
+        <div id="addon-treats-header" class="addon-dd-header" onclick="toggleAddonDd('addon-treats')">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;">Treats</div>
+            <div class="addon-dd-count" style="font-size:11px;font-weight:700;color:var(--lighter);">None</div>
+          </div>
+          <div class="addon-dd-chevron" style="font-size:12px;color:var(--medium);">▾</div>
+        </div>
+        <div id="addon-treats-list" class="addon-dd-list">
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">🐶</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Extreme Kong</div></div>
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">🧊</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Paw-sicle</div></div>
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">☕</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Puppacino</div></div>
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">🥜</div><div style="font-size:14px;font-weight:700;color:var(--dark);">PB Kong</div></div>
         </div>
 
-        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Holiday</div>
-        <div class="chip-group mb-12">
-          <div class="chip">🥚 Egg-celent Egg Hunt</div>
-          <div class="chip">🍬 Not Tricks Just Treats</div>
-          <div class="chip">🎅 Santa Paws Photo</div>
+        <!-- Holiday -->
+        <div id="addon-holiday-header" class="addon-dd-header" onclick="toggleAddonDd('addon-holiday')">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;">Holiday</div>
+            <div class="addon-dd-count" style="font-size:11px;font-weight:700;color:var(--lighter);">None</div>
+          </div>
+          <div class="addon-dd-chevron" style="font-size:12px;color:var(--medium);">▾</div>
+        </div>
+        <div id="addon-holiday-list" class="addon-dd-list">
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">🥚</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Egg-celent Egg Hunt</div></div>
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">🍬</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Not Tricks Just Treats</div></div>
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">🎅</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Santa Paws Photo</div></div>
         </div>
 
-        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Luxury</div>
-        <div class="chip-group mb-20">
-          <div class="chip">🎂 Birthday Party</div>
+        <!-- Luxury -->
+        <div id="addon-luxury-header" class="addon-dd-header" onclick="toggleAddonDd('addon-luxury')">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;">Luxury</div>
+            <div class="addon-dd-count" style="font-size:11px;font-weight:700;color:var(--lighter);">None</div>
+          </div>
+          <div class="addon-dd-chevron" style="font-size:12px;color:var(--medium);">▾</div>
         </div>
-
-        <button class="btn btn-primary btn-full btn-lg" onclick="go('checkin-done')">Complete Check-In</button>
+        <div id="addon-luxury-list" class="addon-dd-list" style="margin-bottom:4px;">
+          <div class="addon-dd-item" onclick="addonToggleItem(this)"><div style="font-size:18px;">🎂</div><div style="font-size:14px;font-weight:700;color:var(--dark);">Birthday Party</div></div>
+        </div>
       </div>
+    </div>
+    <div class="wizard-footer">
+      <button class="btn btn-primary btn-full btn-lg" onclick="completeCheckin()">Complete Check-In</button>
     </div>
   </div>
 
@@ -1135,13 +1244,6 @@
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;text-align:center;background:white;">
       <div style="width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-dark));display:flex;align-items:center;justify-content:center;font-size:52px;box-shadow:0 10px 40px rgba(74,159,213,0.4);margin-bottom:28px;" class="nfc-pulse">🐕</div>
       <div style="font-size:28px;font-weight:900;color:var(--dark);margin-bottom:10px;">Buddy's Checked In! 🎉</div>
-      <div style="font-size:15px;font-weight:600;color:var(--medium);line-height:1.6;margin-bottom:24px;">Room 4 · Orange Group<br>Brushing + Pups-choice scheduled</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:24px;">
-        <span class="badge badge-teal">🏠 Room 4</span>
-        <span class="badge" style="background:var(--orange-light);color:#C45C1A;">🟠 Orange Group</span>
-        <span class="badge badge-yellow">🪮 Brushing</span>
-        <span class="badge badge-purple">⭐ Pups-choice</span>
-      </div>
       <div style="background:var(--green-light);border:2px solid var(--green);border-radius:14px;padding:14px 18px;width:100%;text-align:left;display:flex;gap:12px;align-items:center;margin-bottom:28px;">
         <div style="font-size:24px;">📱</div>
         <div><div style="font-size:13px;font-weight:800;color:#2A8A56;">Parent Notified</div><div style="font-size:12px;font-weight:600;color:#3AAF72;margin-top:2px;">SMS sent to Mike (Buddy's owner)</div></div>
@@ -1606,8 +1708,13 @@
         <!-- Quick Actions -->
         <div class="section-header mb-12"><div class="section-title">Quick Actions</div></div>
         <div class="quick-actions mb-20" style="grid-template-columns:repeat(3,1fr);">
+          <div class="quick-action quick-action-alert" onclick="go('admin-notifications')" style="position:relative;">
+            <div class="qa-icon" style="background:#FFF0F0;position:relative;">🔔<span style="position:absolute;top:-4px;right:-4px;background:#ef4444;color:white;font-size:9px;font-weight:900;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px;line-height:1;">3</span></div>
+            <div class="qa-label">Notifications</div>
+          </div>
           <div class="quick-action" onclick="go('admin-booked')">
-            <div class="qa-icon" style="background:#F0F8FF;">📆</div><div class="qa-label">Scheduling</div>
+            <div class="qa-icon" style="background:#F0F8FF;position:relative;">📆<span style="position:absolute;top:-4px;right:-4px;background:#F59E0B;color:white;font-size:9px;font-weight:900;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px;line-height:1;">2</span></div>
+            <div class="qa-label">Scheduling</div>
           </div>
           <div class="quick-action" onclick="go('admin-parents')">
             <div class="qa-icon" style="background:var(--purple-light);">👤</div><div class="qa-label">Parent Directory</div>
@@ -1649,6 +1756,103 @@
             <div class="qa-icon" style="background:linear-gradient(135deg,#E8F4FD,#D0E8FF);"><span style="font-size:22px;font-weight:900;color:#1D6FA8;line-height:1;">?</span></div><div class="qa-label">Ask AI</div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- ADMIN: NOTIFICATIONS                       -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="screen" id="screen-admin-notifications">
+    <div style="background:linear-gradient(135deg,#b91c1c,#ef4444);padding:48px 20px 20px;display:flex;align-items:center;gap:14px;flex-shrink:0;position:relative;overflow:hidden;">
+      <div style="position:absolute;font-size:120px;opacity:0.06;right:-20px;bottom:-20px;transform:rotate(-15deg);pointer-events:none;">🐾</div>
+      <button class="back-btn" onclick="go('admin-home')" style="background:rgba(255,255,255,0.2);color:white;flex-shrink:0;">‹</button>
+      <div style="flex:1;">
+        <div style="font-size:20px;font-weight:900;color:white;line-height:1.1;">Notifications</div>
+        <div id="notif-subhead" style="font-size:12px;color:rgba(255,255,255,0.8);font-weight:600;margin-top:3px;">3 past due</div>
+      </div>
+      <button onclick="dismissAllNotif()" style="background:rgba(255,255,255,0.2);border:none;border-radius:20px;padding:7px 14px;font-size:11px;font-weight:800;color:white;cursor:pointer;">Dismiss All</button>
+    </div>
+
+    <div class="scroll-content">
+      <div id="notif-list" style="padding:16px;display:flex;flex-direction:column;gap:20px;">
+
+        <!-- ── FEEDING ── -->
+        <div id="notif-section-feeding">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Feeding</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+
+            <div class="notif-card" style="background:white;border-radius:14px;border:2px solid #FFCDD2;padding:14px 16px;">
+              <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;">
+                <div style="width:44px;height:44px;border-radius:50%;background:#F0F4FF;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🐾</div>
+                <div style="flex:1;min-width:0;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px;">
+                    <div style="font-size:15px;font-weight:900;color:var(--dark);">Max</div>
+                    <div style="background:#FFEBEE;color:#C62828;font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;flex-shrink:0;">45 min overdue</div>
+                  </div>
+                  <div style="font-size:13px;font-weight:700;color:var(--dark);">Breakfast</div>
+                  <div style="font-size:12px;color:var(--medium);font-weight:600;margin-top:2px;">German Shepherd · Room 4 · Scheduled 8:00 AM</div>
+                </div>
+              </div>
+              <button onclick="dismissNotif(this)" style="width:100%;padding:9px;border-radius:10px;border:none;background:#ef4444;font-size:13px;font-weight:800;color:white;cursor:pointer;">Mark Done</button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── MEDICATION ── -->
+        <div id="notif-section-medication">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Medication</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+
+            <div class="notif-card" style="background:white;border-radius:14px;border:2px solid #FFCDD2;padding:14px 16px;">
+              <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;">
+                <div style="width:44px;height:44px;border-radius:50%;background:#FFF0F5;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🐩</div>
+                <div style="flex:1;min-width:0;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px;">
+                    <div style="font-size:15px;font-weight:900;color:var(--dark);">Luna</div>
+                    <div style="background:#FFEBEE;color:#C62828;font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;flex-shrink:0;">1.5 hrs overdue</div>
+                  </div>
+                  <div style="font-size:13px;font-weight:700;color:var(--dark);">Apoquel 16mg</div>
+                  <div style="font-size:12px;color:var(--medium);font-weight:600;margin-top:2px;">Miniature Poodle · Kennel 2 · Scheduled 9:00 AM · With food</div>
+                </div>
+              </div>
+              <button onclick="dismissNotif(this)" style="width:100%;padding:9px;border-radius:10px;border:none;background:#ef4444;font-size:13px;font-weight:800;color:white;cursor:pointer;">Mark Done</button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── TASKS & ADD-ONS ── -->
+        <div id="notif-section-tasks">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Tasks &amp; Add-Ons</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+
+            <div class="notif-card" style="background:white;border-radius:14px;border:2px solid #FFCDD2;padding:14px 16px;">
+              <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;">
+                <div style="width:44px;height:44px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🐕</div>
+                <div style="flex:1;min-width:0;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px;">
+                    <div style="font-size:15px;font-weight:900;color:var(--dark);">Buddy</div>
+                    <div style="background:#FFEBEE;color:#C62828;font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;flex-shrink:0;">30 min overdue</div>
+                  </div>
+                  <div style="font-size:13px;font-weight:700;color:var(--dark);">Grooming Brush-Out <span style="font-size:11px;font-weight:700;color:var(--teal-dark);background:var(--teal-light);padding:2px 7px;border-radius:6px;margin-left:4px;">Add-On</span></div>
+                  <div style="font-size:12px;color:var(--medium);font-weight:600;margin-top:2px;">Golden Retriever · Room 2 · Scheduled 10:00 AM</div>
+                </div>
+              </div>
+              <button onclick="dismissNotif(this)" style="width:100%;padding:9px;border-radius:10px;border:none;background:#ef4444;font-size:13px;font-weight:800;color:white;cursor:pointer;">Mark Done</button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Empty state (hidden until all dismissed) -->
+        <div id="notif-empty" style="display:none;text-align:center;padding:48px 20px;">
+          <div style="font-size:48px;margin-bottom:12px;">✅</div>
+          <div style="font-size:18px;font-weight:900;color:var(--dark);margin-bottom:6px;">All caught up!</div>
+          <div style="font-size:13px;color:var(--medium);font-weight:600;">No past-due items right now.</div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -2106,7 +2310,7 @@
       <div class="step-line"></div>
       <div class="step pending"><div class="step-circle">✓</div><div class="step-label">Done</div></div>
     </div>
-    <div class="scroll-content">
+    <div class="scroll-content" style="padding-bottom:16px;">
       <div class="p-16">
         <div style="font-size:14px;font-weight:700;color:var(--medium);margin-bottom:4px;">Review <span class="co-name-inline">Buddy</span>'s belongings</div>
         <div style="font-size:12px;font-weight:600;color:var(--lighter);margin-bottom:18px;">Photos taken at check-in. Confirm all items are ready to go home.</div>
@@ -2132,10 +2336,12 @@
           <div style="font-size:13px;font-weight:700;color:#B8860B;line-height:1.5;">2 items on file from check-in. Confirm all are accounted for before sending home.</div>
         </div>
 
-        <button class="btn btn-primary btn-full btn-lg" onclick="go('checkout-message-yard')">Belongings Collected</button>
-        <div style="text-align:center;margin-top:12px;">
-          <span onclick="go('checkout-message-yard')" style="font-size:13px;font-weight:700;color:var(--lighter);cursor:pointer;">Nothing to collect</span>
-        </div>
+      </div>
+    </div>
+    <div class="wizard-footer">
+      <button class="btn btn-primary btn-full btn-lg" onclick="go('checkout-message-yard')">Belongings Collected</button>
+      <div style="text-align:center;margin-top:12px;">
+        <span onclick="go('checkout-message-yard')" style="font-size:13px;font-weight:700;color:var(--lighter);cursor:pointer;">Nothing to collect</span>
       </div>
     </div>
   </div>
@@ -2162,7 +2368,7 @@
       <div class="step-line"></div>
       <div class="step pending"><div class="step-circle">✓</div><div class="step-label">Done</div></div>
     </div>
-    <div class="scroll-content">
+    <div class="scroll-content" style="padding-bottom:16px;">
       <div class="p-16">
         <div style="font-size:14px;font-weight:700;color:var(--medium);margin-bottom:4px;">Notify <span class="co-name-inline">Buddy</span>'s yard</div>
         <div style="font-size:12px;font-weight:600;color:var(--lighter);margin-bottom:18px;">Let staff know their friend is heading home.</div>
@@ -2194,10 +2400,12 @@
         <textarea id="co-yard-message" class="input-field" style="height:100px;margin-bottom:6px;">Buddy is heading home! Please bring to the front. 🐾</textarea>
         <div style="font-size:12px;font-weight:600;color:var(--medium);margin-bottom:20px;">Delivered as push notification to checked-in staff</div>
 
-        <button class="btn btn-primary btn-full btn-lg" onclick="go('checkout-collar')">Send &amp; Continue</button>
-        <div style="text-align:center;margin-top:12px;">
-          <span onclick="go('checkout-collar')" style="font-size:13px;font-weight:700;color:var(--lighter);cursor:pointer;">Skip</span>
-        </div>
+      </div>
+    </div>
+    <div class="wizard-footer">
+      <button class="btn btn-primary btn-full btn-lg" onclick="go('checkout-collar')">Send &amp; Continue</button>
+      <div style="text-align:center;margin-top:12px;">
+        <span onclick="go('checkout-collar')" style="font-size:13px;font-weight:700;color:var(--lighter);cursor:pointer;">Skip</span>
       </div>
     </div>
   </div>
@@ -2221,7 +2429,7 @@
       <div class="step-line"></div>
       <div class="step pending"><div class="step-circle">✓</div><div class="step-label">Done</div></div>
     </div>
-    <div class="scroll-content">
+    <div class="scroll-content" style="padding-bottom:16px;">
       <div class="p-16">
         <div style="font-size:14px;font-weight:700;color:var(--medium);margin-bottom:4px;">Collar &amp; leash swap</div>
         <div style="font-size:12px;font-weight:600;color:var(--lighter);margin-bottom:20px;">Complete before returning <span class="co-name-inline">Buddy</span> to the parent.</div>
@@ -2255,8 +2463,10 @@
 
         </div>
 
-        <button class="btn btn-primary btn-full btn-lg" onclick="go('checkout-confirm')">Continue</button>
       </div>
+    </div>
+    <div class="wizard-footer">
+      <button class="btn btn-primary btn-full btn-lg" onclick="go('checkout-confirm')">Continue</button>
     </div>
   </div>
 
@@ -2292,8 +2502,10 @@
         </div>
       </div>
 
+    </div>
+    <div class="wizard-footer">
       <button class="btn btn-success btn-full btn-lg" onclick="go('checkout-done')">Check Out</button>
-      <div style="font-size:14px;font-weight:700;color:var(--light);cursor:pointer;" onclick="go('admin-checkout')">Cancel</div>
+      <div style="text-align:center;margin-top:12px;font-size:14px;font-weight:700;color:var(--light);cursor:pointer;" onclick="go('admin-checkout')">Cancel</div>
     </div>
   </div>
 
@@ -2352,104 +2564,20 @@
     <div class="scroll-content">
       <div style="padding:12px 16px 16px;">
 
-        <!-- reusable pill styles (inline) -->
-        <!-- assigned: teal-light bg | unassigned: white bg dashed border -->
-
-        <!-- Mar 3 -->
+        <!-- TODAY: Mar 8 -->
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;margin-top:4px;">
-          <div style="font-size:13px;font-weight:900;color:var(--medium);">Mon, Mar 3</div>
-          <div style="background:#F0F4FF;color:#3B7DDD;font-size:11px;font-weight:800;padding:2px 8px;border-radius:8px;">2 friends</div>
-          <div style="flex:1;height:1px;background:var(--border);"></div>
+          <div style="font-size:13px;font-weight:900;color:var(--teal-dark);">Today · Sat, Mar 8</div>
+          <div id="sched-today-badge" style="background:var(--teal);color:white;font-size:11px;font-weight:800;padding:2px 8px;border-radius:8px;">5 arriving · 2 unassigned</div>
+          <div style="flex:1;height:1px;background:var(--teal);opacity:0.3;"></div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
-          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:11px 14px;">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-              <div style="font-size:22px;">🦮</div>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:14px;font-weight:800;color:var(--dark);">Rosie <span style="font-weight:600;color:var(--medium);font-size:12px;">· Amanda Foster</span></div>
-                <div style="font-size:11px;color:var(--medium);font-weight:600;">Bernese Mtn Dog · 👑 Royal · Mar 3–8</div>
-              </div>
-              <div style="font-size:11px;font-weight:800;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:6px;">Arriving</div>
-            </div>
-            <div style="display:flex;gap:6px;">
-              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('room',this)">🏠 Room 1</div>
-              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('kennel',this)">🏷️ Kennel 1</div>
-            </div>
-          </div>
-          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:11px 14px;">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-              <div style="font-size:22px;">🦴</div>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:14px;font-weight:800;color:var(--dark);">Milo <span style="font-weight:600;color:var(--medium);font-size:12px;">· Karen Lee</span></div>
-                <div style="font-size:11px;color:var(--medium);font-weight:600;">Beagle · 🟡 Yellow · Mar 3–9</div>
-              </div>
-              <div style="font-size:11px;font-weight:800;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:6px;">Arriving</div>
-            </div>
-            <div style="display:flex;gap:6px;">
-              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('room',this)">🏠 Room 3</div>
-              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('kennel',this)">🏷️ Kennel 5</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Mar 4 -->
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-          <div style="font-size:13px;font-weight:900;color:var(--medium);">Tue, Mar 4</div>
-          <div style="background:#F0F4FF;color:#3B7DDD;font-size:11px;font-weight:800;padding:2px 8px;border-radius:8px;">4 friends</div>
-          <div style="flex:1;height:1px;background:var(--border);"></div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
-          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:11px 14px;">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-              <div style="font-size:22px;">🐾</div>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:14px;font-weight:800;color:var(--dark);">Max <span style="font-weight:600;color:var(--medium);font-size:12px;">· Jennifer Rivera</span></div>
-                <div style="font-size:11px;color:var(--medium);font-weight:600;">German Shepherd · 🟣 Purple · Mar 4–9</div>
-              </div>
-              <div style="font-size:11px;font-weight:800;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:6px;">Arriving</div>
-            </div>
-            <div style="display:flex;gap:6px;">
-              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('room',this)">🏠 Room 2</div>
-              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('kennel',this)">🏷️ Kennel 7</div>
-            </div>
-          </div>
-          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:11px 14px;">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-              <div style="font-size:22px;">🐕</div>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:14px;font-weight:800;color:var(--dark);">Charlie <span style="font-weight:600;color:var(--medium);font-size:12px;">· Tom Garcia</span></div>
-                <div style="font-size:11px;color:var(--medium);font-weight:600;">Australian Shepherd · 🟠 Orange · Mar 4–8</div>
-              </div>
-              <div style="font-size:11px;font-weight:800;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:6px;">Arriving</div>
-            </div>
-            <div style="display:flex;gap:6px;">
-              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('room',this)">🏠 Room 8</div>
-              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('kennel',this)">🏷️ Kennel 9</div>
-            </div>
-          </div>
-          <div style="background:#F8FFFE;border-radius:12px;border:1px solid var(--border);padding:11px 14px;display:flex;align-items:center;gap:12px;opacity:0.7;">
-            <div style="font-size:22px;">🦮</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:14px;font-weight:800;color:var(--dark);">Rosie · Milo</div>
-              <div style="font-size:11px;color:var(--medium);font-weight:600;">Continuing stay · rooms assigned</div>
-            </div>
-            <div style="font-size:11px;font-weight:700;color:var(--medium);padding:3px 8px;">Day 2</div>
-          </div>
-        </div>
-
-        <!-- Mar 5 -->
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-          <div style="font-size:13px;font-weight:900;color:var(--medium);">Wed, Mar 5</div>
-          <div style="background:#F0F4FF;color:#3B7DDD;font-size:11px;font-weight:800;padding:2px 8px;border-radius:8px;">6 friends</div>
-          <div style="flex:1;height:1px;background:var(--border);"></div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
-          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:11px 14px;">
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:20px;">
+          <!-- Buddy — assigned -->
+          <div id="sched-buddy-card" style="background:white;border-radius:12px;border:2px solid var(--teal-light);padding:11px 14px;">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
               <div style="font-size:22px;">🐕</div>
               <div style="flex:1;min-width:0;">
                 <div style="font-size:14px;font-weight:800;color:var(--dark);">Buddy <span style="font-weight:600;color:var(--medium);font-size:12px;">· Sarah Thompson</span></div>
-                <div style="font-size:11px;color:var(--medium);font-weight:600;">Golden Retriever · 🟠 Orange · Mar 5–10</div>
+                <div style="font-size:11px;color:var(--medium);font-weight:600;">Golden Retriever · 🟠 Orange · 9:00 AM</div>
               </div>
               <div style="font-size:11px;font-weight:800;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:6px;">Arriving</div>
             </div>
@@ -2458,151 +2586,70 @@
               <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('kennel',this)">🏷️ Kennel 12</div>
             </div>
           </div>
-          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:11px 14px;">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-              <div style="font-size:22px;">🐶</div>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:14px;font-weight:800;color:var(--dark);">Bella <span style="font-weight:600;color:var(--medium);font-size:12px;">· Lisa Johnson</span></div>
-                <div style="font-size:11px;color:var(--medium);font-weight:600;">Shih Tzu · 🟣 Purple · Mar 5–8</div>
-              </div>
-              <div style="font-size:11px;font-weight:800;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:6px;">Arriving</div>
-            </div>
-            <div style="display:flex;gap:6px;">
-              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('room',this)">🏠 Room 5</div>
-              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('kennel',this)">🏷️ Kennel 3</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Mar 6 TODAY -->
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-          <div style="font-size:13px;font-weight:900;color:var(--teal-dark);">Thu, Mar 6</div>
-          <div style="background:var(--teal);color:white;font-size:11px;font-weight:800;padding:2px 8px;border-radius:8px;">Today · 9 friends</div>
-          <div style="flex:1;height:1px;background:var(--teal);opacity:0.3;"></div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
-          <div style="background:white;border-radius:12px;border:2px solid var(--teal-light);padding:11px 14px;">
+          <!-- Luna — unassigned -->
+          <div style="background:white;border-radius:12px;border:2px solid #FBBF24;padding:11px 14px;">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
               <div style="font-size:22px;">🐩</div>
               <div style="flex:1;min-width:0;">
                 <div style="font-size:14px;font-weight:800;color:var(--dark);">Luna <span style="font-weight:600;color:var(--medium);font-size:12px;">· Michael Chen</span></div>
-                <div style="font-size:11px;color:var(--medium);font-weight:600;">Miniature Poodle · 🩷 Pink · Mar 6–9</div>
+                <div style="font-size:11px;color:var(--medium);font-weight:600;">Miniature Poodle · 🩷 Pink · 10:30 AM</div>
               </div>
-              <div style="font-size:11px;font-weight:800;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:6px;">Arriving</div>
+              <div style="font-size:11px;font-weight:800;color:#B45309;background:#FEF3C7;padding:3px 8px;border-radius:6px;">Unassigned</div>
             </div>
             <div style="display:flex;gap:6px;">
               <div style="background:white;color:var(--medium);border:1.5px dashed var(--border);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('room',this)">🏠 Assign Room</div>
               <div style="background:white;color:var(--medium);border:1.5px dashed var(--border);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('kennel',this)">🏷️ Assign Kennel</div>
             </div>
           </div>
+          <!-- Max — assigned -->
           <div style="background:white;border-radius:12px;border:2px solid var(--teal-light);padding:11px 14px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+              <div style="font-size:22px;">🐾</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:14px;font-weight:800;color:var(--dark);">Max <span style="font-weight:600;color:var(--medium);font-size:12px;">· Jennifer Rivera</span></div>
+                <div style="font-size:11px;color:var(--medium);font-weight:600;">German Shepherd · 🟣 Purple · 11:00 AM</div>
+              </div>
+              <div style="font-size:11px;font-weight:800;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:6px;">Arriving</div>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('room',this)">🏠 Room 2</div>
+              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('kennel',this)">🏷️ Kennel 7</div>
+            </div>
+          </div>
+          <!-- Daisy — unassigned -->
+          <div style="background:white;border-radius:12px;border:2px solid #FBBF24;padding:11px 14px;">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
               <div style="font-size:22px;">🐶</div>
               <div style="flex:1;min-width:0;">
                 <div style="font-size:14px;font-weight:800;color:var(--dark);">Daisy <span style="font-weight:600;color:var(--medium);font-size:12px;">· David Park</span></div>
-                <div style="font-size:11px;color:var(--medium);font-weight:600;">Labrador Retriever · 🟡 Yellow · Mar 6–8</div>
+                <div style="font-size:11px;color:var(--medium);font-weight:600;">Labrador Retriever · 🟡 Yellow · 1:00 PM</div>
               </div>
-              <div style="font-size:11px;font-weight:800;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:6px;">Arriving</div>
+              <div style="font-size:11px;font-weight:800;color:#B45309;background:#FEF3C7;padding:3px 8px;border-radius:6px;">Unassigned</div>
             </div>
             <div style="display:flex;gap:6px;">
               <div style="background:white;color:var(--medium);border:1.5px dashed var(--border);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('room',this)">🏠 Assign Room</div>
               <div style="background:white;color:var(--medium);border:1.5px dashed var(--border);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('kennel',this)">🏷️ Assign Kennel</div>
             </div>
           </div>
+          <!-- Rosie — assigned -->
           <div style="background:white;border-radius:12px;border:2px solid var(--teal-light);padding:11px 14px;">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-              <div style="font-size:22px;">🐕‍🦺</div>
+              <div style="font-size:22px;">🦮</div>
               <div style="flex:1;min-width:0;">
-                <div style="font-size:14px;font-weight:800;color:var(--dark);">Cooper <span style="font-weight:600;color:var(--medium);font-size:12px;">· James Williams</span></div>
-                <div style="font-size:11px;color:var(--medium);font-weight:600;">Border Collie · 🔵 Blue · Mar 6–11</div>
+                <div style="font-size:14px;font-weight:800;color:var(--dark);">Rosie <span style="font-weight:600;color:var(--medium);font-size:12px;">· Amanda Foster</span></div>
+                <div style="font-size:11px;color:var(--medium);font-weight:600;">Bernese Mtn Dog · 👑 Royal · 3:30 PM</div>
               </div>
               <div style="font-size:11px;font-weight:800;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:6px;">Arriving</div>
             </div>
             <div style="display:flex;gap:6px;">
-              <div style="background:white;color:var(--medium);border:1.5px dashed var(--border);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('room',this)">🏠 Assign Room</div>
-              <div style="background:white;color:var(--medium);border:1.5px dashed var(--border);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('kennel',this)">🏷️ Assign Kennel</div>
+              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('room',this)">🏠 Room 1</div>
+              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('kennel',this)">🏷️ Kennel 1</div>
             </div>
-          </div>
-          <div style="background:#F8FFFE;border-radius:12px;border:1px solid var(--border);padding:11px 14px;display:flex;align-items:center;gap:12px;opacity:0.75;">
-            <div style="font-size:22px;">🐕</div>
-            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:800;color:var(--dark);">Buddy · Bella · Max · Charlie · Rosie · Milo</div><div style="font-size:11px;color:var(--medium);font-weight:600;">Continuing stay · rooms &amp; kennels assigned</div></div>
           </div>
         </div>
 
-        <!-- Mar 7 -->
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-          <div style="font-size:13px;font-weight:900;color:var(--medium);">Fri, Mar 7</div>
-          <div style="background:#F0F4FF;color:#3B7DDD;font-size:11px;font-weight:800;padding:2px 8px;border-radius:8px;">11 friends</div>
-          <div style="flex:1;height:1px;background:var(--border);"></div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
-          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:11px 14px;">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-              <div style="font-size:22px;">🐕</div>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:14px;font-weight:800;color:var(--dark);">Penny <span style="font-weight:600;color:var(--medium);font-size:12px;">· Rachel Moore</span></div>
-                <div style="font-size:11px;color:var(--medium);font-weight:600;">Dachshund · 🟡 Yellow · Mar 7–10</div>
-              </div>
-              <div style="font-size:11px;font-weight:800;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:6px;">Arriving</div>
-            </div>
-            <div style="display:flex;gap:6px;">
-              <div style="background:white;color:var(--medium);border:1.5px dashed var(--border);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('room',this)">🏠 Assign Room</div>
-              <div style="background:white;color:var(--medium);border:1.5px dashed var(--border);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('kennel',this)">🏷️ Assign Kennel</div>
-            </div>
-          </div>
-          <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:11px 14px;">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-              <div style="font-size:22px;">🐶</div>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:14px;font-weight:800;color:var(--dark);">Zeus <span style="font-weight:600;color:var(--medium);font-size:12px;">· Brian Scott</span></div>
-                <div style="font-size:11px;color:var(--medium);font-weight:600;">Rottweiler · 👑 Royal · Mar 7–12</div>
-              </div>
-              <div style="font-size:11px;font-weight:800;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:6px;">Arriving</div>
-            </div>
-            <div style="display:flex;gap:6px;">
-              <div style="background:white;color:var(--medium);border:1.5px dashed var(--border);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('room',this)">🏠 Assign Room</div>
-              <div style="background:white;color:var(--medium);border:1.5px dashed var(--border);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openAssignPicker('kennel',this)">🏷️ Assign Kennel</div>
-            </div>
-          </div>
-          <div style="background:#F8FFFE;border-radius:12px;border:1px solid var(--border);padding:11px 14px;display:flex;align-items:center;gap:12px;opacity:0.75;">
-            <div style="font-size:22px;">🐾</div>
-            <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:800;color:var(--dark);">9 continuing stays</div><div style="font-size:11px;color:var(--medium);font-weight:600;">Buddy, Luna, Max, Daisy, Rosie, Cooper, Bella, Charlie, Milo</div></div>
-          </div>
-        </div>
-
-        <!-- Mar 8 -->
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-          <div style="font-size:13px;font-weight:900;color:var(--medium);">Sat, Mar 8</div>
-          <div style="background:#FFF0F0;color:#C62828;font-size:11px;font-weight:800;padding:2px 8px;border-radius:8px;">8 friends · 3 departing</div>
-          <div style="flex:1;height:1px;background:var(--border);"></div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
-          <div style="background:white;border-radius:12px;border:1px solid #FFCDD2;padding:11px 14px;">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-              <div style="font-size:22px;">🐶</div>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:14px;font-weight:800;color:var(--dark);">Daisy <span style="font-weight:600;color:var(--medium);font-size:12px;">· David Park</span></div>
-                <div style="font-size:11px;color:var(--medium);font-weight:600;">Labrador Retriever · 🟡 Yellow</div>
-              </div>
-              <div style="font-size:11px;font-weight:800;color:#C62828;background:#FFF0F0;padding:3px 8px;border-radius:6px;">Departing</div>
-            </div>
-            <div style="display:flex;gap:6px;">
-              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;">🏠 Room 11</div>
-              <div style="background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal-light);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;">🏷️ Kennel 6</div>
-            </div>
-          </div>
-          <div style="background:#F8FFFE;border-radius:12px;border:1px solid #FFCDD2;padding:11px 14px;display:flex;align-items:center;gap:12px;">
-            <div style="font-size:22px;">🐕</div>
-            <div style="font-size:22px;">🐶</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:14px;font-weight:800;color:var(--dark);">Bella &amp; Charlie</div>
-              <div style="font-size:11px;color:var(--medium);font-weight:600;">Also departing Mar 8 · rooms assigned</div>
-            </div>
-            <div style="font-size:11px;font-weight:800;color:#C62828;background:#FFF0F0;padding:3px 8px;border-radius:6px;">Departing</div>
-          </div>
-        </div>
-
-        <!-- Mar 9–14 summary rows -->
+        <!-- Future summary rows -->
+                <!-- Mar 9–14 summary rows -->
         <div style="display:flex;flex-direction:column;gap:8px;">
           <div style="display:flex;align-items:center;gap:10px;">
             <div style="font-size:13px;font-weight:900;color:var(--medium);">Sun, Mar 9</div>
@@ -5455,6 +5502,84 @@
     closeAssignPicker();
   }
 
+  // Add-on multi-select dropdowns
+  function toggleAddonDd(id) {
+    const list = document.getElementById(id + '-list');
+    const header = document.getElementById(id + '-header');
+    const opening = !list.classList.contains('open');
+    document.querySelectorAll('.addon-dd-list.open').forEach(el => {
+      el.classList.remove('open');
+      const h = document.getElementById(el.id.replace('-list', '-header'));
+      if (h) h.querySelector('.addon-dd-chevron').textContent = '▾';
+    });
+    if (opening) {
+      list.classList.add('open');
+      header.querySelector('.addon-dd-chevron').textContent = '▴';
+    }
+  }
+  function addonToggleItem(el) {
+    el.classList.toggle('selected');
+    const list = el.closest('.addon-dd-list');
+    const header = document.getElementById(list.id.replace('-list', '-header'));
+    const count = list.querySelectorAll('.addon-dd-item.selected').length;
+    const countEl = header.querySelector('.addon-dd-count');
+    const nameEl = header.querySelector('[style*="uppercase"]');
+    if (count > 0) {
+      countEl.textContent = count + ' selected';
+      countEl.style.color = 'var(--teal-dark)';
+      header.classList.add('has-selection');
+      if (nameEl) nameEl.style.color = 'var(--teal-dark)';
+    } else {
+      countEl.textContent = 'None';
+      countEl.style.color = 'var(--lighter)';
+      header.classList.remove('has-selection');
+      if (nameEl) nameEl.style.color = 'var(--medium)';
+    }
+  }
+
+  // Check-in kennel inline edit
+  function ciStartKennelChange() {
+    document.getElementById('ci-kennel-confirmed').style.display = 'none';
+    document.getElementById('ci-kennel-edit').style.display = 'flex';
+  }
+  function ciConfirmKennel() {
+    const sel = document.getElementById('ci-kennel-select');
+    const label = sel.options[sel.selectedIndex].text;
+    document.getElementById('ci-kennel-label').textContent = label;
+    document.getElementById('ci-kennel-edit').style.display = 'none';
+    document.getElementById('ci-kennel-confirmed').style.display = 'flex';
+  }
+
+  // Complete check-in — removes dog from scheduling screen
+  function completeCheckin() {
+    const card = document.getElementById('sched-buddy-card');
+    if (card) card.style.display = 'none';
+    const badge = document.getElementById('sched-today-badge');
+    if (badge) badge.textContent = '4 arriving · 2 unassigned';
+    go('checkin-done');
+  }
+
+  // Check-in group/kennel
+  function ciGroupChange(sel) {
+    const opt = sel.options[sel.selectedIndex];
+    const color = opt.getAttribute('data-color') || '#ccc';
+    const swatch = document.getElementById('ci-group-swatch');
+    if (swatch) swatch.style.background = color;
+    const hint = document.getElementById('ci-group-hint');
+    if (hint) hint.textContent = 'Currently: ' + opt.text.split(' —')[0];
+  }
+
+  // Check-in NFC tag assignment
+  function ciAssignNfc() {
+    document.getElementById('ci-nfc-btn').style.display = 'none';
+    const done = document.getElementById('ci-nfc-done');
+    done.style.display = 'flex';
+  }
+  function ciReassignNfc() {
+    document.getElementById('ci-nfc-done').style.display = 'none';
+    document.getElementById('ci-nfc-btn').style.display = 'flex';
+  }
+
   // Check-in belongings photo
   const ciPhotoEmojis = ['🦴','🛏️','🍖','💊','🎾','🧸'];
   let ciPhotoCount = 1;
@@ -5695,6 +5820,38 @@
       t.style.background = 'white'; t.style.color = 'var(--medium)'; t.style.borderColor = 'var(--border)';
     });
     el.style.background = 'var(--teal-light)'; el.style.color = 'var(--teal-dark)'; el.style.borderColor = 'var(--teal-dark)';
+  }
+  function dismissNotif(btn) {
+    var card = btn.closest('.notif-card');
+    if (!card) return;
+    card.style.transition = 'opacity 0.25s, max-height 0.3s, margin 0.3s, padding 0.3s';
+    card.style.overflow = 'hidden';
+    card.style.opacity = '0';
+    card.style.maxHeight = card.offsetHeight + 'px';
+    setTimeout(function() { card.style.maxHeight = '0'; card.style.marginBottom = '0'; card.style.padding = '0'; }, 10);
+    setTimeout(function() {
+      card.remove();
+      updateNotifCount();
+    }, 320);
+  }
+  function dismissAllNotif() {
+    document.querySelectorAll('#screen-admin-notifications .notif-card').forEach(function(c) { c.remove(); });
+    updateNotifCount();
+  }
+  function updateNotifCount() {
+    var remaining = document.querySelectorAll('#screen-admin-notifications .notif-card').length;
+    var badge = document.querySelector('#screen-admin-notifications ~ * .quick-action-alert span, .quick-action-alert span');
+    // update badge on home button
+    var badges = document.querySelectorAll('.quick-action-alert span');
+    badges.forEach(function(b) { b.textContent = remaining; if (remaining === 0) b.style.display = 'none'; });
+    // update alert animation
+    var alertBtn = document.querySelector('.quick-action-alert');
+    if (alertBtn && remaining === 0) alertBtn.classList.remove('quick-action-alert');
+    // update subhead
+    var sub = document.getElementById('notif-subhead');
+    if (sub) sub.textContent = remaining === 0 ? 'All clear' : remaining + ' past due';
+    // show empty state
+    if (remaining === 0) { var e = document.getElementById('notif-empty'); if (e) e.style.display = 'block'; }
   }
   function smsSent() {
     var confirm = document.getElementById('sms-sent-confirm');
