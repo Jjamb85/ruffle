@@ -39,11 +39,11 @@
 
     body {
       background: white;
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
     }
 
     .phone-frame {
@@ -1634,7 +1634,7 @@
             <div class="qa-icon" style="background:var(--yellow-light);">📣</div><div class="qa-label">Message Yard</div>
           </div>
           <div class="quick-action" onclick="go('admin-send-sms')">
-            <div class="qa-icon" style="background:var(--pink-light);">📱</div><div class="qa-label">Send SMS</div>
+            <div class="qa-icon" style="background:var(--pink-light);">📱</div><div class="qa-label">Text Hub</div>
           </div>
           <div class="quick-action" onclick="go('admin-email-inbox')">
             <div class="qa-icon" style="background:#EAF4FF;">📧</div><div class="qa-label">Email Inbox</div>
@@ -3738,72 +3738,486 @@
   <!-- ══════════════════════════════════════════ -->
   <!-- ADMIN: SEND SMS                            -->
   <!-- ══════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════════════ -->
+  <!-- ADMIN: SMS HUB                              -->
+  <!-- ══════════════════════════════════════════ -->
   <div class="screen" id="screen-admin-send-sms">
+    <!-- Header -->
     <div style="background:linear-gradient(135deg,var(--teal-deeper),var(--teal-dark));padding:48px 20px 20px;display:flex;align-items:center;gap:14px;flex-shrink:0;position:relative;overflow:hidden;">
       <div style="position:absolute;font-size:120px;opacity:0.06;right:-20px;bottom:-20px;transform:rotate(-15deg);pointer-events:none;">🐾</div>
       <button class="back-btn" onclick="go('admin-home')" style="background:rgba(255,255,255,0.2);color:white;flex-shrink:0;">‹</button>
       <div>
-        <div style="font-size:20px;font-weight:900;color:white;line-height:1.1;">Send SMS</div>
+        <div style="font-size:20px;font-weight:900;color:white;line-height:1.1;">Text Hub</div>
         <div style="font-size:12px;color:rgba(255,255,255,0.75);font-weight:600;margin-top:3px;">Message parents / owners</div>
       </div>
     </div>
 
-    <div class="scroll-content">
-      <div style="padding:16px;display:flex;flex-direction:column;gap:16px;">
+    <!-- Tab Nav -->
+    <div style="background:white;display:flex;border-bottom:1px solid var(--border);flex-shrink:0;">
+      <div id="sms-tab-compose" onclick="smsTab('compose')" style="flex:1;padding:10px 4px 8px;text-align:center;font-size:10px;font-weight:800;color:var(--teal-dark);border-bottom:3px solid var(--teal-dark);cursor:pointer;line-height:1.5;">Compose</div>
+      <div id="sms-tab-scheduled" onclick="smsTab('scheduled')" style="flex:1;padding:10px 4px 8px;text-align:center;font-size:10px;font-weight:800;color:var(--medium);border-bottom:3px solid transparent;cursor:pointer;line-height:1.5;">Scheduled</div>
+      <div id="sms-tab-inbox" onclick="smsTab('inbox')" style="flex:1;padding:10px 4px 8px;text-align:center;font-size:10px;font-weight:800;color:var(--medium);border-bottom:3px solid transparent;cursor:pointer;line-height:1.5;">Inbox</div>
+      <div id="sms-tab-autoreply" onclick="smsTab('autoreply')" style="flex:1;padding:10px 4px 8px;text-align:center;font-size:10px;font-weight:800;color:var(--medium);border-bottom:3px solid transparent;cursor:pointer;line-height:1.5;">Auto-Reply</div>
+    </div>
 
-        <!-- Recipient selection -->
-        <div>
-          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Send To</div>
-          <div style="display:flex;gap:8px;margin-bottom:10px;">
-            <div id="sms-to-all" onclick="smsTo('all')" style="flex:1;padding:10px;border-radius:10px;border:2px solid var(--teal-dark);background:var(--teal-light);text-align:center;font-size:13px;font-weight:800;color:var(--teal-dark);cursor:pointer;">All Parents</div>
-            <div id="sms-to-select" onclick="smsTo('select')" style="flex:1;padding:10px;border-radius:10px;border:2px solid var(--border);background:white;text-align:center;font-size:13px;font-weight:800;color:var(--medium);cursor:pointer;">Select Parents</div>
+    <!-- ── TAB: Compose ── -->
+    <div id="sms-panel-compose" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+
+      <!-- Scrollable body -->
+      <div style="flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:16px;display:flex;flex-direction:column;gap:16px;">
+
+        <!-- Recipient grouping -->
+        <div style="flex-shrink:0;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Send To</div>
+          <!-- Pill grid 2×3 -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+            <div id="sms-pill-checkedin" onclick="smsRecipient('checkedin')" style="padding:9px 6px;border-radius:10px;border:1.5px solid var(--teal-dark);background:var(--teal-light);text-align:center;font-size:11px;font-weight:800;color:var(--teal-dark);cursor:pointer;line-height:1.4;">Checked In<br>Today</div>
+            <div id="sms-pill-checkedout" onclick="smsRecipient('checkedout')" style="padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);background:white;text-align:center;font-size:11px;font-weight:800;color:var(--medium);cursor:pointer;line-height:1.4;">Checked Out<br>Today</div>
+            <div id="sms-pill-allowners" onclick="smsRecipient('allowners')" style="padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);background:white;text-align:center;font-size:11px;font-weight:800;color:var(--medium);cursor:pointer;line-height:1.4;">All<br>Parents</div>
+            <div id="sms-pill-daterange" onclick="smsRecipient('daterange')" style="padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);background:white;text-align:center;font-size:11px;font-weight:800;color:var(--medium);cursor:pointer;line-height:1.4;">Date<br>Range</div>
+            <div id="sms-pill-location" onclick="smsRecipient('location')" style="padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);background:white;text-align:center;font-size:11px;font-weight:800;color:var(--medium);cursor:pointer;line-height:1.4;">By<br>Location</div>
+            <div id="sms-pill-select" onclick="smsRecipient('select')" style="padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);background:white;text-align:center;font-size:11px;font-weight:800;color:var(--medium);cursor:pointer;line-height:1.4;">Select<br>Owners</div>
           </div>
-          <!-- All parents chip -->
-          <div id="sms-all-chip" style="background:var(--teal-light);border:1px solid var(--teal-light);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--teal-dark);">📣 All currently checked-in parents (9 recipients)</div>
-          <!-- Select parents (hidden by default) -->
-          <div id="sms-select-list" style="display:none;background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;">
-            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="this.querySelector('input').click()">
-              <input type="checkbox" style="width:18px;height:18px;accent-color:var(--teal-dark);">
-              <div><div style="font-size:13px;font-weight:800;color:var(--dark);">Amanda Foster</div><div style="font-size:11px;color:var(--medium);font-weight:600;">Rosie · 📱 (555) 201-4433</div></div>
+          <!-- Sub-pickers -->
+          <div id="sms-sub-checkedin" style="background:var(--teal-light);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--teal-dark);">🐾 7 dogs checked in today</div>
+          <div id="sms-sub-checkedout" style="display:none;background:var(--teal-light);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--teal-dark);">🐾 4 dogs checked out today</div>
+          <div id="sms-sub-daterange" style="display:none;flex-direction:column;gap:10px;">
+            <div style="display:flex;gap:8px;">
+              <div id="sms-dt-arrival" onclick="smsDateType('arrival')" style="flex:1;padding:9px 6px;border-radius:10px;border:1.5px solid var(--teal-dark);background:var(--teal-light);text-align:center;font-size:12px;font-weight:800;color:var(--teal-dark);cursor:pointer;">Arrival Date</div>
+              <div id="sms-dt-departure" onclick="smsDateType('departure')" style="flex:1;padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);background:white;text-align:center;font-size:12px;font-weight:800;color:var(--medium);cursor:pointer;">Departure Date</div>
             </div>
-            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="this.querySelector('input').click()">
-              <input type="checkbox" style="width:18px;height:18px;accent-color:var(--teal-dark);">
-              <div><div style="font-size:13px;font-weight:800;color:var(--dark);">Mark Williams</div><div style="font-size:11px;color:var(--medium);font-weight:600;">Buddy · 📱 (555) 388-9012</div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--medium);margin-bottom:5px;">From</div>
+                <input type="date" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;color:var(--dark);">
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--medium);margin-bottom:5px;">To <span style="font-weight:500;font-size:10px;">(same = single day)</span></div>
+                <input type="date" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;color:var(--dark);">
+              </div>
             </div>
-            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="this.querySelector('input').click()">
-              <input type="checkbox" style="width:18px;height:18px;accent-color:var(--teal-dark);">
-              <div><div style="font-size:13px;font-weight:800;color:var(--dark);">Sarah Chen</div><div style="font-size:11px;color:var(--medium);font-weight:600;">Luna · 📱 (555) 477-5566</div></div>
+          </div>
+          <div id="sms-sub-allowners" style="display:none;background:var(--teal-light);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--teal-dark);">📣 All owners in system (42 recipients)</div>
+          <div id="sms-sub-location" style="display:none;flex-direction:column;gap:8px;">
+            <div style="position:relative;">
+              <input id="sms-city-search" type="text" placeholder="Search cities…" oninput="filterCities()" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px 10px 36px;font-size:13px;font-family:inherit;outline:none;color:var(--dark);">
+              <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;">🔍</span>
             </div>
-            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;" onclick="this.querySelector('input').click()">
-              <input type="checkbox" style="width:18px;height:18px;accent-color:var(--teal-dark);">
-              <div><div style="font-size:13px;font-weight:800;color:var(--dark);">James Park</div><div style="font-size:11px;color:var(--medium);font-weight:600;">Max · 📱 (555) 590-7788</div></div>
+            <div id="sms-city-list" style="background:white;border-radius:12px;border:1px solid var(--border);overflow:hidden;max-height:160px;overflow-y:auto;"></div>
+            <div id="sms-city-chips" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+          </div>
+          <div id="sms-sub-select" style="display:none;flex-direction:column;gap:8px;">
+            <div style="position:relative;">
+              <input type="text" placeholder="Search owners…" oninput="filterOwners(this.value)" onfocus="openOwnerDropdown()" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px 10px 36px;font-size:13px;font-family:inherit;outline:none;color:var(--dark);">
+              <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;">🔍</span>
+            </div>
+            <div id="sms-owner-dropdown" style="display:none;background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+              <div id="sms-owner-list" style="max-height:160px;overflow-y:auto;"></div>
+            </div>
+            <div id="sms-owner-chips" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+          </div>
+        </div>
+
+        <!-- Message — grows to fill remaining scroll space -->
+        <div style="flex:1;display:flex;flex-direction:column;min-height:80px;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Message</div>
+          <textarea id="sms-body" placeholder="Type your message here…" style="flex:1;width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:14px;font-family:inherit;resize:none;outline:none;min-height:80px;"></textarea>
+          <div style="text-align:right;font-size:11px;color:var(--medium);font-weight:600;margin-top:4px;">160 char limit per SMS</div>
+        </div>
+
+      </div>
+
+      <!-- Sticky send footer -->
+      <div style="flex-shrink:0;padding:12px 16px;border-top:1px solid var(--border);background:white;display:flex;flex-direction:column;gap:10px;">
+        <div id="sms-sent-confirm" style="display:none;background:var(--green-light);border:1px solid var(--green);border-radius:14px;padding:12px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:4px;">✅</div>
+          <div style="font-size:14px;font-weight:800;color:var(--green);">SMS Sent!</div>
+          <div style="font-size:11px;font-weight:600;color:var(--green);margin-top:2px;">Message delivered to all selected recipients.</div>
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" onclick="smsSent()">Send SMS</button>
+      </div>
+
+    </div>
+
+    <!-- ── TAB: Inbox ── -->
+    <div id="sms-panel-inbox" class="scroll-content" style="display:none;">
+      <div style="padding:16px;">
+        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Recent Replies</div>
+        <!-- Thread: unread -->
+        <div onclick="openThread('Sarah Chen','Luna','Ok thanks! We\'ll be there by 5')" style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;">
+          <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#7c3aed);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:white;">S</div>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+              <div style="font-size:13px;font-weight:900;color:var(--dark);">Sarah Chen</div>
+              <div style="font-size:11px;color:var(--medium);font-weight:600;">2m ago</div>
+            </div>
+            <div style="font-size:12px;color:var(--medium);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Luna 🐾  "Ok thanks! We'll be there by 5"</div>
+          </div>
+          <div style="width:9px;height:9px;border-radius:50%;background:var(--teal-dark);flex-shrink:0;"></div>
+        </div>
+        <!-- Thread -->
+        <div onclick="openThread('Amanda Foster','Rosie','Got it, thank you!')" style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;">
+          <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#fbbf24,#d97706);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:white;">A</div>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+              <div style="font-size:13px;font-weight:900;color:var(--dark);">Amanda Foster</div>
+              <div style="font-size:11px;color:var(--medium);font-weight:600;">1h ago</div>
+            </div>
+            <div style="font-size:12px;color:var(--medium);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Rosie 🐾  "Got it, thank you!"</div>
+          </div>
+        </div>
+        <!-- Thread -->
+        <div onclick="openThread('Mark Williams','Buddy','Will pickup be okay at 5:30?')" style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;">
+          <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#34d399,#059669);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:white;">M</div>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+              <div style="font-size:13px;font-weight:900;color:var(--dark);">Mark Williams</div>
+              <div style="font-size:11px;color:var(--medium);font-weight:600;">3h ago</div>
+            </div>
+            <div style="font-size:12px;color:var(--medium);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Buddy 🐾  "Will pickup be okay at 5:30?"</div>
+          </div>
+        </div>
+        <!-- Thread -->
+        <div onclick="openThread('James Park','Max','Thanks for the update!')" style="display:flex;align-items:center;gap:12px;padding:14px 0;cursor:pointer;">
+          <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#f87171,#dc2626);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:white;">J</div>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+              <div style="font-size:13px;font-weight:900;color:var(--dark);">James Park</div>
+              <div style="font-size:11px;color:var(--medium);font-weight:600;">Yesterday</div>
+            </div>
+            <div style="font-size:12px;color:var(--medium);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Max 🐾  "Thanks for the update!"</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB: Auto-Reply ── -->
+    <div id="sms-panel-autoreply" class="scroll-content" style="display:none;">
+      <div style="padding:16px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Auto-Reply Rules</div>
+
+        <!-- Card 1: Office Closed Hours -->
+        <div class="ar-card" onclick="openArSheet(this)" style="background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;cursor:pointer;">
+          <div style="padding:14px 16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <div>
+                <div class="ar-name" style="font-size:14px;font-weight:900;color:var(--dark);">Office Closed Hours</div>
+                <div class="ar-when" style="font-size:12px;color:var(--medium);font-weight:600;margin-top:2px;">After 6 PM / Before 8 AM</div>
+              </div>
+              <div id="sms-ar-toggle-1" onclick="event.stopPropagation();toggleAutoReply(1)" style="width:44px;height:24px;border-radius:12px;background:var(--teal-dark);cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;">
+                <div id="sms-ar-thumb-1" style="position:absolute;top:2px;left:22px;width:20px;height:20px;border-radius:50%;background:white;transition:left 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.2);"></div>
+              </div>
+            </div>
+            <div class="ar-msg" style="background:var(--bg);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--dark);font-style:italic;line-height:1.5;">"Thanks for reaching out! Our office is currently closed. We'll get back to you during business hours."</div>
+          </div>
+        </div>
+
+        <!-- Card 2: Sundays -->
+        <div class="ar-card" onclick="openArSheet(this)" style="background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;cursor:pointer;">
+          <div style="padding:14px 16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <div>
+                <div class="ar-name" style="font-size:14px;font-weight:900;color:var(--dark);">Sundays</div>
+                <div class="ar-when" style="font-size:12px;color:var(--medium);font-weight:600;margin-top:2px;">Every Sunday, all day</div>
+              </div>
+              <div id="sms-ar-toggle-2" onclick="event.stopPropagation();toggleAutoReply(2)" style="width:44px;height:24px;border-radius:12px;background:var(--teal-dark);cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;">
+                <div id="sms-ar-thumb-2" style="position:absolute;top:2px;left:22px;width:20px;height:20px;border-radius:50%;background:white;transition:left 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.2);"></div>
+              </div>
+            </div>
+            <div class="ar-msg" style="background:var(--bg);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--dark);font-style:italic;line-height:1.5;">"We're closed Sundays. We'll respond first thing Monday!"</div>
+          </div>
+        </div>
+
+        <!-- Card 3: Holidays -->
+        <div class="ar-card" onclick="openArSheet(this)" style="background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;cursor:pointer;">
+          <div style="padding:14px 16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <div>
+                <div class="ar-name" style="font-size:14px;font-weight:900;color:var(--dark);">Holidays</div>
+                <div class="ar-when" style="font-size:12px;color:var(--medium);font-weight:600;margin-top:2px;">Specific dates</div>
+              </div>
+              <div id="sms-ar-toggle-3" onclick="event.stopPropagation();toggleAutoReply(3)" style="width:44px;height:24px;border-radius:12px;background:#d1d5db;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;">
+                <div id="sms-ar-thumb-3" style="position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:white;transition:left 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.2);"></div>
+              </div>
+            </div>
+            <div class="ar-msg" style="background:var(--bg);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--dark);font-style:italic;line-height:1.5;">"Happy holidays! We're closed today and will respond when we're back in the office."</div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-full" onclick="openArSheet(null)" style="margin-top:4px;">+ Add Auto-Reply</button>
+
+      </div>
+    </div>
+
+    <!-- ── AUTO-REPLY FULL-SCREEN EDITOR ── -->
+    <div id="sms-ar-sheet" style="display:none;position:absolute;inset:0;background:white;z-index:200;flex-direction:column;">
+      <!-- Header -->
+      <div style="background:linear-gradient(135deg,var(--teal-deeper),var(--teal-dark));padding:48px 20px 16px;display:flex;align-items:center;gap:14px;flex-shrink:0;position:relative;overflow:hidden;">
+        <div style="position:absolute;font-size:120px;opacity:0.06;right:-20px;bottom:-20px;transform:rotate(-15deg);pointer-events:none;">🐾</div>
+        <button onclick="closeArSheet()" class="back-btn" style="background:rgba(255,255,255,0.2);color:white;flex-shrink:0;">‹</button>
+        <div id="sms-ar-sheet-title" style="font-size:18px;font-weight:900;color:white;line-height:1.1;">New Auto-Reply</div>
+      </div>
+      <!-- Scrollable body -->
+      <div style="flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:16px;display:flex;flex-direction:column;gap:16px;">
+
+        <!-- Rule Name -->
+        <div style="flex-shrink:0;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Rule Name</div>
+          <input id="ar-name-input" type="text" placeholder="e.g. After Hours, Holiday" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;color:var(--dark);">
+        </div>
+
+        <!-- When to trigger -->
+        <div style="flex-shrink:0;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">When to Send</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+            <div id="ar-when-daterange" onclick="arWhen('daterange')" style="padding:9px 6px;border-radius:10px;border:1.5px solid var(--teal-dark);background:var(--teal-light);text-align:center;font-size:11px;font-weight:800;color:var(--teal-dark);cursor:pointer;line-height:1.4;">Date Range</div>
+            <div id="ar-when-daysofweek" onclick="arWhen('daysofweek')" style="padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);background:white;text-align:center;font-size:11px;font-weight:800;color:var(--medium);cursor:pointer;line-height:1.4;">Days of Week</div>
+          </div>
+          <!-- Date range sub (Outlook-style: start date+time → end date+time + days of week) -->
+          <div id="ar-when-sub-daterange" style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--medium);margin-bottom:5px;">Start Date</div>
+                <input type="date" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;color:var(--dark);">
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--medium);margin-bottom:5px;">Start Time</div>
+                <input type="time" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;color:var(--dark);">
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--medium);margin-bottom:5px;">End Date</div>
+                <input type="date" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;color:var(--dark);">
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--medium);margin-bottom:5px;">End Time</div>
+                <input type="time" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;color:var(--dark);">
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--medium);margin-bottom:8px;">Days of Week <span style="font-weight:500;">(leave all unchecked = every day)</span></div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <label style="display:flex;align-items:center;gap:5px;background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;"><input type="checkbox" style="accent-color:var(--teal-dark);"> Sun</label>
+                <label style="display:flex;align-items:center;gap:5px;background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;"><input type="checkbox" style="accent-color:var(--teal-dark);"> Mon</label>
+                <label style="display:flex;align-items:center;gap:5px;background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;"><input type="checkbox" style="accent-color:var(--teal-dark);"> Tue</label>
+                <label style="display:flex;align-items:center;gap:5px;background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;"><input type="checkbox" style="accent-color:var(--teal-dark);"> Wed</label>
+                <label style="display:flex;align-items:center;gap:5px;background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;"><input type="checkbox" style="accent-color:var(--teal-dark);"> Thu</label>
+                <label style="display:flex;align-items:center;gap:5px;background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;"><input type="checkbox" style="accent-color:var(--teal-dark);"> Fri</label>
+                <label style="display:flex;align-items:center;gap:5px;background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;"><input type="checkbox" style="accent-color:var(--teal-dark);"> Sat</label>
+              </div>
+            </div>
+          </div>
+          <!-- Days of week sub -->
+          <div id="ar-when-sub-daysofweek" style="display:none;flex-direction:column;gap:10px;">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <label style="display:flex;align-items:center;gap:5px;background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;"><input type="checkbox" style="accent-color:var(--teal-dark);"> Sun</label>
+              <label style="display:flex;align-items:center;gap:5px;background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;"><input type="checkbox" style="accent-color:var(--teal-dark);"> Mon</label>
+              <label style="display:flex;align-items:center;gap:5px;background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;"><input type="checkbox" style="accent-color:var(--teal-dark);"> Tue</label>
+              <label style="display:flex;align-items:center;gap:5px;background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;"><input type="checkbox" style="accent-color:var(--teal-dark);"> Wed</label>
+              <label style="display:flex;align-items:center;gap:5px;background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;"><input type="checkbox" style="accent-color:var(--teal-dark);"> Thu</label>
+              <label style="display:flex;align-items:center;gap:5px;background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;"><input type="checkbox" style="accent-color:var(--teal-dark);"> Fri</label>
+              <label style="display:flex;align-items:center;gap:5px;background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;"><input type="checkbox" style="accent-color:var(--teal-dark);"> Sat</label>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--medium);margin-bottom:5px;">From Time</div>
+                <input type="time" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;color:var(--dark);">
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--medium);margin-bottom:5px;">To Time</div>
+                <input type="time" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;color:var(--dark);">
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Message -->
-        <div>
+        <div style="flex:1;display:flex;flex-direction:column;min-height:80px;">
           <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Message</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-            <div onclick="smsTemplate(this,'Hi! Just a quick update from Ruff Life — your pup is doing great today! 🐾')" style="background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;">General Update</div>
-            <div onclick="smsTemplate(this,'Reminder: pickup time is today between 4–6 PM. Please reply if your plans have changed.')" style="background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;">Pickup Reminder</div>
-            <div onclick="smsTemplate(this,'We are currently closed for the holiday. We\'ll be back in touch shortly!')" style="background:white;border:1.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--medium);cursor:pointer;">Holiday Notice</div>
-          </div>
-          <textarea id="sms-body" rows="5" placeholder="Type your message here…" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:14px;font-family:inherit;resize:none;outline:none;"></textarea>
+          <textarea id="ar-msg-input" placeholder="Type your auto-reply message…" style="flex:1;width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:14px;font-family:inherit;resize:none;outline:none;min-height:80px;"></textarea>
           <div style="text-align:right;font-size:11px;color:var(--medium);font-weight:600;margin-top:4px;">160 char limit per SMS</div>
         </div>
 
-        <button class="btn btn-primary btn-full btn-lg" onclick="smsSent()">📱 Send SMS</button>
+      </div>
+      <!-- Sticky footer -->
+      <div style="flex-shrink:0;padding:12px 16px;border-top:1px solid var(--border);background:white;">
+        <button id="ar-save-btn" class="btn btn-primary btn-full btn-lg" onclick="saveArRule()">Save Rule</button>
+      </div>
+    </div>
 
-        <!-- Sent confirmation (hidden) -->
-        <div id="sms-sent-confirm" style="display:none;background:var(--green-light);border:1px solid var(--green);border-radius:14px;padding:16px;text-align:center;">
-          <div style="font-size:24px;margin-bottom:6px;">✅</div>
-          <div style="font-size:15px;font-weight:800;color:var(--green);">SMS Sent!</div>
-          <div style="font-size:12px;font-weight:600;color:var(--green);margin-top:4px;">Message delivered to all selected parents.</div>
+    <!-- ── TAB: Scheduled ── -->
+    <div id="sms-panel-scheduled" class="scroll-content" style="display:none;">
+      <div style="padding:16px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Upcoming Sends</div>
+
+        <div id="sms-scheduled-list" style="display:flex;flex-direction:column;gap:10px;">
+          <!-- Card 1 -->
+          <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:14px 16px;cursor:pointer;" onclick="openScheduleSheet(this)">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
+              <div style="font-size:20px;flex-shrink:0;">📅</div>
+              <div style="flex:1;min-width:0;">
+                <div class="sched-name" style="font-size:13px;font-weight:900;color:var(--dark);">Reservation Reminder</div>
+                <div class="sched-time" style="font-size:11px;color:var(--teal-dark);font-weight:700;margin-top:2px;">Mar 12, 8:00 AM</div>
+                <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:3px;">→ Arriving Mar 13–15</div>
+                <div class="sched-msg" style="font-size:12px;color:var(--dark);margin-top:5px;line-height:1.4;">"Just a reminder that your reservation starts tomorrow…"</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+                <button onclick="event.stopPropagation();cancelScheduled(this)" style="background:none;border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-size:11px;font-weight:700;color:var(--medium);cursor:pointer;">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:14px 16px;cursor:pointer;" onclick="openScheduleSheet(this)">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
+              <div style="font-size:20px;flex-shrink:0;">📢</div>
+              <div style="flex:1;min-width:0;">
+                <div class="sched-name" style="font-size:13px;font-weight:900;color:var(--dark);">Special Event</div>
+                <div class="sched-time" style="font-size:11px;color:var(--teal-dark);font-weight:700;margin-top:2px;">Mar 20, 9:00 AM</div>
+                <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:3px;">→ All Owners</div>
+                <div class="sched-msg" style="font-size:12px;color:var(--dark);margin-top:5px;line-height:1.4;">"Spring Pawty is coming! Join us March 22nd for treats…"</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+                <button onclick="event.stopPropagation();cancelScheduled(this)" style="background:none;border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-size:11px;font-weight:700;color:var(--medium);cursor:pointer;">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div style="background:white;border-radius:14px;border:1px solid var(--border);padding:14px 16px;cursor:pointer;" onclick="openScheduleSheet(this)">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
+              <div style="font-size:20px;flex-shrink:0;">💉</div>
+              <div style="flex:1;min-width:0;">
+                <div class="sched-name" style="font-size:13px;font-weight:900;color:var(--dark);">Vaccination Reminder</div>
+                <div class="sched-time" style="font-size:11px;color:var(--teal-dark);font-weight:700;margin-top:2px;">Mar 25, 7:00 AM</div>
+                <div style="font-size:11px;color:var(--medium);font-weight:600;margin-top:3px;">→ Expiring in 30 days</div>
+                <div class="sched-msg" style="font-size:12px;color:var(--dark);margin-top:5px;line-height:1.4;">"Heads up — your dog's vaccination records expire soon…"</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+                <button onclick="event.stopPropagation();cancelScheduled(this)" style="background:none;border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-size:11px;font-weight:700;color:var(--medium);cursor:pointer;">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-full" onclick="openScheduleSheet(null)" style="margin-top:4px;">+ New Scheduled Message</button>
+      </div>
+    </div>
+
+    <!-- ── INBOX THREAD BOTTOM SHEET ── -->
+    <div id="sms-thread-overlay" onclick="closeThread()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:190;"></div>
+    <div id="sms-thread-sheet" style="display:none;position:fixed;bottom:0;left:0;right:0;background:white;border-radius:20px 20px 0 0;box-shadow:0 -4px 24px rgba(0,0,0,0.12);z-index:200;max-height:80vh;flex-direction:column;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 12px;border-bottom:1px solid var(--border);flex-shrink:0;">
+        <div>
+          <div id="sms-thread-name" style="font-size:15px;font-weight:900;color:var(--dark);"></div>
+          <div id="sms-thread-pet" style="font-size:12px;color:var(--medium);font-weight:600;"></div>
+        </div>
+        <button onclick="closeThread()" style="background:var(--bg);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">×</button>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;justify-content:flex-end;">
+          <div style="background:var(--teal-dark);color:white;border-radius:18px 18px 4px 18px;padding:10px 14px;font-size:13px;font-weight:600;max-width:75%;line-height:1.4;">Reminder: pickup time is today between 4–6 PM. Please reply if your plans have changed.</div>
+        </div>
+        <div style="display:flex;justify-content:flex-start;">
+          <div id="sms-thread-reply-text" style="background:var(--bg);color:var(--dark);border-radius:18px 18px 18px 4px;padding:10px 14px;font-size:13px;font-weight:600;max-width:75%;line-height:1.4;"></div>
+        </div>
+      </div>
+      <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:10px;flex-shrink:0;">
+        <input type="text" placeholder="Reply…" style="flex:1;border:1px solid var(--border);border-radius:20px;padding:10px 14px;font-size:13px;font-family:inherit;outline:none;">
+        <button style="background:var(--teal-dark);color:white;border:none;border-radius:20px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;">Send</button>
+      </div>
+    </div>
+
+    <!-- ── SCHEDULE FULL-SCREEN EDITOR ── -->
+    <div id="sms-schedule-sheet" style="display:none;position:absolute;inset:0;background:white;z-index:200;flex-direction:column;">
+      <!-- Header -->
+      <div style="background:linear-gradient(135deg,var(--teal-deeper),var(--teal-dark));padding:48px 20px 16px;display:flex;align-items:center;gap:14px;flex-shrink:0;position:relative;overflow:hidden;">
+        <div style="position:absolute;font-size:120px;opacity:0.06;right:-20px;bottom:-20px;transform:rotate(-15deg);pointer-events:none;">🐾</div>
+        <button onclick="closeScheduleSheet()" class="back-btn" style="background:rgba(255,255,255,0.2);color:white;flex-shrink:0;">‹</button>
+        <div id="sms-sched-title" style="font-size:18px;font-weight:900;color:white;line-height:1.1;">New Scheduled Message</div>
+      </div>
+      <!-- Scrollable body -->
+      <div style="flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:16px;display:flex;flex-direction:column;gap:16px;">
+
+        <!-- Name -->
+        <div style="flex-shrink:0;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Message Name</div>
+          <input id="sms-sched-name" type="text" placeholder="e.g. Spring Arrival Reminder" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;color:var(--dark);">
+        </div>
+
+        <!-- Send To -->
+        <div style="flex-shrink:0;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Send To</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+            <div id="sch-pill-checkedin" onclick="schRecipient('checkedin')" style="padding:9px 6px;border-radius:10px;border:1.5px solid var(--teal-dark);background:var(--teal-light);text-align:center;font-size:11px;font-weight:800;color:var(--teal-dark);cursor:pointer;line-height:1.4;">Checked In<br>Today</div>
+            <div id="sch-pill-checkedout" onclick="schRecipient('checkedout')" style="padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);background:white;text-align:center;font-size:11px;font-weight:800;color:var(--medium);cursor:pointer;line-height:1.4;">Checked Out<br>Today</div>
+            <div id="sch-pill-allowners" onclick="schRecipient('allowners')" style="padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);background:white;text-align:center;font-size:11px;font-weight:800;color:var(--medium);cursor:pointer;line-height:1.4;">All<br>Parents</div>
+            <div id="sch-pill-daterange" onclick="schRecipient('daterange')" style="padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);background:white;text-align:center;font-size:11px;font-weight:800;color:var(--medium);cursor:pointer;line-height:1.4;">Date<br>Range</div>
+            <div id="sch-pill-location" onclick="schRecipient('location')" style="padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);background:white;text-align:center;font-size:11px;font-weight:800;color:var(--medium);cursor:pointer;line-height:1.4;">By<br>Location</div>
+            <div id="sch-pill-select" onclick="schRecipient('select')" style="padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);background:white;text-align:center;font-size:11px;font-weight:800;color:var(--medium);cursor:pointer;line-height:1.4;">Select<br>Owners</div>
+          </div>
+          <!-- Sub-pickers -->
+          <div id="sch-sub-checkedin" style="background:var(--teal-light);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--teal-dark);">🐾 7 dogs checked in today</div>
+          <div id="sch-sub-checkedout" style="display:none;background:var(--teal-light);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--teal-dark);">🐾 4 dogs checked out today</div>
+          <div id="sch-sub-allowners" style="display:none;background:var(--teal-light);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--teal-dark);">📣 All owners in system (42 recipients)</div>
+          <div id="sch-sub-daterange" style="display:none;flex-direction:column;gap:10px;">
+            <div style="display:flex;gap:8px;">
+              <div id="sch-dt-arrival" onclick="schDateType('arrival')" style="flex:1;padding:9px 6px;border-radius:10px;border:1.5px solid var(--teal-dark);background:var(--teal-light);text-align:center;font-size:12px;font-weight:800;color:var(--teal-dark);cursor:pointer;">Arrival Date</div>
+              <div id="sch-dt-departure" onclick="schDateType('departure')" style="flex:1;padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);background:white;text-align:center;font-size:12px;font-weight:800;color:var(--medium);cursor:pointer;">Departure Date</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--medium);margin-bottom:5px;">From</div>
+                <input type="date" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;color:var(--dark);">
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--medium);margin-bottom:5px;">To <span style="font-weight:500;font-size:10px;">(same = single day)</span></div>
+                <input type="date" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;color:var(--dark);">
+              </div>
+            </div>
+          </div>
+          <div id="sch-sub-location" style="display:none;flex-direction:column;gap:8px;">
+            <div style="position:relative;">
+              <input type="text" placeholder="Search cities…" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px 10px 36px;font-size:13px;font-family:inherit;outline:none;color:var(--dark);">
+              <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;">🔍</span>
+            </div>
+          </div>
+          <div id="sch-sub-select" style="display:none;flex-direction:column;gap:8px;">
+            <div style="position:relative;">
+              <input type="text" placeholder="Search owners…" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px 10px 36px;font-size:13px;font-family:inherit;outline:none;color:var(--dark);">
+              <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;">🔍</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Send Date & Time -->
+        <div style="flex-shrink:0;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Send Date &amp; Time</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--medium);margin-bottom:5px;">Date</div>
+              <input type="date" id="sms-sched-date" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;color:var(--dark);">
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--medium);margin-bottom:5px;">Time</div>
+              <input type="time" id="sms-sched-time" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;color:var(--dark);">
+            </div>
+          </div>
+        </div>
+
+        <!-- Message -->
+        <div style="flex:1;display:flex;flex-direction:column;min-height:80px;">
+          <div style="font-size:11px;font-weight:800;color:var(--medium);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Message</div>
+          <textarea id="sms-sched-body" placeholder="Type your message here…" style="flex:1;width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:14px;font-family:inherit;resize:none;outline:none;min-height:80px;"></textarea>
+          <div style="text-align:right;font-size:11px;color:var(--medium);font-weight:600;margin-top:4px;">160 char limit per SMS</div>
         </div>
 
       </div>
+      <!-- Sticky footer -->
+      <div style="flex-shrink:0;padding:12px 16px;border-top:1px solid var(--border);background:white;">
+        <button id="sms-sched-save-btn" class="btn btn-primary btn-full btn-lg" onclick="saveScheduled()">Schedule Message</button>
+      </div>
     </div>
+
   </div>
 
   <!-- ══════════════════════════════════════════ -->
@@ -5127,35 +5541,393 @@
     go('flag-done');
   }
 
-  // Send SMS screen
-  function smsTo(mode) {
-    const allChip = document.getElementById('sms-all-chip');
-    const selectList = document.getElementById('sms-select-list');
-    const allBtn = document.getElementById('sms-to-all');
-    const selectBtn = document.getElementById('sms-to-select');
-    if (mode === 'all') {
-      allChip.style.display = 'block';
-      selectList.style.display = 'none';
-      allBtn.style.borderColor = 'var(--teal-dark)'; allBtn.style.background = 'var(--teal-light)'; allBtn.style.color = 'var(--teal-dark)';
-      selectBtn.style.borderColor = 'var(--border)'; selectBtn.style.background = 'white'; selectBtn.style.color = 'var(--medium)';
-    } else {
-      allChip.style.display = 'none';
-      selectList.style.display = 'block';
-      selectBtn.style.borderColor = 'var(--teal-dark)'; selectBtn.style.background = 'var(--teal-light)'; selectBtn.style.color = 'var(--teal-dark)';
-      allBtn.style.borderColor = 'var(--border)'; allBtn.style.background = 'white'; allBtn.style.color = 'var(--medium)';
+  // SMS Hub
+  function smsTab(name) {
+    ['compose','inbox','autoreply','scheduled'].forEach(function(t) {
+      var panel = document.getElementById('sms-panel-' + t);
+      var tab = document.getElementById('sms-tab-' + t);
+      if (panel) panel.style.display = t === name ? 'block' : 'none';
+      if (tab) {
+        tab.style.color = t === name ? 'var(--teal-dark)' : 'var(--medium)';
+        tab.style.borderBottom = t === name ? '3px solid var(--teal-dark)' : '3px solid transparent';
+      }
+    });
+  }
+  function smsRecipient(mode) {
+    var pills = ['checkedin','checkedout','allowners','daterange','location','select'];
+    var displayMap = { checkedin:'block', checkedout:'block', allowners:'block', daterange:'flex', location:'flex', select:'flex' };
+    pills.forEach(function(p) {
+      var pill = document.getElementById('sms-pill-' + p);
+      var sub = document.getElementById('sms-sub-' + p);
+      var active = p === mode;
+      if (pill) {
+        pill.style.background = active ? 'var(--teal-light)' : 'white';
+        pill.style.borderColor = active ? 'var(--teal-dark)' : 'var(--border)';
+        pill.style.color = active ? 'var(--teal-dark)' : 'var(--medium)';
+      }
+      if (sub) sub.style.display = active ? displayMap[p] : 'none';
+    });
+    if (mode === 'location') renderCityList('');
+  }
+  var _owners = [
+    { name: 'Amanda Foster', sub: 'Rosie · 📱 (555) 201-4433', selected: false },
+    { name: 'Mark Williams',  sub: 'Buddy · 📱 (555) 388-9012', selected: false },
+    { name: 'Sarah Chen',    sub: 'Luna · 📱 (555) 477-5566',  selected: false },
+    { name: 'James Park',    sub: 'Max · 📱 (555) 590-7788',   selected: false },
+  ];
+  function renderOwnerList(q) {
+    var list = document.getElementById('sms-owner-list');
+    if (!list) return;
+    var filtered = _owners.filter(function(o) {
+      return !q || o.name.toLowerCase().indexOf(q.toLowerCase()) !== -1;
+    });
+    if (!filtered.length) {
+      list.innerHTML = '<div style="padding:12px 16px;font-size:13px;color:var(--medium);font-weight:600;">No owners found</div>';
+      return;
     }
+    list.innerHTML = filtered.map(function(o) {
+      var idx = _owners.indexOf(o);
+      var last = filtered.indexOf(o) === filtered.length - 1;
+      return '<div onclick="toggleOwner(' + idx + ')" style="display:flex;align-items:center;gap:12px;padding:11px 14px;cursor:pointer;background:' + (o.selected ? 'var(--teal-light)' : 'white') + ';' + (!last ? 'border-bottom:1px solid var(--border);' : '') + '">'
+        + '<div style="width:18px;height:18px;border-radius:5px;border:2px solid ' + (o.selected ? 'var(--teal-dark)' : 'var(--border)') + ';background:' + (o.selected ? 'var(--teal-dark)' : 'white') + ';flex-shrink:0;display:flex;align-items:center;justify-content:center;">'
+        + (o.selected ? '<span style="color:white;font-size:11px;font-weight:900;">✓</span>' : '')
+        + '</div>'
+        + '<div><div style="font-size:13px;font-weight:800;color:var(--dark);">' + o.name + '</div>'
+        + '<div style="font-size:11px;color:var(--medium);font-weight:600;">' + o.sub + '</div></div>'
+        + '</div>';
+    }).join('');
+  }
+  function renderOwnerChips() {
+    var chips = document.getElementById('sms-owner-chips');
+    if (!chips) return;
+    var selected = _owners.filter(function(o) { return o.selected; });
+    chips.innerHTML = selected.map(function(o) {
+      var idx = _owners.indexOf(o);
+      return '<div style="display:flex;align-items:center;gap:5px;background:var(--teal-light);border:1px solid var(--teal-dark);border-radius:20px;padding:4px 10px 4px 12px;font-size:12px;font-weight:700;color:var(--teal-dark);">'
+        + o.name
+        + '<span onclick="toggleOwner(' + idx + ')" style="cursor:pointer;font-size:14px;line-height:1;margin-left:2px;">×</span>'
+        + '</div>';
+    }).join('');
+  }
+  function toggleOwner(idx) {
+    _owners[idx].selected = !_owners[idx].selected;
+    var search = document.querySelector('#sms-sub-select input[type="text"]');
+    renderOwnerList(search ? search.value : '');
+    renderOwnerChips();
+  }
+  function openOwnerDropdown() {
+    var panel = document.getElementById('sms-owner-dropdown');
+    if (panel) { panel.style.display = 'block'; renderOwnerList(''); }
+  }
+  function filterOwners(q) {
+    var panel = document.getElementById('sms-owner-dropdown');
+    if (panel) panel.style.display = 'block';
+    renderOwnerList(q);
+  }
+  function smsDateType(type) {
+    ['arrival','departure'].forEach(function(t) {
+      var el = document.getElementById('sms-dt-' + t);
+      if (!el) return;
+      var active = t === type;
+      el.style.background = active ? 'var(--teal-light)' : 'white';
+      el.style.borderColor = active ? 'var(--teal-dark)' : 'var(--border)';
+      el.style.color = active ? 'var(--teal-dark)' : 'var(--medium)';
+    });
+  }
+  var _cities = [
+    { label: 'Heber, UT', selected: false },
+    { label: 'Midway, UT', selected: false },
+    { label: 'Park City, UT', selected: false },
+    { label: 'Salt Lake City, UT', selected: false },
+    { label: 'Provo, UT', selected: false },
+    { label: 'Chicago, IL', selected: false },
+    { label: 'Denver, CO', selected: false },
+    { label: 'Phoenix, AZ', selected: false },
+  ];
+  function renderCityList(filter) {
+    var list = document.getElementById('sms-city-list');
+    if (!list) return;
+    var q = (filter || '').toLowerCase();
+    var visible = _cities.filter(function(c) { return !q || c.label.toLowerCase().indexOf(q) !== -1; });
+    if (visible.length === 0) {
+      list.innerHTML = '<div style="padding:12px 16px;font-size:13px;color:var(--medium);font-weight:600;">No cities found</div>';
+      return;
+    }
+    list.innerHTML = visible.map(function(c, i) {
+      var idx = _cities.indexOf(c);
+      return '<div onclick="toggleCity(' + idx + ')" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;background:' + (c.selected ? 'var(--teal-light)' : 'white') + ';">'
+        + '<div style="width:18px;height:18px;border-radius:5px;border:2px solid ' + (c.selected ? 'var(--teal-dark)' : 'var(--border)') + ';background:' + (c.selected ? 'var(--teal-dark)' : 'white') + ';flex-shrink:0;display:flex;align-items:center;justify-content:center;">'
+        + (c.selected ? '<span style="color:white;font-size:11px;font-weight:900;">✓</span>' : '')
+        + '</div>'
+        + '<span style="font-size:13px;font-weight:700;color:var(--dark);">' + c.label + '</span>'
+        + '</div>';
+    }).join('');
+    // Remove border on last item
+    var rows = list.querySelectorAll('div[onclick]');
+    if (rows.length) rows[rows.length - 1].style.borderBottom = 'none';
+  }
+  function renderCityChips() {
+    var chips = document.getElementById('sms-city-chips');
+    if (!chips) return;
+    var selected = _cities.filter(function(c) { return c.selected; });
+    chips.innerHTML = selected.map(function(c) {
+      var idx = _cities.indexOf(c);
+      return '<div style="display:flex;align-items:center;gap:5px;background:var(--teal-light);border:1px solid var(--teal-dark);border-radius:20px;padding:4px 10px 4px 12px;font-size:12px;font-weight:700;color:var(--teal-dark);">'
+        + c.label
+        + '<span onclick="toggleCity(' + idx + ')" style="cursor:pointer;font-size:14px;line-height:1;color:var(--teal-dark);margin-left:2px;">×</span>'
+        + '</div>';
+    }).join('');
+  }
+  function toggleCity(idx) {
+    _cities[idx].selected = !_cities[idx].selected;
+    var q = document.getElementById('sms-city-search');
+    renderCityList(q ? q.value : '');
+    renderCityChips();
+  }
+  function filterCities() {
+    var q = document.getElementById('sms-city-search');
+    renderCityList(q ? q.value : '');
   }
   function smsTemplate(el, text) {
-    const body = document.getElementById('sms-body');
+    var body = document.getElementById('sms-body');
     if (body) body.value = text;
-    document.querySelectorAll('#screen-admin-send-sms [onclick^="smsTemplate"]').forEach(t => {
+    document.querySelectorAll('#screen-admin-send-sms [onclick^="smsTemplate"]').forEach(function(t) {
       t.style.background = 'white'; t.style.color = 'var(--medium)'; t.style.borderColor = 'var(--border)';
     });
     el.style.background = 'var(--teal-light)'; el.style.color = 'var(--teal-dark)'; el.style.borderColor = 'var(--teal-dark)';
   }
   function smsSent() {
-    const confirm = document.getElementById('sms-sent-confirm');
+    var confirm = document.getElementById('sms-sent-confirm');
     if (confirm) { confirm.style.display = 'block'; confirm.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+  }
+  function openThread(name, pet, replyText) {
+    document.getElementById('sms-thread-name').textContent = name;
+    document.getElementById('sms-thread-pet').textContent = pet + ' 🐾';
+    var rt = document.getElementById('sms-thread-reply-text');
+    if (rt) rt.textContent = replyText || '';
+    document.getElementById('sms-thread-overlay').style.display = 'block';
+    document.getElementById('sms-thread-sheet').style.display = 'flex';
+  }
+  function closeThread() {
+    document.getElementById('sms-thread-overlay').style.display = 'none';
+    document.getElementById('sms-thread-sheet').style.display = 'none';
+  }
+  var _arState = { 1: true, 2: true, 3: false };
+  function toggleAutoReply(id) {
+    _arState[id] = !_arState[id];
+    var on = _arState[id];
+    var toggle = document.getElementById('sms-ar-toggle-' + id);
+    var thumb = document.getElementById('sms-ar-thumb-' + id);
+    if (toggle) toggle.style.background = on ? 'var(--teal-dark)' : '#d1d5db';
+    if (thumb) thumb.style.left = on ? '22px' : '2px';
+  }
+  function toggleArEdit(id) {
+    var area = document.getElementById('sms-ar-edit-area-' + id);
+    var preview = document.getElementById('sms-ar-preview-' + id);
+    if (!area) return;
+    var editing = area.style.display === 'block';
+    area.style.display = editing ? 'none' : 'block';
+    if (preview) preview.style.display = editing ? 'block' : 'none';
+  }
+  var _arEditCard = null;
+  function openArSheet(cardEl) {
+    _arEditCard = cardEl || null;
+    var sheet = document.getElementById('sms-ar-sheet');
+    var title = document.getElementById('sms-ar-sheet-title');
+    var btn   = document.getElementById('ar-save-btn');
+    if (!sheet) return;
+    document.getElementById('ar-name-input').value = '';
+    document.getElementById('ar-msg-input').value = '';
+    arRecipient('checkedin');
+    arWhen('timerange');
+    if (cardEl) {
+      if (title) title.textContent = 'Edit Auto-Reply';
+      if (btn) btn.textContent = 'Save Changes';
+      var nameEl = cardEl.querySelector('.ar-name');
+      if (nameEl) document.getElementById('ar-name-input').value = nameEl.textContent;
+      var msgEl = cardEl.querySelector('.ar-msg');
+      if (msgEl) document.getElementById('ar-msg-input').value = msgEl.textContent.replace(/^"|"$/g, '');
+    } else {
+      if (title) title.textContent = 'New Auto-Reply';
+      if (btn) btn.textContent = 'Save Rule';
+    }
+    sheet.style.display = 'flex';
+  }
+  function closeArSheet() {
+    var sheet = document.getElementById('sms-ar-sheet');
+    if (sheet) sheet.style.display = 'none';
+    _arEditCard = null;
+  }
+  function arRecipient(mode) {
+    var pills = ['checkedin','checkedout','allowners','daterange','location','select'];
+    var displayMap = { checkedin:'block', checkedout:'block', allowners:'block', daterange:'flex', location:'flex', select:'flex' };
+    pills.forEach(function(p) {
+      var pill = document.getElementById('ar-pill-' + p);
+      var sub  = document.getElementById('ar-sub-' + p);
+      var active = p === mode;
+      if (pill) {
+        pill.style.background  = active ? 'var(--teal-light)' : 'white';
+        pill.style.borderColor = active ? 'var(--teal-dark)'  : 'var(--border)';
+        pill.style.color       = active ? 'var(--teal-dark)'  : 'var(--medium)';
+      }
+      if (sub) sub.style.display = active ? displayMap[p] : 'none';
+    });
+  }
+  function arDateType(type) {
+    ['arrival','departure'].forEach(function(t) {
+      var el = document.getElementById('ar-dt-' + t);
+      if (!el) return;
+      var active = t === type;
+      el.style.background  = active ? 'var(--teal-light)' : 'white';
+      el.style.borderColor = active ? 'var(--teal-dark)'  : 'var(--border)';
+      el.style.color       = active ? 'var(--teal-dark)'  : 'var(--medium)';
+    });
+  }
+  function arWhen(mode) {
+    var modes = ['daterange','daysofweek'];
+    var displayMap = { daterange:'flex', daysofweek:'flex' };
+    modes.forEach(function(m) {
+      var pill = document.getElementById('ar-when-' + m);
+      var sub  = document.getElementById('ar-when-sub-' + m);
+      var active = m === mode;
+      if (pill) {
+        pill.style.background  = active ? 'var(--teal-light)' : 'white';
+        pill.style.borderColor = active ? 'var(--teal-dark)'  : 'var(--border)';
+        pill.style.color       = active ? 'var(--teal-dark)'  : 'var(--medium)';
+      }
+      if (sub) sub.style.display = active ? displayMap[m] : 'none';
+    });
+  }
+  function saveArRule() {
+    var nameVal = document.getElementById('ar-name-input').value.trim() || 'Auto-Reply';
+    var msgVal  = document.getElementById('ar-msg-input').value.trim();
+    var snippet = msgVal.length > 80 ? msgVal.slice(0, 80) + '…' : msgVal;
+    if (_arEditCard) {
+      var nameEl = _arEditCard.querySelector('.ar-name');
+      if (nameEl) nameEl.textContent = nameVal;
+      var msgEl = _arEditCard.querySelector('.ar-msg');
+      if (msgEl) msgEl.textContent = '"' + snippet + '"';
+    } else {
+      var list = document.getElementById('sms-panel-autoreply').querySelector('div');
+      var card = document.createElement('div');
+      card.className = 'ar-card';
+      card.style.cssText = 'background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;cursor:pointer;';
+      card.setAttribute('onclick', 'openArSheet(this)');
+      card.innerHTML = '<div style="padding:14px 16px;">'
+        + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">'
+        + '<div><div class="ar-name" style="font-size:14px;font-weight:900;color:var(--dark);">' + nameVal + '</div>'
+        + '<div class="ar-when" style="font-size:12px;color:var(--medium);font-weight:600;margin-top:2px;">Custom rule</div></div>'
+        + '<div style="width:44px;height:24px;border-radius:12px;background:var(--teal-dark);cursor:pointer;position:relative;flex-shrink:0;" onclick="event.stopPropagation();">'
+        + '<div style="position:absolute;top:2px;left:22px;width:20px;height:20px;border-radius:50%;background:white;box-shadow:0 1px 4px rgba(0,0,0,0.2);"></div></div>'
+        + '</div>'
+        + '<div class="ar-msg" style="background:var(--bg);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--dark);font-style:italic;line-height:1.5;">"' + snippet + '"</div>'
+        + '</div>';
+      var addBtn = list.querySelector('button');
+      if (addBtn) list.insertBefore(card, addBtn);
+    }
+    closeArSheet();
+  }
+  var _schedEditCard = null;
+  function openScheduleSheet(cardEl) {
+    _schedEditCard = cardEl || null;
+    var sheet = document.getElementById('sms-schedule-sheet');
+    var title = document.getElementById('sms-sched-title');
+    var btn   = document.getElementById('sms-sched-save-btn');
+    if (!sheet) return;
+    // Reset recipient pills to default (checkedin)
+    schRecipient('checkedin');
+    // Clear fields
+    document.getElementById('sms-sched-name').value = '';
+    document.getElementById('sms-sched-date').value = '';
+    document.getElementById('sms-sched-time').value = '';
+    document.getElementById('sms-sched-body').value = '';
+    if (cardEl) {
+      // Edit mode — populate from card
+      if (title) title.textContent = 'Edit Scheduled Message';
+      if (btn) btn.textContent = 'Save Changes';
+      var nameEl = cardEl.querySelector('.sched-name');
+      if (nameEl) document.getElementById('sms-sched-name').value = nameEl.textContent;
+      var msgEl = cardEl.querySelector('.sched-msg');
+      if (msgEl) {
+        var raw = msgEl.textContent.replace(/^"|"$/g, '');
+        document.getElementById('sms-sched-body').value = raw;
+      }
+    } else {
+      // New mode
+      if (title) title.textContent = 'New Scheduled Message';
+      if (btn) btn.textContent = 'Schedule Message';
+    }
+    sheet.style.display = 'flex';
+  }
+  function closeScheduleSheet() {
+    var sheet = document.getElementById('sms-schedule-sheet');
+    if (sheet) sheet.style.display = 'none';
+    _schedEditCard = null;
+  }
+  function schRecipient(mode) {
+    var pills = ['checkedin','checkedout','allowners','daterange','location','select'];
+    var displayMap = { checkedin:'block', checkedout:'block', allowners:'block', daterange:'flex', location:'flex', select:'flex' };
+    pills.forEach(function(p) {
+      var pill = document.getElementById('sch-pill-' + p);
+      var sub  = document.getElementById('sch-sub-' + p);
+      var active = p === mode;
+      if (pill) {
+        pill.style.background  = active ? 'var(--teal-light)' : 'white';
+        pill.style.borderColor = active ? 'var(--teal-dark)'  : 'var(--border)';
+        pill.style.color       = active ? 'var(--teal-dark)'  : 'var(--medium)';
+      }
+      if (sub) sub.style.display = active ? displayMap[p] : 'none';
+    });
+  }
+  function schDateType(type) {
+    ['arrival','departure'].forEach(function(t) {
+      var el = document.getElementById('sch-dt-' + t);
+      if (!el) return;
+      var active = t === type;
+      el.style.background  = active ? 'var(--teal-light)' : 'white';
+      el.style.borderColor = active ? 'var(--teal-dark)'  : 'var(--border)';
+      el.style.color       = active ? 'var(--teal-dark)'  : 'var(--medium)';
+    });
+  }
+  function saveScheduled() {
+    var nameVal = document.getElementById('sms-sched-name').value.trim() || 'Scheduled Message';
+    var dateVal = document.getElementById('sms-sched-date').value;
+    var timeVal = document.getElementById('sms-sched-time').value;
+    var bodyVal = document.getElementById('sms-sched-body').value;
+    var dateStr = dateVal ? new Date(dateVal + 'T12:00').toLocaleDateString('en-US', { month:'short', day:'numeric' }) : 'TBD';
+    var timeStr = timeVal || 'TBD';
+    var snippet = bodyVal.length > 60 ? bodyVal.slice(0, 60) + '…' : bodyVal;
+    if (_schedEditCard) {
+      // Update existing card
+      var nameEl = _schedEditCard.querySelector('.sched-name');
+      if (nameEl) nameEl.textContent = nameVal;
+      var timeEl = _schedEditCard.querySelector('.sched-time');
+      if (timeEl) timeEl.textContent = dateStr + ', ' + timeStr;
+      var msgEl = _schedEditCard.querySelector('.sched-msg');
+      if (msgEl) msgEl.textContent = '"' + snippet + '"';
+    } else {
+      // Add new card
+      var card = document.createElement('div');
+      card.style.cssText = 'background:white;border-radius:14px;border:1px solid var(--border);padding:14px 16px;cursor:pointer;';
+      card.setAttribute('onclick', 'openScheduleSheet(this)');
+      card.innerHTML = '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">'
+        + '<div style="font-size:20px;flex-shrink:0;">📅</div>'
+        + '<div style="flex:1;min-width:0;">'
+        + '<div class="sched-name" style="font-size:13px;font-weight:900;color:var(--dark);">' + nameVal + '</div>'
+        + '<div class="sched-time" style="font-size:11px;color:var(--teal-dark);font-weight:700;margin-top:2px;">' + dateStr + ', ' + timeStr + '</div>'
+        + '<div class="sched-msg" style="font-size:12px;color:var(--dark);margin-top:5px;line-height:1.4;">"' + snippet + '"</div>'
+        + '</div>'
+        + '<div style="flex-shrink:0;">'
+        + '<button onclick="event.stopPropagation();cancelScheduled(this)" style="background:none;border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-size:11px;font-weight:700;color:var(--medium);cursor:pointer;">Cancel</button>'
+        + '</div></div>';
+      var list = document.getElementById('sms-scheduled-list');
+      if (list) list.insertBefore(card, list.firstChild);
+    }
+    closeScheduleSheet();
+  }
+  function cancelScheduled(el) {
+    var card = el.closest('[style*="border-radius:14px"]') || el.parentElement.parentElement.parentElement;
+    if (card) card.remove();
   }
 
   // Kennels & Rooms screen
@@ -5475,6 +6247,18 @@
   }
 
   renderYardAssign();
+
+  // Fit phone frame to viewport height
+  function fitPhone() {
+    var frame = document.querySelector('.phone-frame');
+    var scale = Math.min(1, (window.innerHeight - 32) / 844, (window.innerWidth - 32) / 390);
+    var mh = Math.round(844 * (1 - scale) / 2);
+    var mw = Math.round(390 * (1 - scale) / 2);
+    frame.style.transform = 'scale(' + scale + ')';
+    frame.style.margin = '-' + mh + 'px -' + mw + 'px';
+  }
+  fitPhone();
+  window.addEventListener('resize', fitPhone);
 </script>
 </body>
 </html>
