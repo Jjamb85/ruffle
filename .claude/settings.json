@@ -1,0 +1,19 @@
+{
+  "allowedTools": [
+    "Read",
+    "Edit",
+    "Write",
+    "Glob",
+    "Grep",
+    "NotebookEdit",
+    "Bash(git *)",
+    "Bash(ls*)",
+    "Bash(mkdir*)",
+    "Bash(rm*)",
+    "Bash(mv*)",
+    "Bash(cp*)",
+    "Bash(node *)",
+    "Bash(npm *)",
+    "Bash(python*)"
+  ]
+}
